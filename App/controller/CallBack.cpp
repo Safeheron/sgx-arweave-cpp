@@ -1,7 +1,3 @@
-//
-// Created by EDY on 2022/6/16.
-//
-
 #include "CallBack.h"
 #include "tee-util-sgx/log_u.h"
 #include "common-util/log.h"
