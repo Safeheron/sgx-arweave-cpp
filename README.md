@@ -34,7 +34,7 @@
 - Click the button "**Subscribe**" .
 
 - Click the button "**Add subscription**" in the page and wait for the jump page.
-  The **Primary key** and **Secondary key** are in the page, you can show them.
+  The **Primary key** and **Secondary key** are in the page, and you can use them.
 
 ### 1.2 Install DCAP
 
@@ -88,6 +88,8 @@ $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake
   Question: Please input the directory which you want to install in :  **/opt/intel/**
   (if you install to the wrong directory, delete the sgxsdk, and install again)
 
+
+
 **Install PCCS**
 
 Fetch the Node.js setup script, because the PCCS package has a dependency on Node®.js version 14:
@@ -125,58 +127,67 @@ $ sudo apt install sgx-dcap-pccs   //When installing this step, some questions w
 ```
 
 > 1.Do you want to install PCCS now? (Y/N) :
-  Answer: **Y**
+
+**Answer: Y**
 
 > 2.Enter your http proxy server address, e.g. http://proxy-server:port (Press ENTER if there is no proxy server):
-  **Press Enter**
+
+**Press Enter**
 
 > 3.Enter your https proxy server address, e.g. http://proxy-server:port (Press ENTER if there is no proxy server):
-  **Press Enter**
+
+**Press Enter**
 
 > 4.Do you want to configure PCCS now? (Y/N)
-  Answer: **Y**
+
+**Answer: Y**
 
 > 5.Set HTTPS listening port [8081] (1024-65535)
-  **Accept default, Press Enter**
+
+**Accept default, Press Enter**
 
 > 6.Set the PCCS service to accept local connections only? [Y] (Y/N)
-  Answer: **N**
+
+**Answer: N**
 
 > 7.Set your Intel PCS API key (Press ENTER to skip)
-  Answer: (Enter your Primary key or Secondary key) for example: bb950d5eb195443f855b473e815db3f1
+
+**Answer: (Enter your Primary key or Secondary key) for example: bb950d5eb195443f855b473e815db3f1**
 
 > 8.Choose caching fill method : [LAZY] (LAZY/OFFLINE/REQ)
-  Answer: **REQ**
+
+**Answer: REQ**
 
 > 9.Set PCCS server administrator password:
-  Answer: Set administrator password (Letters, characters and numbers) for example: DM2cEQOdSXuZblQW    
-  Re-enter administrator password:
-  Answer: Re-enter your admin password
+
+**Answer: Set administrator password (Letters, characters and numbers) for example: DM2cEQOdSXuZblQW**    
 
 > 10.Set PCCS server user password: 
-  Answer: Set user password (Letters, characters and numbers) for example: SM76jxsGS7tc2BJ
-  Re-enter user password:
-  Answer: Re-enter your user password               //This will be used later. 
+
+**Answer: Set user password (Letters, characters and numbers) for example: SM76jxsGS7tc2BJ**
+**Tt will be used later.** 
 
 > 11.Do you want to generate insecure HTTPS key and cert for PCCS service? [Y] (Y/N):
-  Answer: **Y**
+
+**Answer: Y**
 
 Then set the following certificate request. It is not important, because this is a self-signed certificate for testing and development purposes only. 
 
 A production environment will require a certificate that is signed by a recognized certificate authority.
 
-> Country Name (2 letter code) [AU]:
-  State or Province Name (full name) [Some-State]:
-  Locality Name (eg, city) []:
-  Organization Name (eg, company) [Internet Widgits Pty Ltd]:
-  Organizational Unit Name (eg, section) []:
-  Common Name (e.g. server FQDN or YOUR name) []:
-  Email Address []:
-  A challenge password []:
-  An optional company name []:
+```
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:
+A challenge password []:
+An optional company name []:
+```
 
 Install the provisioning tools:
-
 ```
 $ sudo apt install sgx-pck-id-retrieval-tool
 $ sudo vi /opt/intel/sgx-pck-id-retrieval-tool/network_setting.conf 
