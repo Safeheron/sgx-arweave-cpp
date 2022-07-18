@@ -1,7 +1,3 @@
-//
-// Created by EDY on 2022/6/22.
-//
-
 #include "app_util.h"
 #include <string>
 #include <safeheron/crypto-hash/sha256.h>

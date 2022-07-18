@@ -1,9 +1,6 @@
-//
-// Created by edy on 2022/7/1.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_ECLAVECLASS_H
 #define TEE_ARWEAVE_SERVER_ECLAVECLASS_H
+
 #include "common/CJsonObject.h"
 #include <assert.h>
 #include <stdlib.h>

@@ -1,7 +1,3 @@
-//
-// Created by edy on 6/11/22.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_THREAD_TASK_H
 #define TEE_ARWEAVE_SERVER_THREAD_TASK_H
 
@@ -55,15 +51,6 @@ struct taskpar {
     string request_id;
 };
 
-typedef unsigned long long uint64;
-#define CPU_HZ_K 2699998
-inline uint64 crtTime() {
-    uint64 result;
-    unsigned int h, l;
-    __asm__ __volatile__("rdtsc" : "=a" (l), "=d" (h));
-    result = (((uint64)l) | (((uint64)h) << 32))/CPU_HZ_K;
-    return result;
-}
 
 /**
  * The thread task for key shard creation.

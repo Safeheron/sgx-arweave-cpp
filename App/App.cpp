@@ -1,11 +1,3 @@
-/*
- * Created by yyf on 21-06-25.
- * 
- * This is the application implement file, we'll
- * load and intiliaze the enclave, then enter main loop
- * 
- */ 
-
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -40,7 +32,7 @@ using namespace http::experimental::listener;
 std::unique_ptr<handler> g_httpHandler;
 bool thread_clear_map_quit = false;
 
-std::string interface_create = "/arweave/create_key_share";
+std::string interface_create = "/arweave/create_key_shard";
 std::string interface_query  = "/arweave/query_key_shard_state";
 std::string call_back_address = "http://127.0.0.1:8008/sayHi";
 
@@ -85,7 +77,7 @@ int SGX_CDECL main(int argc, char *argv[])
 {
     sgx_status_t result;
     string line;
-    string log_dir = U("/root/hq/tee-arweave-server/glog-arweave");
+    string log_dir = U("/var/log/glog-arweave");
     string port = U("40000");
     string address = U("http://0.0.0.0:");
     address.append(port);

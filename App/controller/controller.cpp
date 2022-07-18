@@ -1,6 +1,3 @@
-//
-// Created by edy on 6/11/22.
-//
 #include "controller.h"
 #include <safeheron/crypto-hash/sha256.h>
 #include <safeheron/crypto-bn/bn.h>

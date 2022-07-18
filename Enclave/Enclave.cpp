@@ -1,5 +1,3 @@
-
-
 #include "Enclave.h"
 #include "Enclave_t.h"
 

@@ -1,7 +1,3 @@
-//
-// Created by EDY on 2022/6/22.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_APP_UTIL_H
 #define TEE_ARWEAVE_SERVER_APP_UTIL_H
 

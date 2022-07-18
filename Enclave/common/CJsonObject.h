@@ -1,6 +1,3 @@
-
-
-
 #ifndef CJSONOBJECT_HPP_
 #define CJSONOBJECT_HPP_
 

@@ -1,7 +1,3 @@
-//
-// Created by edy on 2022/6/14.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_QUOTE_GENERATION_H
 #define TEE_ARWEAVE_SERVER_QUOTE_GENERATION_H
 

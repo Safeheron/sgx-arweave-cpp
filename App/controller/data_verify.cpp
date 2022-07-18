@@ -1,7 +1,3 @@
-//
-// Created by edy on 5/23/22.
-//
-
 #include "data_verify.h"
 #include "controller.h"
 #include <safeheron/crypto-encode/hex.h>
@@ -42,11 +38,12 @@ bool VerifyData(const http_request& message, vector<string>& pubkey_list,
 
     /**
      *  The threshold denominator must be greater than 1
+     *  The threshold denominator must be smaller than 21
      *  The threshold numerator must be greater than 0
      *  The threshold numerator must be greater than half of threshold denominator
      *  The threshold numerator must be smaller than or equal to the threshold denominator
      */
-    if (l <= 1 || k <= 0 || k < (l/2+1) || k > l) return false;
+    if (l <= 1 || k <= 0 || k < (l/2+1) || k > l || l >= 21) return false;
 
     /** The number of public keys should equal to the number of the threshold denominator */
     if (pubkey_list.size() != l) return false;

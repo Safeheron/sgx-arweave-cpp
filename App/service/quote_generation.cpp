@@ -1,7 +1,3 @@
-//
-// Created by edy on 2022/6/14.
-//
-
 #include "quote_generation.h"
 
 extern sgx_enclave_id_t global_eid;

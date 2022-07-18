@@ -1,5 +1,3 @@
-
-
 #include "CJsonObject.h"
 #include "tee-util-sgx/log_t.h"
 

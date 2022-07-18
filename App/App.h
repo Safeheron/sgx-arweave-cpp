@@ -1,10 +1,3 @@
-/*
- * Created by yyf on 21-06-25.
- * 
- * This is the application header file
- * 
- */ 
-
 #ifndef _APP_H_
 #define _APP_H_
 

@@ -1,7 +1,3 @@
-//
-// Created by max on 19-12-26.
-//
-
 #ifndef PROJECT_TEE_ERROR_H
 #define PROJECT_TEE_ERROR_H
 

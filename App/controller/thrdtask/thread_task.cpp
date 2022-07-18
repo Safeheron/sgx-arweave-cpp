@@ -1,7 +1,3 @@
-//
-// Created by edy on 6/11/22.
-//
-
 #include "thread_task.h"
 #include "Enclave_u.h"
 #include "CallBack.h"

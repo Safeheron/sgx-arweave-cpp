@@ -1,4 +1,3 @@
-
 #include "EnclaveAccess.h"
 #include "../common/CJsonObject.h"
 

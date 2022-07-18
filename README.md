@@ -44,6 +44,7 @@
 $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake curl libgflags-dev libgtest-dev libc++-dev git vim zlib1g-dev openssl libssl-dev libboost-all-dev 
 ```
 
+
 **Install sgx-driver**
 
 - on ubuntu 18.04
@@ -71,7 +72,6 @@ $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake
   $ chmod +x sgx_linux_x64_sdk_2.16.100.4.bin
   $ ./sgx_linux_x64_sdk_2.16.100.4.bin   //Two questions will be asked, answer as follows
   ```
-  
   Question: Do you want to install in current directory? [yes/no] :  **no**
   Question: Please input the directory which you want to install in :  **/opt/intel/**
   (if you install to the wrong directory, delete the sgxsdk, and install again)
@@ -83,7 +83,6 @@ $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake
   $ chmod +x sgx_linux_x64_sdk_2.16.100.4.bin
   $ ./sgx_linux_x64_sdk_2.16.100.4.bin   //Two questions will be asked, answer as follows
   ```
-  
   Question: Do you want to install in current directory? [yes/no] :  **no**
   Question: Please input the directory which you want to install in :  **/opt/intel/**
   (if you install to the wrong directory, delete the sgxsdk, and install again)

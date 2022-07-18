@@ -1,6 +1,3 @@
-//
-// Created by max on 19-12-26.
-//
 #include "tee_error.h"
 #include <sgx_error.h>
 #include <stddef.h>

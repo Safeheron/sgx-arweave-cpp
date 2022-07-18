@@ -1,7 +1,3 @@
-//
-// Created by edy on 2022/7/1.
-//
-
 #include "KeyShardCreation.h"
 #include "tee-util-sgx/log_t.h"
 #include "Enclave_t.h"

@@ -1,5 +1,3 @@
-
-
 #include "CJsonObject.h"
 #include "common-util/log.h"
 

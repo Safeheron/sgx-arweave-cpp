@@ -1,7 +1,3 @@
-//
-// Created by edy on 5/23/22.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_DATA_VERIFY_H
 #define TEE_ARWEAVE_SERVER_DATA_VERIFY_H
 

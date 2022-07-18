@@ -1,7 +1,3 @@
-//
-// Created by edy on 2022/6/13.
-//
-
 #include "enclave_util.h"
 #include "Enclave_t.h"
 #include <tee-util-sgx/log_t.h>

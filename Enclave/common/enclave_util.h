@@ -1,7 +1,3 @@
-//
-// Created by edy on 2022/6/13.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_ENCLAVE_UTIL_H
 #define TEE_ARWEAVE_SERVER_ENCLAVE_UTIL_H
 #include "libcxx/memory"

@@ -1,7 +1,3 @@
-//
-// Created by edy on 6/11/22.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_CONTROLLER_H
 #define TEE_ARWEAVE_SERVER_CONTROLLER_H
 

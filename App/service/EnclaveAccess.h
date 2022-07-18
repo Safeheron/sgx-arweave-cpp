@@ -1,7 +1,3 @@
-//
-// Created by edy on 5/18/22.
-//
-
 #ifndef TEE_ARWEAVE_SERVER_ENCLAVEACCESS_H
 #define TEE_ARWEAVE_SERVER_ENCLAVEACCESS_H
 
