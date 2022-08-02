@@ -1,0 +1,42 @@
+enclave {
+    from "sgx_tstdc.edl" import *;
+    from "sgx_tprotected_fs.edl" import *;
+    include "sgx_tprotected_fs.h"
+    include "time.h"
+
+    untrusted {
+        /*
+        *  Get local host name and ip
+        */
+        void ocall_get_hostinfo( [in, out] char** name, [in, out] char** ip );
+        /*
+        *  get current system time (time_t) in GMT from application
+        */
+        void ocall_get_system_time( [in, out] int64_t** now );
+        /*
+        *  get current system time (tm struct) from application
+        *  in_local = 1, return loclal time, otherwise return UTC time
+        */
+        void ocall_get_system_tm( uint32_t in_local, [in, out] uint8_t** t, [in, out] size_t* size );
+        /*
+        *  Output message to console in enclave
+        */
+        void ocall_printf([in, string] const char *str);
+        /*
+        *  Output message to log file in enclave
+        */
+        void ocall_log( uint32_t level, [string, in] char * message );
+        /*
+        *  malloc a buffer in the untrusted memory 
+        */
+        void ocall_malloc( size_t size, [out] uint8_t **ret );
+        /*
+        *  free a buffer in the untrusted memory, which is malloc in untrusted code
+        */
+        void ocall_free( [user_check] uint8_t* p_out_side );
+        /*
+        *  free a buffer in the untrusted memory, which is malloc in untrusted code
+        */
+        void ocall_free_long( [user_check] long* p_out_side );
+    };
+};
