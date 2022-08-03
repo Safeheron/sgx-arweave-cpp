@@ -26,7 +26,7 @@ set(APP_SRC_FILES
 		handler/Handler.cpp
 		controller/thrdtask/thrdpool.cpp controller/controller.cpp controller/thrdtask/thread_task.cpp controller/CallBack.cpp controller/data_verify.cpp
 		service/EnclaveAccess.cpp service/quote_generation.cpp
-		common/base64.cpp common/base64.h)
+		)
 
 # Use the edger8r to generate C bindings from the EDL file.
 

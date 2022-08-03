@@ -4,10 +4,9 @@
 #include "sgx_urts.h"
 #include "App.h"
 #include "Enclave_u.h"
-#include "common/tee_error.h"
+#include "tee_error.h"
 #include <log_u.h>
 #include "Handler.h"
-#include <signal.h>
 
 #define PROJECT_NAME    "tee-arweave"
 
@@ -40,45 +39,33 @@ void on_shutdown()
     g_httpHandler->close().wait();
 }
 
-/** Initialize enclave */
-sgx_status_t initialize_enclave(const char* enclave_file)
-{
-    sgx_status_t ret = SGX_ERROR_UNEXPECTED;
-
-    /** Create enclave */
-    ret = sgx_create_enclave(enclave_file, 0, NULL, NULL, &global_eid, NULL);
-    if (ret != SGX_SUCCESS) {
-        ERROR( "sgx_create_enclave() failed! errmsg: %s", t_strerror( (int)ret ) );
-        return ret;
-    }
-
-    return ret;
-}
-
 int SGX_CDECL main(int argc, char *argv[])
 {
-    sgx_status_t result;
+    sgx_status_t sgx_status;
     string line;
     string log_dir = U("/root/glog-arweave");
     string port = U("40000");
     string address = U("http://0.0.0.0:");
     address.append(port);
 
-    signal(SIGTTIN, SIG_IGN);
-    signal(SIGTTOU, SIG_IGN);
-
     /** Initialize log */
     TeeLogHelper* glog_helper = nullptr;
     glog_helper = new TeeLogHelper( log_dir.c_str(), PROJECT_NAME );
 
     /** Initialize trusted execution environment */
-    if ( ( result = initialize_enclave( (const char*)argv[1] ) ) != SGX_SUCCESS ) {
-        ERROR( "initialize_enclave() failed! result: 0x%x, enclave file: %s", result, argv[1] );
+    sgx_status = sgx_create_enclave((const char*)argv[1], 0, NULL, NULL, &global_eid, NULL);
+    if (sgx_status != SGX_SUCCESS ) {
+        ERROR("initialize enclave failed! enclave file: %s, error message: %s", argv[1], t_strerror((int)sgx_status));
         delete glog_helper;
         return -1;
     }
 
-    ecall_print_enclave_id(global_eid);
+    sgx_status = ecall_print_enclave_id(global_eid);
+    if (sgx_status != SGX_SUCCESS) {
+        ERROR("Function ecall_print_enclave_id call failed, error message: %s", t_strerror((int)sgx_status));
+        delete glog_helper;
+        return -1;
+    }
     INFO_OUTPUT_CONSOLE( "Enclave is initialized!" );
 
     /** Initializing the REST service listener */

@@ -3,7 +3,6 @@
 #include "Enclave_t.h"
 #include <string>
 #include "sgx_report.h"
-#include <pthread.h>
 
 extern std::mutex enclave_mutex;
 extern thread_local char request_id[100];

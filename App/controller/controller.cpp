@@ -1,8 +1,8 @@
 #include "controller.h"
-#include <safeheron/crypto-hash/sha256.h>
 #include <safeheron/crypto-bn/bn.h>
 #include <safeheron/crypto-bn/rand.h>
 #include "Enclave_u.h"
+#include "tee_error.h"
 
 using safeheron::bignum::BN;
 
@@ -30,14 +30,24 @@ void HandleCreateKeyRequest(http_request& message) {
     GetUniqueID(pubkey_list, pubkey_list_hash);
 
     /** Enter enclave to check if the request is repeat */
-    ecall_if_repeat(global_eid, &ret, pubkey_list_hash.c_str());
+    sgx_status = ecall_if_repeat(global_eid, &ret, pubkey_list_hash.c_str());
+    if (sgx_status != SGX_SUCCESS) {
+        ERROR("Function ecall_if_repeat call failed, error message: %s", t_strerror( (int)sgx_status));
+        MessageReply(message, false, "Enclave call failed.");
+        return;
+    }
     if (ret) {
         MessageReply(message, false, "repeat input, please try again later.");
         return;
     }
 
     /** Enter enclave to check if the request is busy */
-    ecall_is_server_available(global_eid, &ret);
+    sgx_status = ecall_is_server_available(global_eid, &ret);
+    if (sgx_status != SGX_SUCCESS) {
+        ERROR("Function ecall_is_server_available call failed, error message: %s", t_strerror( (int)sgx_status));
+        MessageReply(message, false, "Enclave call failed.");
+        return;
+    }
     if (!ret) {
         MessageReply(message, false, "Server is busy now, please try again later.");
         return;

@@ -1,4 +1,5 @@
 #include "quote_generation.h"
+#include <safeheron/crypto-encode/base64.h>
 
 extern sgx_enclave_id_t global_eid;
 
@@ -130,12 +131,11 @@ int QuoteGeneration(const std::string& pubkey_list_hash, std::string& tee_report
     }
 #endif
 
+    tee_report = safeheron::encode::base64::EncodeToBase64(p_quote_buffer, quote_size);
+
     if( !is_out_of_proc )
     {
         qe3_ret = sgx_qe_cleanup_by_policy();
-
-        base64_encode(p_quote_buffer, quote_size, tee_report);
-
         if(SGX_QL_SUCCESS != qe3_ret) {
             printf("Error in cleanup enclave load policy: 0x%04x\n", qe3_ret);
             ret = -1;

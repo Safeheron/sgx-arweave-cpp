@@ -20,7 +20,6 @@
 #include "sgx_quote_3.h"
 #include <string>
 #include "Enclave_u.h"
-#include <base64.h>
 #include <iostream>
 
 #define SGX_AESM_ADDR "SGX_AESM_ADDR"

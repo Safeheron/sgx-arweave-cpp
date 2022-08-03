@@ -4,7 +4,6 @@ add_definitions(-DPB_ENABLE_SGX)
 
 set(ENCLAVE_SRC_FILES 
         Enclave.cpp
-        common/tee_error.cpp
         common/CJsonObject.cpp
         common/cJSON.c
         common/enclave_util.cpp

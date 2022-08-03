@@ -23,25 +23,5 @@
  */
 bool VerifyData(const http_request& message, vector<string>& pubkey_list, int& k, int& l, int& key_length);
 
-/**
- * Check if the related key in the body.
- * @param [in]body_json the body value in Json format of the request
- * @return true on success, false on failure
- */
-bool KeyExist(json::value& body_json);
-
-/**
- * Check if the inputs is valid.
- * @param body_json the body value in Json format of the request
- * @return true on success, false on failure
- */
-bool InputValid(json::value& body_json);
-
-/**
- * Verify the public key.
- * @param public_key
- * @return true on success, false on failure
- */
-bool VerifyPublicKey(const string& public_key);
 
 #endif //TEE_ARWEAVE_SERVER_DATA_VERIFY_H

@@ -64,5 +64,17 @@
       tee_log(LL_FATAL, log);                                         \
     }while(0)
 
+/**
+ * Put information message to both of log file and console
+*/
+#define INFO_OUTPUT_CONSOLE(format, args...)        \
+    do {                                            \
+      char info[MAX_LOG_LEN] = {0};                 \
+      snprintf(info, MAX_LOG_LEN, format, ##args);  \
+      printf( "INFO: %s\n", info );                       \
+      INFO( "%s", info );                           \
+    }while(0);
+
+
 void tee_log(int level, char* log);
 #endif //TEE_ARWEAVE_SERVER_LOG_T_H

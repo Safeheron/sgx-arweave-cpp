@@ -1,6 +1,4 @@
 #include "log_u.h"
-
-
 #include <sys/time.h>
 #include <unistd.h>
 

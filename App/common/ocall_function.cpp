@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
-#include <unistd.h>     /* gethostname */
-#include <netdb.h>      /* struct hostent */
 #include <arpa/inet.h>  /* inet_ntop */
 #include <time.h>
 
@@ -74,8 +71,6 @@ void ocall_free_long( long* p_out_side ) {
         p_out_side = nullptr;
     }
 }
-
-
 
 #ifdef __cplusplus
 }

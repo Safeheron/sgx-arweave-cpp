@@ -63,6 +63,19 @@
       glog_log(LL_FATAL, log);                                         \
     }while(0)
 
+/**
+ * Put information message to both of log file and console
+*/
+#define INFO_OUTPUT_CONSOLE(format, args...)        \
+    do {                                            \
+      char info[MAX_LOG_LEN] = {0};                 \
+      snprintf(info, MAX_LOG_LEN, format, ##args);  \
+      fprintf( stdout, "INFO: %s\n", info );        \
+      INFO( "%s", info );                           \
+    }while(0);
+
+
+
 // log output function
 void glog_log(int level, char* log);
 

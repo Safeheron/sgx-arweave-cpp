@@ -1,15 +1,5 @@
 #include "Enclave.h"
 #include "Enclave_t.h"
-
-#include "common/tee_error.h"
-#include <common/log_t.h>
-#include <sgx_utils.h>
-#include <sgx_cpuid.h>
-#include <sgx_thread.h>
-#include <string>
-#include "sgx_error.h"
-#include "sgx_report.h"
-#include <pthread.h>
 #include "KeyShardCreation.h"
 
 std::mutex enclave_mutex;

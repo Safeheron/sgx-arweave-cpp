@@ -1,7 +1,7 @@
 #include "thread_task.h"
 #include "Enclave_u.h"
 #include "CallBack.h"
-
+#include "tee_error.h"
 
 extern sgx_enclave_id_t global_eid;
 extern bool thread_clear_map_quit;
@@ -60,10 +60,14 @@ exit:
 }
 
 void ClearMapCache(void* context) {
+    sgx_status_t sgx_status;
+
     while(true) {
         if (thread_clear_map_quit) return;
         sleep(1);
-        ecall_clear_map(global_eid);
+        sgx_status = ecall_clear_map(global_eid);
+        if (sgx_status != SGX_SUCCESS)
+            ERROR("Function ecall_clear_map call failed, error message: %s", t_strerror( (int)sgx_status));
     }
 }
 

@@ -1,5 +1,6 @@
 #include "EnclaveAccess.h"
 #include "Enclave_u.h"
+#include "tee_error.h"
 
 extern sgx_enclave_id_t global_eid;
 
@@ -14,8 +15,8 @@ bool EnclaveAccess::CreateKeyShard(const string& request_id, const string& pubke
 
     /** Enter enclave to create key shards */
     sgx_status = ecall_create_keyshard(global_eid, &ret, request_id.c_str(), pubkey_list.c_str(), k, l, key_length, &first_result);
-    if (0 != ret || sgx_status != SGX_SUCCESS) {
-        ERROR("Request ID: %s, ecall_create_keyshard failed, and the return value is %d.", request_id.c_str(), ret);
+    if (sgx_status != SGX_SUCCESS || 0 != ret) {
+        ERROR("Request ID: %s, ecall_create_keyshard failed, the return value is %d, sgx status message: %s", request_id.c_str(), ret, t_strerror( (int)sgx_status));
         return false;
     }
 
@@ -65,8 +66,8 @@ bool EnclaveAccess::QueryKeyShareStatus(const string& pubkey_list_hash, string& 
 
     /** Enter enclave to query the status of key shards generation */
     sgx_status = ecall_query_keyshard(global_eid, &ret, pubkey_list_hash.c_str(), &query_result);
-    if (0 != ret || sgx_status != SGX_SUCCESS) {
-        ERROR("pubkey list hash: %s, ecall_query_keyshard failed.", pubkey_list_hash.c_str());
+    if (sgx_status != SGX_SUCCESS || 0 != ret) {
+        ERROR("pubkey list hash: %s, ecall_query_keyshard failed, sgx return message: %s", pubkey_list_hash.c_str(), t_strerror( (int)sgx_status));
         return false;
     }
 

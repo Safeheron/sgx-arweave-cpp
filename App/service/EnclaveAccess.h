@@ -6,7 +6,6 @@
 #include <map>
 #include "quote_generation.h"
 #include <log_u.h>
-#include "tee_error.h"
 using namespace std;
 
 

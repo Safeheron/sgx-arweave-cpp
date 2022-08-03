@@ -35,9 +35,9 @@
 
 **Install dependencies**
 
-```
-$ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake curl libgflags-dev libgtest-dev libc++-dev git vim zlib1g-dev openssl libssl-dev libboost-all-dev 
-```
+  ```
+  $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake curl libgflags-dev libgtest-dev libc++-dev git vim zlib1g-dev openssl libssl-dev libboost-all-dev 
+  ```
 
 
 **Install sgx-driver**
@@ -88,12 +88,12 @@ $ sudo apt-get install dkms build-essential autoconf libtool pkg-config automake
 
 Fetch the Node.js setup script, because the PCCS package has a dependency on Node®.js version 14:
 
-```
-$ curl -o setup.sh -sL https://deb.nodesource.com/setup_14.x
-$ chmod a+x setup.sh
-$ sudo ./setup.sh
-$ sudo apt-get -y install nodejs
-```
+  ```
+  $ curl -o setup.sh -sL https://deb.nodesource.com/setup_14.x
+  $ chmod a+x setup.sh
+  $ sudo ./setup.sh
+  $ sudo apt-get -y install nodejs
+  ```
 
 We'll use Intel's Debian packages for the Intel SGX DCAP installation, but to do that we need to add the repository to the list of sources for apt:
 
