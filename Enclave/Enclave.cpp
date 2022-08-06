@@ -90,9 +90,36 @@ void ecall_free()
 }
 
 /**
+ *  To return this enclave id in hex string
+ */
+int ecall_get_enclave_id(
+    char **output, 
+    uint64_t *output_len)
+{
+    int id_len = 0;
+    std::string mrenclave_id;
+    sgx_target_info_t self_info;
+    uint8_t* outside_buff = nullptr;
+
+    sgx_self_target(&self_info);
+    mrenclave_id = safeheron::encode::hex::EncodeToHex( self_info.mr_enclave.m, SGX_HASH_SIZE );
+
+    // Write memory of output reply
+    id_len = mrenclave_id.length();
+    if ( !(outside_buff = malloc_outside( id_len + 1 )) ) {
+        return TEE_ERROR_MALLOC_OUTSIDE;
+    }
+    memcpy( outside_buff, mrenclave_id.c_str(), id_len );
+    *output = (char*)outside_buff;
+    *output_len = id_len;
+
+    return TEE_OK;
+}
+
+/**
  *  To generate the enclave quote
  */
-uint32_t ecall_create_report(
+int ecall_create_report(
     const char* request_id, 
     const char* pubkey_list_hash,
     const sgx_target_info_t* p_qe3_target, 
@@ -106,11 +133,13 @@ uint32_t ecall_create_report(
     sgx_report_data_t report_data = { 0 };
 
     // get the key meta hash string from context list
+    std::lock_guard<std::mutex> lock( g_list_mutex );
     if ( !g_keyContext_list.count( pubkey_list_hash ) ) {
         ERROR( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", request_id, pubkey_list_hash );
         return TEE_ERROR_PUBLIST_KEY_HASH;
     }
     key_meta_hash = g_keyContext_list.at( pubkey_list_hash )->key_meta_hash;
+    g_list_mutex.unlock();
 
     // Combine the hash of the public key list and the hash of the key meta
     pubkey_and_meta = safeheron::encode::hex::DecodeFromHex( pubkey_list_hash );

@@ -38,8 +38,9 @@ int GenerateTask::get_task_type( )
     return eTaskType_Generate;
 }
 /**
- * Introduce:this task's process function 
- * Params:request[IN]:request data string, in plian
+ * Introduce: this task's process function 
+ * Params:request_id[IN]:unqine ID for this requesting, it will be output to log for debug
+ *        request[IN]:request data string, in plian
  *        reply[OUT]:reply data string
  *        error_msg[OUT]:return an error message string while failed
  * Return:TEE_OK if successful, otherwise return an error code

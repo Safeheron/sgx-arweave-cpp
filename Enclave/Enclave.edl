@@ -29,12 +29,17 @@ enclave {
         public void ecall_free();
 
         /**
+         *  To return this enclave id in hex string
+         */
+        public int ecall_get_enclave_id([user_check] char **output, [out] uint64_t *output_len);
+
+        /**
          *  To generate the enclave quote
          */
-        public uint32_t ecall_create_report([in, string]const char* request_id, 
-                                            [in, string]const char* pubkey_list_hash, 
-                                            [in]const sgx_target_info_t* p_qe3_target, 
-                                            [out]sgx_report_t* p_report);
+        public int ecall_create_report([in, string]const char* request_id, 
+                                       [in, string]const char* pubkey_list_hash, 
+                                       [in]const sgx_target_info_t* p_qe3_target, 
+                                       [out]sgx_report_t* p_report);
 
         /**
          * Create private key shards.
@@ -44,31 +49,31 @@ enclave {
          * [in]key_length the key length
          * [out]output the result in Json string format
          */
-        public int ecall_create_keyshard([in, string]const char* in_request_id, [in, string]const char* pubkey_list, int k, int l, int key_length, [out] char** output);
-
+        /*public int ecall_create_keyshard([in, string]const char* in_request_id, [in, string]const char* pubkey_list, int k, int l, int key_length, [out] char** output);*/
+        
         /**
          * Query the status of the key shards creation.
          * [in]pubkey_list the hash of the public key list
          * [out]output the result of the query request
          */
-        public int ecall_query_keyshard([string, in]const char* pubkey_list_hash, [out] char** output);
+        /*public int ecall_query_keyshard([string, in]const char* pubkey_list_hash, [out] char** output);*/
 
-        public void ecall_print_enclave_id();
-
+        /*public void ecall_print_enclave_id();*/
+        
         /**
          * Query if the server is busy.
          */
-        public int ecall_is_server_available();
+        /*public int ecall_is_server_available();*/
 
         /**
          * Clear the cache in the map.
          */
-        public void ecall_clear_map();
+        /*public void ecall_clear_map();*/
 
         /**
          * Query if the creation request is repeat.
          */
-        public int ecall_if_repeat([string, in]const char* pubkey_list);
+        /*public int ecall_if_repeat([string, in]const char* pubkey_list);*/
 
     };
 

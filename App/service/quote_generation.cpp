@@ -10,7 +10,6 @@ int QuoteGeneration(const std::string & request_id,
     std::string temp;
     std::string aaa;
     int ret = 0;
-    uint32_t retval = 0;
     sgx_status_t sgx_status = SGX_SUCCESS;
     quote3_error_t qe3_ret = SGX_QL_SUCCESS;
     uint32_t quote_size = 0;
@@ -79,9 +78,9 @@ int QuoteGeneration(const std::string & request_id,
         goto CLEANUP;
     }
 
-    sgx_status = ecall_create_report(global_eid, &retval, (char*)request_id.c_str(), 
+    sgx_status = ecall_create_report(global_eid, &ret, (char*)request_id.c_str(), 
          (char*)pubkey_list_hash.c_str(), &qe_target_info, &app_report);
-    if ((SGX_SUCCESS != sgx_status) || (0 != retval)) {
+    if ((SGX_SUCCESS != sgx_status) || (0 != ret)) {
         printf("\nCall to get_app_enclave_report() failed\n");
         ret = -1;
         goto CLEANUP;

@@ -61,7 +61,7 @@ exit:
 
 void ClearMapCache(void* context) {
     sgx_status_t sgx_status;
-
+#if 0
     while(true) {
         if (thread_clear_map_quit) return;
         sleep(1);
@@ -69,6 +69,7 @@ void ClearMapCache(void* context) {
         if (sgx_status != SGX_SUCCESS)
             ERROR("Function ecall_clear_map call failed, error message: %s", t_strerror( (int)sgx_status));
     }
+#endif //0
 }
 
 void PendingTask(const struct thrdpool_task *task) {

@@ -28,7 +28,7 @@ void HandleCreateKeyRequest(http_request& message) {
 
     /** Create a unique ID for each request */
     GetUniqueID(pubkey_list, pubkey_list_hash);
-
+#if 0
     /** Enter enclave to check if the request is repeat */
     sgx_status = ecall_if_repeat(global_eid, &ret, pubkey_list_hash.c_str());
     if (sgx_status != SGX_SUCCESS) {
@@ -52,7 +52,7 @@ void HandleCreateKeyRequest(http_request& message) {
         MessageReply(message, false, "Server is busy now, please try again later.");
         return;
     }
-
+#endif //0
     /** Add tasks to the thread pool */
     ok = AddTaskToPool(pubkey_list, k, l, keylen);
     if (!ok) {

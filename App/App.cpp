@@ -41,7 +41,11 @@ void on_shutdown()
 
 int SGX_CDECL main(int argc, char *argv[])
 {
+    int ret = 0;
     sgx_status_t sgx_status;
+    char* enclave_id = nullptr;
+    size_t enclave_id_len = 0;
+    //
     string line;
     string log_dir = U("/root/glog-arweave");
     string port = U("40000");
@@ -60,13 +64,13 @@ int SGX_CDECL main(int argc, char *argv[])
         return -1;
     }
 
-    sgx_status = ecall_print_enclave_id(global_eid);
-    if (sgx_status != SGX_SUCCESS) {
-        ERROR("Function ecall_print_enclave_id call failed, error message: %s", t_strerror((int)sgx_status));
+    sgx_status = ecall_get_enclave_id( global_eid, &ret, &enclave_id, &enclave_id_len );
+    if (sgx_status != SGX_SUCCESS || ret != 0) {
+        ERROR("ecall_get_enclave_id() failed, error message: %s", t_strerror((int)sgx_status));
         delete glog_helper;
         return -1;
     }
-    INFO_OUTPUT_CONSOLE( "Enclave is initialized!" );
+    INFO_OUTPUT_CONSOLE( "Enclave is initialized! Enclave ID: %s", enclave_id );
 
     /** Initializing the REST service listener */
     on_initialize(address);
@@ -85,6 +89,11 @@ int SGX_CDECL main(int argc, char *argv[])
     /** Destroy enclave */
     sgx_destroy_enclave(global_eid);
     delete glog_helper;
+
+    if ( enclave_id ) {
+        free( enclave_id );
+        enclave_id = nullptr;
+    }
 
     return 0;
 }
