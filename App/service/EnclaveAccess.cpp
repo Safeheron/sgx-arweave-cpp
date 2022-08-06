@@ -29,7 +29,7 @@ bool EnclaveAccess::CreateKeyShard(const string& request_id, const string& pubke
     if (!ok) goto exit;
 
     /** Generate the remote attestation report */
-    ret = QuoteGeneration(pubkey_list_hash, tee_report);
+    ret = QuoteGeneration(request_id, pubkey_list_hash, tee_report);
     if (-1 == ret) {
         ERROR("Request ID: %s, generate remote attestation report failed.", request_id.c_str());
         return false;

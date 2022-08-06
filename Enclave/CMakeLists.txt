@@ -4,11 +4,22 @@ add_definitions(-DPB_ENABLE_SGX)
 
 set(ENCLAVE_SRC_FILES 
         Enclave.cpp
-        common/CJsonObject.cpp
-        common/cJSON.c
-        common/enclave_util.cpp
+        #
         common/log_t.cpp
-        KeyShardCreation.cpp
+        common/tee_util.cpp
+        #
+        json/cJSON.c
+        json/json.cpp
+        #
+        shell/Dispatcher.cpp
+        #
+        tasks/GenerateTask.cpp
+        tasks/QueryTask.cpp
+        #common/CJsonObject.cpp
+        #common/cJSON.c
+        #common/enclave_util.cpp
+        #common/log_t.cpp
+        #KeyShardCreation.cpp
         )
 
 

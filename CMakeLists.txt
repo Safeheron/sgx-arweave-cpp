@@ -20,7 +20,7 @@ set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
 set(PROTOC  "/opt/protobuf/bin/protoc")
 find_package(PkgConfig REQUIRED)
 
-set(SGX_SUITS_TSS_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/sgx-crypto-suites-tss-rsa)
+set(SGX_SUITS_TSS_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/sgx-crypto-suites-tss-rsa)
 set(SGX_SUITS_TSS_INCLUDE_DIR ${SGX_SUITS_TSS_ROOT}/include)
 set(SGX_SUITS_TSS_LIBRARY_DIR ${SGX_SUITS_TSS_ROOT}/lib)
 

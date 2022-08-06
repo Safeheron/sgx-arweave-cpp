@@ -8,6 +8,33 @@ enclave {
     include "sgx_report.h"
 
     trusted {
+        /**
+         *  To initliaze the enclave
+         */
+        public int ecall_init();
+
+        /**
+         *  To run a TEE task in enclave
+         */
+        public int ecall_run(uint32_t type, 
+                             [in, string]const char* request_id, 
+                             [in, size=data_len]const char* input_data,
+                             uint64_t data_len,
+                             [user_check] char **output, 
+                             [out] uint64_t *output_len);
+
+        /**
+         *  To deallocate memory in the enclave
+         */
+        public void ecall_free();
+
+        /**
+         *  To generate the enclave quote
+         */
+        public uint32_t ecall_create_report([in, string]const char* request_id, 
+                                            [in, string]const char* pubkey_list_hash, 
+                                            [in]const sgx_target_info_t* p_qe3_target, 
+                                            [out]sgx_report_t* p_report);
 
         /**
          * Create private key shards.
@@ -26,11 +53,6 @@ enclave {
          */
         public int ecall_query_keyshard([string, in]const char* pubkey_list_hash, [out] char** output);
 
-        /**
-         * Deallocate a block of memory in enclave.
-         */
-        public void ecall_free();
-
         public void ecall_print_enclave_id();
 
         /**
@@ -48,13 +70,6 @@ enclave {
          */
         public int ecall_if_repeat([string, in]const char* pubkey_list);
 
-        /**
-         * Generate the enclave quote.
-         * [in]p_qe3_target target information
-         * [out]p_report quote result
-         * [in]pubkey_list_hash pubkey
-         */
-        public uint32_t enclave_create_report([in]const sgx_target_info_t* p_qe3_target, [out]sgx_report_t* p_report, [in, string]const char* pubkey_list_hash);
     };
 
     untrusted {

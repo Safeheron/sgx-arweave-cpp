@@ -122,19 +122,21 @@ uint8_t* malloc_outside(size_t size)
     }
 
     // malloc outside buff
-    status = ocall_malloc( size, &outside_buf );
-    if ( SGX_SUCCESS != status ) {
-        ERROR( "Failed to call ocall_malloc(), status: %d", status );
+    status = ocall_malloc(size, &outside_buf);
+    if (SGX_SUCCESS != status) {
+        ERROR("Failed to call ocall_malloc(), status: %d", status);
         return nullptr;
     }
-    if ( !outside_buf ) {
-        ERROR( "ocall_malloc() return null, out of memory!" );
+    if (!outside_buf) {
+        ERROR("ocall_malloc() return null, out of memory!");
         return nullptr;
     }
+    memset(outside_buf, 0, size);
+
     //check buff is outside or not
-    if ( sgx_is_outside_enclave( outside_buf, size ) != 1 ) {
+    if ( sgx_is_outside_enclave(outside_buf, size) != 1 ) {
         ERROR( "ocall_malloc() return buffer is not in outside!" );
-        ocall_free( outside_buf );
+        ocall_free(outside_buf);
         outside_buf = nullptr;
         return nullptr;
     }

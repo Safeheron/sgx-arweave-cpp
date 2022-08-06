@@ -35,7 +35,7 @@
  * @param [out]tee_report the remote attestation report in Base64 format
  * @return true on success, false on failure
  */
-int QuoteGeneration(const std::string& pubkey_list_hash, std::string& tee_report);
+int QuoteGeneration(const std::string & request_id, const std::string& pubkey_list_hash, std::string& tee_report);
 
 
 

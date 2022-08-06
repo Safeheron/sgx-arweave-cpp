@@ -3,7 +3,9 @@
 
 extern sgx_enclave_id_t global_eid;
 
-int QuoteGeneration(const std::string& pubkey_list_hash, std::string& tee_report)
+int QuoteGeneration(const std::string & request_id, 
+                    const std::string& pubkey_list_hash, 
+                    std::string& tee_report)
 {
     std::string temp;
     std::string aaa;
@@ -77,11 +79,8 @@ int QuoteGeneration(const std::string& pubkey_list_hash, std::string& tee_report
         goto CLEANUP;
     }
 
-    sgx_status = enclave_create_report(global_eid,
-                                       &retval,
-                                       &qe_target_info,
-                                       &app_report,
-                                       (char*)pubkey_list_hash.c_str());
+    sgx_status = ecall_create_report(global_eid, &retval, (char*)request_id.c_str(), 
+         (char*)pubkey_list_hash.c_str(), &qe_target_info, &app_report);
     if ((SGX_SUCCESS != sgx_status) || (0 != retval)) {
         printf("\nCall to get_app_enclave_report() failed\n");
         ret = -1;
