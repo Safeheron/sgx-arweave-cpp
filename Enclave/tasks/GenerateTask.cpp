@@ -72,10 +72,31 @@ int GenerateTask::execute(
         return TEE_ERROR_INVALID_PARAMETER;
     }
 
+    std::lock_guard<std::mutex> lock( g_list_mutex );
+
+    // Traverse context list, and remove which status is error or expired
+    if ( (ret = del_expired_context( KEY_CONTEXT_ALIVE_DURATION )) ) {
+        error_msg = format_msg( "Request ID: %s, del_expired_context() failed! ret: 0x%x", 
+            request_id_.c_str(), ret );
+        ERROR( "%s", error_msg.c_str() );
+        return TEE_ERROR_INVALID_PARAMETER;
+    }
+
+    // Return busy is context list is full
+    if ( g_keyContext_list.size() >= MAX_TASK_COUNT ) {
+        error_msg = format_msg( "Request ID: %s, Connext list is full! current size: %d", 
+            request_id_.c_str(), (int)g_keyContext_list.size() );
+        ERROR( "%s", error_msg.c_str() );
+        return TEE_ERROR_ENCLAVE_IS_BUSY;
+    }
+
+    g_list_mutex.unlock();
+
     // Parse shard's parameters from request data
     req_root = JSON::Root::parse( request );
     if ( !req_root.is_valid() ) {
-        error_msg = format_msg( "Request ID: %s, request is not a JSON! request: %s", request_id_.c_str(), request.c_str() );
+        error_msg = format_msg( "Request ID: %s, request is not a JSON! request: %s", 
+            request_id_.c_str(), request.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_INVALID_PARAMETER;
     }
@@ -83,17 +104,20 @@ int GenerateTask::execute(
     l = req_root["l"].asInt();
     key_bits = req_root["keyLength"].asInt();
     input_pubkey_list = req_root["userPublicKeyList"].asStringArrary();
-    INFO("Request ID: %s, k: %d l: %d, keyLength: %d, pubkey count: %d", request_id_.c_str(), k, l, key_bits, (int)input_pubkey_list.size());
-    for (const auto& it : input_pubkey_list) INFO("Request ID: %s, pubkey: %s", request_id_.c_str(), it.c_str());
+    INFO("Request ID: %s, k: %d l: %d, keyLength: %d, pubkey count: %d", 
+        request_id_.c_str(), k, l, key_bits, (int)input_pubkey_list.size());
+    for (const auto& it : input_pubkey_list) 
+        INFO("Request ID: %s, pubkey: %s", request_id_.c_str(), it.c_str());
 
     // Checking the same parameters key shards is generating or not
     std::sort( input_pubkey_list.begin(), input_pubkey_list.end() );
     if ( (ret = get_pubkey_hash( input_pubkey_list, pubkey_hash )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with input_pubkey_list! ret : 0x%x", request_id_.c_str(), ret );
+        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with input_pubkey_list! ret : 0x%x", 
+            request_id_.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         return ret;
     }
-    std::lock_guard<std::mutex> lock( g_list_mutex );
+    g_list_mutex.lock();
     if ( g_keyContext_list.count( pubkey_hash ) ) {
         error_msg = format_msg( "Request ID: %s, a same request is generating!", request_id_.c_str() );
         ERROR( "%s", error_msg.c_str() );
@@ -101,7 +125,7 @@ int GenerateTask::execute(
     }
     g_list_mutex.unlock();
 
-    // At first, Construct a TssRsaKeyShards object and add it into g_keyShards_list.
+    // At first, construct a KeyShardContext object and add it into g_keyContext_list.
     if ( !(context = new KeyShardContext( k, l, key_bits )) ) {
         error_msg = format_msg( "Request ID: %s, new KeyShardContext failed!", request_id_.c_str() );
         ERROR( "%s", error_msg.c_str() );
@@ -123,7 +147,8 @@ int GenerateTask::execute(
 
     // Calc the hash of key meta
     if ( (ret = get_keymeta_hash( key_meta, key_meta_hash )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with key_mata! ret: 0x%x", request_id_.c_str(), ret );
+        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with key_mata! ret: 0x%x", 
+            request_id_.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         context->key_status = eKeyStatus_Error;
         return ret;
@@ -133,14 +158,53 @@ int GenerateTask::execute(
     // Construct reply JSON string
     if ( (ret = get_reply_string( pubkey_hash, input_pubkey_list,
             pubkey, prikey_list, key_meta, reply )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_reply_string() failed! ret: 0x%x", request_id_.c_str(), ret );
+        error_msg = format_msg( "Request ID: %s, get_reply_string() failed! ret: 0x%x", 
+            request_id_.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         context->key_status = eKeyStatus_Error;
         return ret;
     }
     context->key_status = eKeyStatus_Finished;
+    context->finished_time = get_system_time();
 
     return ret;
+}
+
+// Traverse context_list and remove item if it's one of below:
+// 1. it's status is error
+// 2. it's current_time - finished_time > duration
+int GenerateTask::del_expired_context( int duration )
+{
+    long current_time = 0;
+
+    // return OK if list is empty
+    if ( g_keyContext_list.size() == 0 ) {
+        return TEE_OK;
+    }
+
+    current_time = get_system_time();
+
+    // traverse list for items status and duration checking
+    for ( auto it = g_keyContext_list.begin(); 
+          it != g_keyContext_list.end(); ) {
+        // free item if it's status is error
+        if ( it->second->key_status == eKeyStatus_Error ) {
+            delete it->second;
+            it = g_keyContext_list.erase( it );
+        } 
+        // free item if it's finished and duration is expired
+        else if ( it->second->key_status == eKeyStatus_Finished ) {
+            if ( (current_time - it->second->finished_time) > duration ) {
+                delete it->second;
+                it = g_keyContext_list.erase( it );
+            }
+        } 
+        else {
+            ++it;
+        }
+    }
+
+    return TEE_OK;
 }
 
 // Calc the hash of the public key list
