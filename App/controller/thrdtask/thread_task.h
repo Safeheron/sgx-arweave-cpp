@@ -35,7 +35,7 @@
 #include "list.h"
 #include "EnclaveAccess.h"
 #include "CallBack.h"
-#include "CJsonObject.h"
+#include "../json/CJsonObject.h"
 
 using namespace std;
 using namespace web;

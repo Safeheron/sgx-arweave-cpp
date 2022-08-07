@@ -24,19 +24,30 @@ set(APP_SRC_FILES
         App.cpp
 		common/tee_error.cpp 
 		common/app_util.cpp 
-		common/CJsonObject.cpp 
-		common/cJSON.c 
-		common/json.cpp
-		common/ocall_function.cpp 
+		#common/CJsonObject.cpp 
+		#common/cJSON.c 
+		#common/json.cpp
+		#common/ocall_function.cpp 
 		common/log_u.cpp
-		handler/Handler.cpp
-		controller/thrdtask/thrdpool.cpp 
-		controller/controller.cpp 
-		controller/thrdtask/thread_task.cpp 
-		controller/CallBack.cpp 
-		controller/data_verify.cpp
-		service/EnclaveAccess.cpp 
-		service/quote_generation.cpp
+		#handler/Handler.cpp
+		#controller/thrdtask/thrdpool.cpp 
+		#controller/controller.cpp 
+		#controller/thrdtask/thread_task.cpp 
+		#controller/CallBack.cpp 
+		#controller/data_verify.cpp
+		#service/EnclaveAccess.cpp 
+		#service/quote_generation.cpp
+		#
+		json/CJsonObject.cpp 
+		json/cJSON.c 
+		json/json.cpp
+		#
+		ocall/ocall.cpp
+		#
+		server/keyshare_param.cpp
+		server/listen_svr.cpp
+		server/msg_handler.cpp
+		server/thread_task.cpp
 		)
 
 # Use the edger8r to generate C bindings from the EDL file.

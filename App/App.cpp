@@ -7,7 +7,7 @@
 #include "tee_error.h"
 #include <log_u.h>
 #include "Handler.h"
-#include "common/json.h"
+#include "json/json.h"
 
 #define PROJECT_NAME    "tee-arweave"
 

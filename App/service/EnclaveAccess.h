@@ -1,7 +1,7 @@
 #ifndef TEE_ARWEAVE_SERVER_ENCLAVEACCESS_H
 #define TEE_ARWEAVE_SERVER_ENCLAVEACCESS_H
 
-#include "CJsonObject.h"
+#include "../json/CJsonObject.h"
 #include <iostream>
 #include <map>
 #include "quote_generation.h"
