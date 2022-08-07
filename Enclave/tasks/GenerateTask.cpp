@@ -22,6 +22,9 @@
 #include <mutex>
 #include <map>
 
+
+#include "Enclave_t.h"
+
 using safeheron::curve::Curve;
 using safeheron::curve::CurvePoint;
 using safeheron::curve::CurveType;
@@ -228,6 +231,7 @@ int GenerateTask::get_reply_string(
     int ret = 0;
     int index = 0;
     JSON::Root root;
+    std::list<JSON::Root> pkg_array;
 
     // add node for "pubkey_list_hash"
     root["pubkey_list_hash"] = input_pubkey_hash;
@@ -249,8 +253,12 @@ int GenerateTask::get_reply_string(
         // add this node to "key_shard_pkg" arrary
         arrary_node["public_key"] = input_pubkey_list[index - 1];
         arrary_node["encrypt_key_info"] = keyInfo_cipher;
-        root["key_shard_pkg"] = arrary_node;
+        pkg_array.push_back( arrary_node );
     }
+    root["key_shard_pkg"] = pkg_array;
+
+    // return JSON string
+    out_str = JSON::Root::write( root );
 
     return TEE_OK;
 }

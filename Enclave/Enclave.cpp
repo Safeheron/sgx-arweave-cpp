@@ -46,14 +46,18 @@ int ecall_run(
     int reply_len = 0;
     std::string plain_request;
     std::string plain_reply;
-    std::string s_error_msg;
+    std::string error_msg;
     uint8_t* outside_buff = nullptr;
 
     plain_request.assign( input_data, data_len );
 
     // Dispatch request
-    if ( ( ret = g_dispatcher.dispatch( type, request_id, plain_request, plain_reply, s_error_msg ) ) != 0 ){
-        ERROR( "Request ID: %s, Failed to dispatch request: %s", request_id, s_error_msg.c_str() );
+    if ( ( ret = g_dispatcher.dispatch(type, request_id, plain_request, plain_reply, error_msg) ) != 0 ){
+        ERROR( "Request ID: %s, Failed to dispatch! ret: 0x%x, error_msg: %s", request_id, ret, error_msg.c_str() );
+        goto _exit;
+    }
+    if ( plain_reply.length() == 0 ) {
+        ERROR( "Request ID: %s, Failed to dispatch! plain_reply is null! error_msg: %s", request_id, error_msg.c_str() );
         goto _exit;
     }
 
@@ -68,7 +72,6 @@ int ecall_run(
     memcpy( outside_buff, plain_reply.c_str(), reply_len );
     *output = (char*)outside_buff;
     *output_len = reply_len;
-
 _exit:
 
     return ret;

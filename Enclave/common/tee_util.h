@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <string>
 
+#define MAX_BUF_LEN  4*1024
+
 /**
  * Output message to console by calling ocall_printf()
  * The function MUST be implemented for protobuf.a

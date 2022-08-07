@@ -22,13 +22,13 @@
 */
 int printf( const char* fmt, ... )
 {
-    char buf[BUFSIZ] = { '\0' };
+    char buf[MAX_BUF_LEN] = { '\0' };
     va_list ap;
-    va_start(ap, fmt);
-    vsnprintf(buf, BUFSIZ, fmt, ap);
-    va_end(ap);
-    ocall_printf(buf);
-    return (int)strnlen(buf, BUFSIZ - 1) + 1;
+    va_start( ap, fmt );
+    vsnprintf( buf, MAX_BUF_LEN, fmt, ap );
+    va_end( ap );
+    ocall_printf( buf );
+    return (int)strnlen( buf, MAX_BUF_LEN - 1 ) + 1;
 }
 
 /**
@@ -36,13 +36,12 @@ int printf( const char* fmt, ... )
  */
 std::string format_msg( const char* fmt, ... )
 {
-    const int MAX_LEN = 4*1024;
-    char buf[MAX_LEN] = { 0 };
+    char buf[MAX_BUF_LEN] = { 0 };
     std::string ret;
 
     va_list ap;
     va_start( ap, fmt );
-    vsnprintf( buf, MAX_LEN - 1, fmt, ap );
+    vsnprintf( buf, MAX_BUF_LEN - 1, fmt, ap );
     va_end(ap);
     ret = buf;
 
