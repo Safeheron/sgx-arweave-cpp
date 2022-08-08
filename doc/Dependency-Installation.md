@@ -21,19 +21,20 @@
 
 - Apply for **Primary key** and **Secondary key** at first, and them will be used later.
   The link address: [https://api.portal.trustedservices.intel.com/products](https://api.portal.trustedservices.intel.com/products).
-  ![img](./apply-key-1.png)
   
 - Click "**sign in**" to login, or click "**create a new IDZ account**" to create a new account.
+  ![img](./apply-key-1.png)
+  
+- Click the link "**Intel® SGX Provisioning Certification Service**" in the page , and wait for the page to jump.
   ![img](./apply-key-2.png)
 
-- Click the link "**Intel® SGX Provisioning Certification Service**" in the page , and wait for the page to jump.
+- Click the button "**Subscribe**" .
   ![img](./apply-key-3.png)
 
-- Click the button "**Subscribe**" .
+- Click the button "**Add subscription**" in the page and wait for the jump page.
   ![img](./apply-key-4.png)
 
-- Click the button "**Add subscription**" in the page and wait for the jump page.
-  The **Primary key** and **Secondary key** are in the page, and you can use them.
+- The **Primary key** and **Secondary key** are in the page, and you can use them.
   ![img](./apply-key-5.png)
 
 ### 1.2 Install DCAP
