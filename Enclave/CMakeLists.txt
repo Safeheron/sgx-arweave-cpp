@@ -15,11 +15,6 @@ set(ENCLAVE_SRC_FILES
         #
         tasks/GenerateTask.cpp
         tasks/QueryTask.cpp
-        #common/CJsonObject.cpp
-        #common/cJSON.c
-        #common/enclave_util.cpp
-        #common/log_t.cpp
-        #KeyShardCreation.cpp
         )
 
 
@@ -40,7 +35,6 @@ add_library(enclave SHARED
 # Additional include paths
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
         ${SGX_SUITS_TSS_INCLUDE_DIR}
         ${SGX_SDK}/include
         ${SGX_SDK}/include/tlibc

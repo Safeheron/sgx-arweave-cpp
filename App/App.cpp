@@ -3,7 +3,6 @@
 #include "tee_error.h"
 #include "common/log_u.h"
 #include "server/listen_svr.h"
-#include "json/json.h"
 #include <stdio.h>
 #include <string.h>
 #include <pwd.h>
@@ -81,11 +80,6 @@ int SGX_CDECL main(int argc, char *argv[])
     ////////////////////////Test/////////////////////////////
     char* reply = nullptr;
     size_t reply_len = 0;
-    JSON::Root root = JSON::Root::parse( test_req );
-    if ( !root.is_valid() ) {
-        printf( "test_req is not a JSON!\n" );
-        return -1;
-    }
     sgx_status = ecall_init( global_eid, &ret );
     if (sgx_status != SGX_SUCCESS || ret != 0) {
         printf( "ecall_init() failed, error message: %s\n", t_strerror((int)sgx_status) );
@@ -128,7 +122,11 @@ int SGX_CDECL main(int argc, char *argv[])
 
     /** Destroy enclave */
     sgx_destroy_enclave(global_eid);
-    delete glog_helper;
+
+    if ( glog_helper) {
+        delete glog_helper;
+        glog_helper = nullptr;
+    }
 
     if ( enclave_id ) {
         free( enclave_id );

@@ -23,24 +23,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/
 set(APP_SRC_FILES 
         App.cpp
 		common/tee_error.cpp 
-		common/app_util.cpp 
-		#common/CJsonObject.cpp 
-		#common/cJSON.c 
-		#common/json.cpp
-		#common/ocall_function.cpp 
 		common/log_u.cpp
-		#handler/Handler.cpp
-		#controller/thrdtask/thrdpool.cpp 
-		#controller/controller.cpp 
-		#controller/thrdtask/thread_task.cpp 
-		#controller/CallBack.cpp 
-		#controller/data_verify.cpp
-		#service/EnclaveAccess.cpp 
-		#service/quote_generation.cpp
-		#
-		#json/CJsonObject.cpp 
-		json/cJSON.c 
-		json/json.cpp
 		#
 		ocall/ocall.cpp
 		#

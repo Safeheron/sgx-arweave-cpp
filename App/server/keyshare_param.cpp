@@ -17,10 +17,7 @@
 using safeheron::curve::Curve;
 using safeheron::curve::CurvePoint;
 using safeheron::curve::CurveType;
-
-using namespace web;
-using namespace http;
-using namespace utility;
+using namespace web;    // for json
 
 KeyShareParam::KeyShareParam()
 {
