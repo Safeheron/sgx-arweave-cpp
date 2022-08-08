@@ -172,7 +172,6 @@ uint32_t enclave_create_report(const sgx_target_info_t* p_qe3_target, sgx_report
 
     /** Generate the report */
     sgx_status_t  sgx_error = sgx_create_report(p_qe3_target, &report_data, p_report);
-
     return sgx_error;
 }
 

@@ -30,9 +30,7 @@ CallBackFunction::CallBackFunction(const string& request_id_in, bool success, co
 
 }
 
-CallBackFunction::~CallBackFunction(){
-
-}
+CallBackFunction::~CallBackFunction() = default;
 
 pplx::task<void> CallBackFunction::PostRequest() {
 

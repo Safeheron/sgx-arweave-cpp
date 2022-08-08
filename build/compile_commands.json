@@ -1,0 +1,97 @@
+[
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/App.cpp.o -c /tmp/tmp.itA7eJzVq8/App/App.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/App.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/common/tee_error.cpp.o -c /tmp/tmp.itA7eJzVq8/App/common/tee_error.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/common/tee_error.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/common/app_util.cpp.o -c /tmp/tmp.itA7eJzVq8/App/common/app_util.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/common/app_util.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/common/CJsonObject.cpp.o -c /tmp/tmp.itA7eJzVq8/App/common/CJsonObject.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/common/CJsonObject.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/handler/Handler.cpp.o -c /tmp/tmp.itA7eJzVq8/App/handler/Handler.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/handler/Handler.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/controller/thrdtask/thrdpool.cpp.o -c /tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thrdpool.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thrdpool.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/controller/controller.cpp.o -c /tmp/tmp.itA7eJzVq8/App/controller/controller.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/controller/controller.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/controller/thrdtask/thread_task.cpp.o -c /tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thread_task.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thread_task.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/controller/CallBack.cpp.o -c /tmp/tmp.itA7eJzVq8/App/controller/CallBack.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/controller/CallBack.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/controller/data_verify.cpp.o -c /tmp/tmp.itA7eJzVq8/App/controller/data_verify.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/controller/data_verify.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/service/EnclaveAccess.cpp.o -c /tmp/tmp.itA7eJzVq8/App/service/EnclaveAccess.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/service/EnclaveAccess.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/g++ -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App   -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -std=c++11 -O3 -DNDEBUG   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/tee-arweave-server.dir/service/quote_generation.cpp.o -c /tmp/tmp.itA7eJzVq8/App/service/quote_generation.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/App/service/quote_generation.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/App",
+  "command": "/usr/bin/gcc -DNDEBUG -I/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include -I/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include -I/opt/intel/sgxsdk/include -I/usr/local/include/safeheron -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/App/handler -I/tmp/tmp.itA7eJzVq8/App/controller -I/tmp/tmp.itA7eJzVq8/App/controller/thrdtask -I/tmp/tmp.itA7eJzVq8/App/service -I/tmp/tmp.itA7eJzVq8/build/App  -UDEBUG -DNDEBUG -UEDEBUG -m64 -O2 -fPIC -Wno-attributes -O3 -DNDEBUG   -UEDEBUG -UDEBUG -o CMakeFiles/tee-arweave-server.dir/Enclave_u.c.o -c /tmp/tmp.itA7eJzVq8/build/App/Enclave_u.c",
+  "file": "/tmp/tmp.itA7eJzVq8/build/App/Enclave_u.c"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/g++ -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -nostdinc++ -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/enclave.dir/Enclave.cpp.o -c /tmp/tmp.itA7eJzVq8/Enclave/Enclave.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/Enclave/Enclave.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/g++ -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -nostdinc++ -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/enclave.dir/common/tee_error.cpp.o -c /tmp/tmp.itA7eJzVq8/Enclave/common/tee_error.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/Enclave/common/tee_error.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/g++ -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -nostdinc++ -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/enclave.dir/common/CJsonObject.cpp.o -c /tmp/tmp.itA7eJzVq8/Enclave/common/CJsonObject.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/Enclave/common/CJsonObject.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/g++ -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -nostdinc++ -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/enclave.dir/KeyShardCreation.cpp.o -c /tmp/tmp.itA7eJzVq8/Enclave/KeyShardCreation.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/Enclave/KeyShardCreation.cpp"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/gcc -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -o CMakeFiles/enclave.dir/Enclave_t.c.o -c /tmp/tmp.itA7eJzVq8/build/Enclave/Enclave_t.c",
+  "file": "/tmp/tmp.itA7eJzVq8/build/Enclave/Enclave_t.c"
+},
+{
+  "directory": "/tmp/tmp.itA7eJzVq8/build/Enclave",
+  "command": "/usr/bin/g++ -DNDEBUG -DPB_ENABLE_SGX -Denclave_EXPORTS -I/tmp/tmp.itA7eJzVq8/Enclave -I/tmp/tmp.itA7eJzVq8/include -I/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include -I/opt/intel/sgxsdk/include -I/opt/intel/sgxsdk/include/tlibc -I/opt/intel/sgxsdk/include/libcxx -I/opt/intel/sgxsdk/include/tprotobuf -I/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include -I/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include -I/tmp/tmp.itA7eJzVq8/build/Enclave  -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron  -UDEBUG -DNDEBUG -UEDEBUG -fmacro-prefix-map=/tmp/tmp.itA7eJzVq8=/safeheron -m64 -O2 -nostdinc -fvisibility=hidden -fpie -fstack-protector -nostdinc++ -O3 -DNDEBUG -fPIC   -UEDEBUG -UDEBUG -std=gnu++14 -o CMakeFiles/enclave.dir/common/enclave_util.cpp.o -c /tmp/tmp.itA7eJzVq8/Enclave/common/enclave_util.cpp",
+  "file": "/tmp/tmp.itA7eJzVq8/Enclave/common/enclave_util.cpp"
+}
+]

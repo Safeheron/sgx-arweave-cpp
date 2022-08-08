@@ -1,0 +1,116 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "App",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-App-Release-3b50088e51f849602065.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "App",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "Enclave",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-Enclave-Release-f924f44ca1157b10d754.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Enclave",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "tee-arweave-server",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "enclave::@564273d1a909f4f8060d",
+					"jsonFile" : "target-enclave-Release-8562bc634bf11b813361.json",
+					"name" : "enclave",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "package::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-package-Release-046fe56bba18caa85c4e.json",
+					"name" : "package",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "tee-arweave-server::@4cec9bfdf5c218c89c51",
+					"jsonFile" : "target-tee-arweave-server-Release-27fe398abf3c759eae1a.json",
+					"name" : "tee-arweave-server",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/tmp/tmp.itA7eJzVq8/build",
+		"source" : "/tmp/tmp.itA7eJzVq8"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

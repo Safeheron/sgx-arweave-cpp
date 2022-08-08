@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="tee-arweave-server"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake\;CMake Files\App\;CMake Files\Enclave\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="package">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 package"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tee-arweave-server">
+				<Option output="/tmp/tmp.itA7eJzVq8/build/App/tee-arweave-server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build/App"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DNDEBUG"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include"/>
+					<Add directory="/opt/intel/sgxsdk/include"/>
+					<Add directory="/usr/local/include/safeheron"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/handler"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/controller"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/service"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/build/App"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 tee-arweave-server"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tee-arweave-server/fast">
+				<Option output="/tmp/tmp.itA7eJzVq8/build/App/tee-arweave-server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build/App"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DNDEBUG"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/3rdparty/common-util-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/3rdparty/mbedtls-2.6.0/include"/>
+					<Add directory="/opt/intel/sgxsdk/include"/>
+					<Add directory="/usr/local/include/safeheron"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/handler"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/controller"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/App/service"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/build/App"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 tee-arweave-server/fast"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/App/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="enclave">
+				<Option output="/tmp/tmp.itA7eJzVq8/build/Enclave/enclave.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build/Enclave"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DNDEBUG"/>
+					<Add option="-DPB_ENABLE_SGX"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/Enclave"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include"/>
+					<Add directory="/opt/intel/sgxsdk/include"/>
+					<Add directory="/opt/intel/sgxsdk/include/tlibc"/>
+					<Add directory="/opt/intel/sgxsdk/include/libcxx"/>
+					<Add directory="/opt/intel/sgxsdk/include/tprotobuf"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/build/Enclave"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 enclave"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="enclave/fast">
+				<Option output="/tmp/tmp.itA7eJzVq8/build/Enclave/enclave.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/tmp/tmp.itA7eJzVq8/build/Enclave"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DNDEBUG"/>
+					<Add option="-DPB_ENABLE_SGX"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/Enclave"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/sgx-crypto-suites-tss-rsa/include"/>
+					<Add directory="/opt/intel/sgxsdk/include"/>
+					<Add directory="/opt/intel/sgxsdk/include/tlibc"/>
+					<Add directory="/opt/intel/sgxsdk/include/libcxx"/>
+					<Add directory="/opt/intel/sgxsdk/include/tprotobuf"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/mbedtls-sgx-2.6.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/3rdparty/tee-util-sgx-1.0.0/include"/>
+					<Add directory="/tmp/tmp.itA7eJzVq8/build/Enclave"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 enclave/fast"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/tmp/tmp.itA7eJzVq8/build/Enclave/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/App.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/App.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/CJsonObject.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/CJsonObject.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/app_util.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/app_util.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/tee_error.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/common/tee_error.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/CallBack.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/CallBack.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/controller.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/controller.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/data_verify.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/data_verify.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thrdpool.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thrdpool.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thread_task.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/controller/thrdtask/thread_task.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/handler/Handler.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/handler/Handler.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/service/EnclaveAccess.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/service/EnclaveAccess.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/service/quote_generation.cpp">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/service/quote_generation.h">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/Enclave.cpp">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/Enclave.h">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/KeyShardCreation.cpp">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/KeyShardCreation.h">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/CJsonObject.cpp">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/CJsonObject.h">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/enclave_util.cpp">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/enclave_util.h">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/tee_error.cpp">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/common/tee_error.h">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/build/App/Enclave_u.c">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/build/App/Enclave_u.h.rule">
+			<Option target="tee-arweave-server"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/build/Enclave/Enclave_t.c">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/build/Enclave/Enclave_t.h.rule">
+			<Option target="enclave"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/cmake/ConfigSGX.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/cmake/Init.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/App/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\App\"/>
+		</Unit>
+		<Unit filename="/tmp/tmp.itA7eJzVq8/Enclave/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Enclave\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
