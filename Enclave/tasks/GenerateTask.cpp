@@ -84,7 +84,7 @@ int GenerateTask::execute(
 
     // Return busy is context list is full
     if ( g_keyContext_list.size() >= MAX_TASK_COUNT ) {
-        error_msg = format_msg( "Request ID: %s, Connext list is full! current size: %d", 
+        error_msg = format_msg( "Request ID: %s, Key connext list in TEE is full! current size: %d", 
             request_id_.c_str(), (int)g_keyContext_list.size() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_ENCLAVE_IS_BUSY;

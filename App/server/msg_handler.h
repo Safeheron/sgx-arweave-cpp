@@ -14,12 +14,20 @@
 #include "thread_task.h"
 #include <string>
 #include <list>
+#include <mutex>
 
 /**
  * HTTP request paths defintion
  */
 #define HTTP_REQ_GENERATE_KEYSHARE  "/arweave/create_key_share"
 #define HTTP_REQ_QUERY_KEYSTATE     "/arweave/query_key_shard_state"
+
+/**
+ * Max thread count in s_thread_pool
+ * s_thread_pool is a thread pool to save
+ * all asynchronous task threads
+ */
+#define MAX_TASKTHREAD_COUNT       100
 
 /**
  * Class for HTTP request message handler
@@ -42,14 +50,16 @@ public:
     int process( const std::string & req_path, const std::string & req_body, std::string & resp_body );
     
 public:
-    static std::string generateRequestID( const std::string & prefix );
-    static std::string getMessageReply( const std::string & request_id, bool success, const std::string & message );
-    static void destoryThreadPool();
+    static std::string CreateRequestID( const std::string & prefix );
+    static std::string GetMessageReply( const std::string & request_id, bool success, const std::string & message );
+    static int CreateEnclaveReport( const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
+    static void DestoryThreadPool();
 
 private:
-    int generateKeyShare( const std::string & req_body, std::string & resp_body );
-    int queryKeyShareState( const std::string & req_body, std::string & resp_body );
+    int GenerateKeyShare( const std::string & req_body, std::string & resp_body );
+    int QueryKeyShareState( const std::string & req_body, std::string & resp_body );
 private:
+    static std::mutex   s_thread_lock;
     static std::list<ThreadTask*>  s_thread_pool;
 };
 #endif //_MSG_HANDLER_H_

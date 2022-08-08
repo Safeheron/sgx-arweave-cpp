@@ -1,43 +1,38 @@
-#include <stdio.h>
-#include <string.h>
-#include <pwd.h>
-#include "sgx_urts.h"
 #include "App.h"
 #include "Enclave_u.h"
 #include "tee_error.h"
-#include <log_u.h>
-#include "Handler.h"
+#include "common/log_u.h"
+#include "server/listen_svr.h"
 #include "json/json.h"
+#include <stdio.h>
+#include <string.h>
+#include <pwd.h>
+#include <sgx_urts.h>
 
 #define PROJECT_NAME    "tee-arweave"
 
-std::unique_ptr<handler> g_httpHandler;
-bool thread_clear_map_quit = false;
-
-std::string interface_create = "/arweave/create_key_share";
-std::string interface_query  = "/arweave/query_key_shard_state";
-std::string call_back_address = "http://127.0.0.1:8008/sayHi";
-
+std::unique_ptr<listen_svr> g_httpServer = nullptr;
 sgx_enclave_id_t global_eid = 0;
-thrdpool_t* pool = nullptr;
 
-void on_initialize(const string& address)
+// Start the HTTP listen server, and receive
+// request from clients
+void HttpServer_Start( const std::string & address )
 {
-    uri_builder uri(address);
+    uri_builder uri( address );
 
     auto addr = uri.to_uri().to_string();
-    g_httpHandler = std::unique_ptr<handler>(new handler(addr));
-    g_httpHandler->open().wait();
+    g_httpServer = std::unique_ptr<listen_svr>(new listen_svr( addr ));
+    g_httpServer->open().wait();
 
     INFO_OUTPUT_CONSOLE("Listening for requests at: %s", address.c_str());
 }
 
-void on_shutdown()
+// Shutdown the HTTP listen server
+void HttpServer_Shutdown()
 {
-    /** Destroy the thread pool */
-    thrdpool_destroy(&PendingTask, pool);
-
-    g_httpHandler->close().wait();
+    if ( g_httpServer ) {
+        g_httpServer->close().wait();
+    }
 }
 
 int SGX_CDECL main(int argc, char *argv[])
@@ -46,6 +41,10 @@ int SGX_CDECL main(int argc, char *argv[])
     sgx_status_t sgx_status;
     char* enclave_id = nullptr;
     size_t enclave_id_len = 0;
+    std::string listen_addr = "http://0.0.0.0";
+    const std::string LIST_PORT = "40000";
+    const std::string log_dir = "/root/glog-arweave";
+    std::string input_line;
     //
     std::string test_req = "{" \
     "\"userPublicKeyList\": ["  \
@@ -59,24 +58,18 @@ int SGX_CDECL main(int argc, char *argv[])
     "\"callBackAddress\": \"http://127.0.0.1:8008/sayHi\" "\
     "}";
     //
-    string line;
-    string log_dir = U("/root/glog-arweave");
-    string port = U("40000");
-    string address = U("http://0.0.0.0:");
-    address.append(port);
 
     /** Initialize log */
     TeeLogHelper* glog_helper = nullptr;
     glog_helper = new TeeLogHelper( log_dir.c_str(), PROJECT_NAME );
 
     /** Initialize trusted execution environment */
-    sgx_status = sgx_create_enclave((const char*)argv[1], 0, NULL, NULL, &global_eid, NULL);
+    sgx_status = sgx_create_enclave( (const char*)argv[1], 0, nullptr, nullptr, &global_eid, nullptr );
     if (sgx_status != SGX_SUCCESS ) {
         ERROR("initialize enclave failed! enclave file: %s, error message: %s", argv[1], t_strerror((int)sgx_status));
         delete glog_helper;
         return -1;
     }
-
     sgx_status = ecall_get_enclave_id( global_eid, &ret, &enclave_id, &enclave_id_len );
     if (sgx_status != SGX_SUCCESS || ret != 0) {
         ERROR("ecall_get_enclave_id() failed, error message: %s", t_strerror((int)sgx_status));
@@ -118,18 +111,20 @@ int SGX_CDECL main(int argc, char *argv[])
     ////////////////////////Test/////////////////////////////
 
     /** Initializing the REST service listener */
-    on_initialize(address);
+    listen_addr.append(":");
+    listen_addr.append(LIST_PORT);
+    HttpServer_Start( listen_addr );
 
+    /* End server until any key is pressed */
     INFO_OUTPUT_CONSOLE("Press ENTER to exit.");
-    getline(std::cin, line);
+    getline(std::cin, input_line);
 
     /** Server exit */
     INFO_OUTPUT_CONSOLE( "Server closed!");
-    thread_clear_map_quit = true;
-    on_shutdown();
+    HttpServer_Shutdown();
 
     /** Free enclave resources */
-    ecall_free( global_eid);
+    ecall_free( global_eid );
 
     /** Destroy enclave */
     sgx_destroy_enclave(global_eid);

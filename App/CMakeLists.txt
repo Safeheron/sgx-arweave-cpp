@@ -38,7 +38,7 @@ set(APP_SRC_FILES
 		#service/EnclaveAccess.cpp 
 		#service/quote_generation.cpp
 		#
-		json/CJsonObject.cpp 
+		#json/CJsonObject.cpp 
 		json/cJSON.c 
 		json/json.cpp
 		#

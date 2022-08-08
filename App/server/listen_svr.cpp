@@ -18,19 +18,38 @@ using namespace web::http;
 using namespace web::http::client;
 
 listen_svr::listen_svr( const std::string & url )
+ : listener_( url )
 {
     listener_.support(methods::POST, 
-                      std::bind(&listen_svr::HandlePost, 
+                      std::bind(&listen_svr::HandleMessage, 
+                      this, 
+                      std::placeholders::_1));
+    listener_.support(methods::GET, 
+                      std::bind(&listen_svr::HandleMessage, 
                       this, 
                       std::placeholders::_1));
 }
 
 listen_svr::~listen_svr()
 {
-    listener_.close();
 }
 
-void listen_svr::HandlePost( const http_request & message )
+// Start to listen
+pplx::task<void> listen_svr::open() 
+{ 
+    return listener_.open(); 
+}
+
+// Stop to listen
+pplx::task<void> listen_svr::close() 
+{ 
+    msg_handler::DestoryThreadPool();
+
+    return listener_.close(); 
+}
+
+// A HTTP request message is received
+void listen_svr::HandleMessage( const http_request & message )
 {
     std::string path = message.request_uri().path();
     auto req_body = message.extract_json().get();
@@ -45,6 +64,7 @@ void listen_svr::HandlePost( const http_request & message )
     message.reply( status_codes::OK, resp_body );
 }
 
+// Post a message to client
 pplx::task<void> listen_svr::PostRequest( 
     const std::string & request_id, 
     const std::string & client_url, 
@@ -54,7 +74,6 @@ pplx::task<void> listen_svr::PostRequest(
     http_client client{client_url};
     web::json::value resp_json = json::value::parse( body );
 
-    // POST request to client
     auto request = client.request( methods::POST, path, resp_json )
             .then( [request_id](http_response resp ) {
                 if ( resp.status_code() != status_codes::OK ) {
