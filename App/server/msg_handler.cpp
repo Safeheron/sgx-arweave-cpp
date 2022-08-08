@@ -389,8 +389,7 @@ int msg_handler::GenerateKeyShare(
     std::lock_guard<std::mutex> lock( s_thread_lock );
 
     // free all stopped task threads in pool
-    for ( std::list<ThreadTask*>::iterator it = s_thread_pool.begin();
-          it != s_thread_pool.end(); ) {
+    for ( auto it = s_thread_pool.begin(); it != s_thread_pool.end(); ) {
         if ( (*it)->is_stopped() ) {
             delete *it;
             s_thread_pool.erase( it );
