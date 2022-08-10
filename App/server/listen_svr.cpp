@@ -10,7 +10,7 @@
  */
 #include "listen_svr.h"
 #include "msg_handler.h"
-#include "log_u.h"
+#include "../common/log_u.h"
 #include <cpprest/http_client.h>
 
 using namespace utility;

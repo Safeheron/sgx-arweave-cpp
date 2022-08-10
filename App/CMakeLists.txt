@@ -53,11 +53,6 @@ include_directories(
 		${GLOG_INCLUDE_DIR}
 		${SAFEHERON_INCLUDE_DIR}
 		${SGX_SDK}/include
-		common
-		handler
-		controller
-		controller/thrdtask
-		service
 )
 # Needed for the generated file Enclave_u.h
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

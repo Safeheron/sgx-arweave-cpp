@@ -10,11 +10,11 @@
  */
 #include "msg_handler.h"
 #include "listen_svr.h"
-#include "keyshare_param.h"
-#include "define.h"
 #include "Enclave_u.h"
-#include "log_u.h"
-#include "tee_error.h"
+#include "keyshare_param.h"
+#include "../common/define.h"
+#include "../common/log_u.h"
+#include "../common/tee_error.h"
 #include <cpprest/http_client.h>
 #include <safeheron/crypto-bn/bn.h>
 #include <safeheron/crypto-bn/rand.h>

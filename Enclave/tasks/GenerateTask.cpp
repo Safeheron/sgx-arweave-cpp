@@ -65,6 +65,8 @@ int GenerateTask::execute(
     RSAPublicKey pubkey;
     RSAKeyMeta key_meta;
 
+    FUNC_BEGIN;
+
     request_id_ = request_id;
     if (request.length() == 0) {
         error_msg = format_msg( "Request ID: %s, request is null!", request_id_.c_str() );
@@ -166,6 +168,8 @@ int GenerateTask::execute(
     }
     context->key_status = eKeyStatus_Finished;
     context->finished_time = get_system_time();
+
+    FUNC_END;
 
     return ret;
 }

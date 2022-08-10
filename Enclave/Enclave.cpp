@@ -18,9 +18,13 @@ int ecall_init()
 {
     int ret = TEE_OK;
 
+    FUNC_BEGIN;
+
     // Register TEE tasks
     g_dispatcher.register_task( new GenerateTask() );
     g_dispatcher.register_task( new QueryTask() );
+
+    FUNC_END;
 
     return ret;
 }
@@ -43,7 +47,12 @@ int ecall_run(
     std::string error_msg;
     uint8_t* outside_buff = nullptr;
 
+    FUNC_BEGIN;
+
     plain_request.assign( input_data, data_len );
+    printf("--->type: %d\n", type);
+    printf("--->request_id: %s\n", request_id);
+    printf("--->plain_request: %s\n", plain_request.c_str());
 
     // Dispatch request
     if ( ( ret = g_dispatcher.dispatch(type, request_id, plain_request, plain_reply, error_msg) ) != 0 ){
@@ -66,6 +75,9 @@ int ecall_run(
     memcpy( outside_buff, plain_reply.c_str(), reply_len );
     *output = (char*)outside_buff;
     *output_len = reply_len;
+
+    FUNC_END;
+
 _exit:
 
     return ret;

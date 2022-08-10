@@ -143,7 +143,11 @@ std::string KeyShareParam::calc_pubkey_list_hash()
 std::string KeyShareParam::to_json_string( )
 {
     json::value root = json::value::object( true );
-    //root[NODE_NAME_USER_PUBLICKEY_LIST] = json::value( request_id_ );
+    std::vector<json::value> pubkey_array;
+    for ( int i = 0; i < pubkey_list_.size(); ++i ) {
+        pubkey_array.push_back( json::value(pubkey_list_[i]) );
+    }
+    root[NODE_NAME_USER_PUBLICKEY_LIST] = json::value::array( pubkey_array );
     root[NODE_NAME_NUMERATOR_K] = json::value( k_ );
     root[NODE_NAME_DENOMINATOR_L] = json::value( l_ );
     root[NODE_NAME_KEY_LENGTH] = json::value( key_length_ );

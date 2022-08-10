@@ -1,6 +1,6 @@
 #include "App.h"
 #include "Enclave_u.h"
-#include "tee_error.h"
+#include "common/tee_error.h"
 #include "common/log_u.h"
 #include "server/listen_svr.h"
 #include <stdio.h>
@@ -77,15 +77,17 @@ int SGX_CDECL main(int argc, char *argv[])
     }
     INFO_OUTPUT_CONSOLE( "Enclave is initialized! Enclave ID: %s", enclave_id );
 
-    ////////////////////////Test/////////////////////////////
-    char* reply = nullptr;
-    size_t reply_len = 0;
     sgx_status = ecall_init( global_eid, &ret );
     if (sgx_status != SGX_SUCCESS || ret != 0) {
         printf( "ecall_init() failed, error message: %s\n", t_strerror((int)sgx_status) );
         delete glog_helper;
         return -1;
     }
+    
+#if 0
+    ////////////////////////Test/////////////////////////////
+    char* reply = nullptr;
+    size_t reply_len = 0;
     sgx_status = ecall_run( global_eid, &ret, 101,  "1111", test_req.c_str(), test_req.length(), &reply, &reply_len );
     if (sgx_status != SGX_SUCCESS || ret != 0) {
         printf( "ecall_run() failed, ret: 0x%x, error message: %s\n", ret, t_strerror((int)sgx_status) );
@@ -103,7 +105,7 @@ int SGX_CDECL main(int argc, char *argv[])
         return -1;
     }
     ////////////////////////Test/////////////////////////////
-
+#endif //0
     /** Initializing the REST service listener */
     listen_addr.append(":");
     listen_addr.append(LIST_PORT);

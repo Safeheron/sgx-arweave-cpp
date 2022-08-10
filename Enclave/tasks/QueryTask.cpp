@@ -46,6 +46,8 @@ int QueryTask::execute(
     std::string input_pubkey_hash;
     KeyShardContext* context = nullptr;
     JSON::Root root;
+    
+    FUNC_BEGIN;
 
     // checking
     request_id_ = request_id;
@@ -83,6 +85,8 @@ int QueryTask::execute(
     root["k"] = context->k;
     root["l"] = context->l;
     root["alive_time_seconds"] = int(get_system_time() - context->start_time);
+
+    FUNC_END;
 
 _exit:
     reply = JSON::Root::write( root );
