@@ -37,6 +37,7 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION})
 
 add_subdirectory(App)
 add_subdirectory(Enclave)
+add_subdirectory(test)
 
 
 # package installed files to an tar.gz file.
