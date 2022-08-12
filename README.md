@@ -7,6 +7,21 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
 
 
 
+# Contents
+* [Service Workflow](#service-workflow)
+* [Deployment Document](#deployment-document)
+* [Prerequisites](#prerequisites)
+* [Build & Run](#build&run)
+* [Usage](#code-structure)
+    * [Configuration File](#configuration-file)
+    * [Creation Request Details](#creation-request-details)
+    * [Query Request Details](#query-request-details)
+* [Intel® SGX Remote Attestation](#intel-sgx-remote-attestation)
+* [Contributions & Contact](#contributions--contact)
+
+
+
+
 # Service Workflow
 This service provides two main functions: **Private Key Shard Creation** and **Creation Status Query**.
 - **Private Key Shard Creation**: Create the private key shards and generate a remote attestation report. The request is processed asynchronously and will be returned immediately. When the request processing is finished, the service will send the generated key shards data and the certification report to the specified service address as an HTTP POST request by using a webhook.
@@ -32,7 +47,7 @@ You can follow the [Dependency-Installation](./doc/Dependency-Installation.md) t
 
 
 
-# Build and Run
+# Build & Run
 
 It only supports Linux now.
 
@@ -258,6 +273,6 @@ For more details on DCAP and remote attestation, please refer to the [Intel® Do
 
 
 
-# Development Process & Contact
+# Contributions & Contact
 
 This library is maintained by Safeheron. Contributions are welcomed! Besides, for GitHub issues and PRs, feel free to reach out by email.
