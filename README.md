@@ -99,7 +99,7 @@ user_public_key_list |  String  |    YES    | This field represents the user pub
 k | Integer  |    YES    | Threshold numerator.
 l | Integer  |    YES    | Threshold denominator.
 key_length | Integer  |    YES    | The length of the private key to be generated. Only in 1024, 2048, 3072 and 4096.
-webhook_URL |  String  |    YES    | Webhook address. The generated results will be called back to this address via a webhook service.
+webhook_url |  String  |    YES    | Webhook address. The generated results will be called back to this address via a webhook service.
 
 ```json
 {
@@ -111,7 +111,7 @@ webhook_URL |  String  |    YES    | Webhook address. The generated results will
 	"k": 2,
 	"l": 3,
 	"key_length": 1024,
-	"webhook_URL": "http://127.0.0.1:8008/sayHi"
+	"webhook_url": "http://127.0.0.1:8008/sayHi"
 }
 ```
 
