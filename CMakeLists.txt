@@ -16,8 +16,8 @@ include (cmake/Init.cmake)
 include (cmake/ConfigSGX.cmake)
 
 set(CMAKE_PREFIX_PATH "/opt/protobuf/lib/pkgconfig")
-set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
-set(PROTOC  "/opt/protobuf/bin/protoc")
+#set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
+#set(PROTOC  "/opt/protobuf/bin/protoc")
 find_package(PkgConfig REQUIRED)
 
 set(SGX_SUITS_TSS_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/sgx-crypto-suites-tss-rsa)

@@ -1,19 +1,17 @@
 # CMake for application
 #
 set(CMAKE_PREFIX_PATH "/opt/protobuf/lib/pkgconfig")
-set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
-set(PROTOC  "/opt/protobuf/bin/protoc")
+#set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
+#set(PROTOC  "/opt/protobuf/bin/protoc")
 
 # Set safeheron library paths
 set(SAFEHERON_INCLUDE_DIR /usr/local/include/safeheron)
 set(SAFEHERON_LIB /usr/local/lib/libCryptoSuites.so)
 
-# Set glog library paths
-set(GLOG_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/glog-0.4.0)
-set(GLOG_INCLUDE_DIR ${GLOG_ROOT}/include)
-set(GLOG_LIBRARY_DIR ${GLOG_ROOT}/lib)
-set(GLOG_LIB_GLOG ${GLOG_LIBRARY_DIR}/libglog.a)
-set(GLOG_LIB_GFLAGS ${GLOG_LIBRARY_DIR}/libgflags.a)
+# Threads library is needed for cpprest
+find_package(Threads REQUIRED)
+# glog library is needed for log file
+find_package(glog REQUIRED)
 
 # Set all flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${SGX_COMMON_CFLAGS} -fPIC -Wno-attributes")
@@ -42,15 +40,12 @@ add_custom_command(OUTPUT Enclave_u.h Enclave_u.c
 )
 message(STATUS "COMMAND: ${SGX_EDGER8R} --untrusted ${CMAKE_SOURCE_DIR}/Enclave.edl")
 
-find_package(Threads REQUIRED)
-
 add_executable(${PROJECT_NAME} 
         ${APP_SRC_FILES}
         ${CMAKE_CURRENT_BINARY_DIR}/Enclave_u.c
 )
 
 include_directories(
-		${GLOG_INCLUDE_DIR}
 		${SAFEHERON_INCLUDE_DIR}
 		${SGX_SDK}/include
 )
@@ -61,12 +56,12 @@ message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
 
 target_link_libraries(${PROJECT_NAME}
-        ${GLOG_LIB_GLOG} ${GLOG_LIB_GFLAGS}
         -L${SGX_LIBRARY_PATH} -l${SGX_URTS_LIB} -l${SGX_USVC_LIB} -lsgx_uprotected_fs
         -lpthread
 		Threads::Threads
+		glog::glog
 		-lboost_system -lcrypto -lssl -lcpprest -lsgx_dcap_ql -lsgx_quote_ex -lsgx_urts ${SAFEHERON_LIB}
-	-lz
+		-lz
 )
 
 # Install target file
