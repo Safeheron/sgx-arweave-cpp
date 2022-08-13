@@ -70,21 +70,15 @@ int QueryTask::execute(
         goto _exit;
     }
     
-    // return success = false if the found key's status is not eKeyStatus_Generating
-    if ( context->key_status != eKeyStatus_Generating ) {
-        error_msg = format_msg( "Request ID: %s, key context has found, but it's status is bad! Status: %d", 
-            request_id_.c_str(), context->key_status );
-        INFO( "%s", error_msg.c_str() );
-        ret = TEE_ERROR_KEYSTATUS_IS_BAD;
-        root["success"] = false;
-        goto _exit;
-    }
-
     // return success = true
     root["success"] = true;
+    root["status_code"] = context->key_status;
+    root["status_text"] = get_status_text( context->key_status );
     root["k"] = context->k;
     root["l"] = context->l;
-    root["alive_time_seconds"] = int(get_system_time() - context->start_time);
+    root["alive_time_seconds"] = (context->finished_time == 0) ? 
+                                 int(get_system_time() - context->start_time) :
+                                 int(context->finished_time - context->start_time);
 
     FUNC_END;
 
@@ -92,4 +86,25 @@ _exit:
     reply = JSON::Root::write( root );
 
     return ret;
+}
+
+/**
+ * @brief Return key share generation's status text
+ * 
+ * @param status : status code, one of eKeyStatus
+ * @return std::string 
+ */
+std::string QueryTask::get_status_text( int status )
+{
+    switch ( status ) {
+    case eKeyStatus_Generating:
+        return "Generating";
+    case eKeyStatus_Finished:
+        return "Finished";
+    case eKeyStatus_Error:
+        return "Error";
+    case eKeyStatus_Unknown:
+    default:
+        return "Unknown";
+    } 
 }

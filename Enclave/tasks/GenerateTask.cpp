@@ -16,6 +16,7 @@
 #include "json/json.h"
 #include <crypto-curve/curve.h>
 #include <crypto-ecies/ecies.h>
+#include <crypto-encode/base64.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
@@ -281,7 +282,8 @@ int GenerateTask::get_keymeta_hash(
 // The JSON structure likes below:
 // 
 //  {
-//    "pubkey_list_hash": "publick key list hash",
+//    "pubkey_list_hash": "public key list hash",
+//    "key_shard_pubkey": "generated public key of private key shard",
 //    "key_shard_pkg": [
 //        {
 //            "public_key": "pubkey1 hex string",
@@ -292,8 +294,8 @@ int GenerateTask::get_keymeta_hash(
 //            "encrypt_key_info": "cipher of private key shard 2 and meta"
 //        },
 //        {
-//            "public_key": "pubkey2 hex string",
-//            "encrypt_key_info": "cipher of private key shard 2 and meta"
+//            "public_key": "pubkey3 hex string",
+//            "encrypt_key_info": "cipher of private key shard 3 and meta"
 //        }
 //     ]
 //  }
@@ -315,6 +317,12 @@ int GenerateTask::get_reply_string(
 
     // add node for "pubkey_list_hash"
     root["pubkey_list_hash"] = input_pubkey_hash;
+
+    // add node for "key_shard_pubkey"
+    std::string pubkey_json_str;
+    pubkey.ToJsonString( pubkey_json_str );
+    JSON::Root pubkey_root = JSON::Root::parse( pubkey_json_str );
+    root["key_shard_pubkey"] = pubkey_root;
 
     // add nodes for "key_shard_pkg"
     for ( const auto& prikey : prikey_list ) {

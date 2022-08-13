@@ -12,10 +12,13 @@
 #include "msg_handler.h"
 #include "../common/log_u.h"
 #include <cpprest/http_client.h>
+#include <safeheron/crypto-bn/bn.h>
+#include <safeheron/crypto-bn/rand.h>
 
 using namespace utility;
 using namespace web::http;
 using namespace web::http::client;
+using safeheron::bignum::BN;
 
 listen_svr::listen_svr( const std::string & url )
  : listener_( url )
@@ -51,21 +54,45 @@ pplx::task<void> listen_svr::close()
 // A HTTP request message is received
 void listen_svr::HandleMessage( const http_request & message )
 {
+    std::string request_id;
     std::string path = message.request_uri().path();
     auto req_body = message.extract_json().get();
 
     FUNC_BEGIN;
 
+    // generate an unique ID for log lines
+    request_id = CreateRequestID();
+    INFO_OUTPUT_CONSOLE( "Request ID: %s is received!", request_id.c_str() );
+
     if ( path.length() == 0 ) {
+        ERROR( "Request ID: %s, path is null!", request_id.c_str() );
         message.reply( status_codes::BadRequest, "Unknow request path!" );
     }
 
+    // process request and reply its response to client
     msg_handler handler;
     std::string resp_body;
-    handler.process( path, req_body.serialize(), resp_body );
-    message.reply( status_codes::OK, json::value::parse( resp_body ) );
+    handler.process( request_id, path, req_body.serialize(), resp_body );
+    web::json::value resp_json = json::value::parse( resp_body );
+    resp_json["request_id"] = json::value( request_id );
+    message.reply( status_codes::OK, resp_json );
+
+    INFO_OUTPUT_CONSOLE( "Request ID: %s is replied!", request_id.c_str() );
 
     FUNC_END;
+}
+
+// Generate an uniqne ID for every request process, and this ID
+// will be output log file to identify logs for this request process.
+std::string listen_svr::CreateRequestID( const std::string & prefix )
+{
+    std::string ret;
+
+    // generate an 8 bytes rand number as the ID
+    BN rand_bn = safeheron::rand::RandomBNStrict( 64 );
+    rand_bn.ToHexStr( ret );
+
+    return prefix + ret;
 }
 
 // Post a message to client
@@ -77,6 +104,7 @@ pplx::task<void> listen_svr::PostRequest(
     std::string path = "";
     http_client client{client_url};
     web::json::value resp_json = json::value::parse( body );
+    resp_json["request_id"] = json::value( request_id );
 
     auto request = client.request( methods::POST, path, resp_json )
             .then( [request_id](http_response resp ) {

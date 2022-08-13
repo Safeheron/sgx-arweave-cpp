@@ -42,22 +42,22 @@ public:
     /**
      * @brief : The HTTP message handle function
      * 
+     * @param req_id : the request id for log lines
      * @param req_path : the request path name string
      * @param req_body : a JSON string for request body
      * @param resp_body : return the response body string, in JSON
      * @return int : return 0 if success, otherwise return an error code.
      */
-    int process( const std::string & req_path, const std::string & req_body, std::string & resp_body );
+    int process( const std::string & req_id, const std::string & req_path, const std::string & req_body, std::string & resp_body );
     
 public:
-    static std::string CreateRequestID( const std::string & prefix );
-    static std::string GetMessageReply( const std::string & request_id, bool success, int code, const std::string & message );
+    static std::string GetMessageReply( bool success, int code, const std::string & message );
     static int CreateEnclaveReport( const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
     static void DestoryThreadPool();
 
 private:
-    int GenerateKeyShare( const std::string & req_body, std::string & resp_body );
-    int QueryKeyShareState( const std::string & req_body, std::string & resp_body );
+    int GenerateKeyShare( const std::string & req_id, const std::string & req_body, std::string & resp_body );
+    int QueryKeyShareState( const std::string & req_id, const std::string & req_body, std::string & resp_body );
 private:
     static std::mutex   s_thread_lock;
     static std::list<ThreadTask*>  s_thread_pool;

@@ -39,7 +39,7 @@ ThreadTask::ThreadTask( task_handler task_func, void* task_param )
 }
 ThreadTask::~ThreadTask()
 {
-
+    stop();
 }
 
 int ThreadTask::start()

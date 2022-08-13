@@ -42,6 +42,7 @@ public:
 
 private:
     void HandleMessage( const http_request & message );
+    std::string CreateRequestID( const std::string & prefix = "" );
 
 private:
     http_listener   listener_;

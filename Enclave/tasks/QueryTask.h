@@ -17,4 +17,5 @@ public:
     virtual int get_task_type( );
 
 private:
+    std::string get_status_text( int status );
 };
