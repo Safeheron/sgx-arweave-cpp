@@ -19,7 +19,6 @@ include_directories(
 
 add_executable(test
         	main.cpp
-			callback_listener.cpp
 )
 
 message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")

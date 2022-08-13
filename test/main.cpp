@@ -31,7 +31,7 @@ std::string g_query_path = "/arweave/query_key_shard_state";
 //
 int g_k = 2;
 int g_l = 3;
-int g_key_bits = 4096;
+int g_key_bits = 2048;
 std::string g_callback_addr = "http://127.0.0.1:8008";
 std::string g_callback_path = "/keyShareCallback";
 std::string g_user_pubkey[] = {"049f992995affb335b576a7186316fc0ecfcca3d88f78dfb00e0e76e1f9a9766135230831442e4b1975f2caf81756a250032ea5e165ba1631606795be04a00d42c",
@@ -81,7 +81,7 @@ int main()
         if ( (ret = doQueryStatusRequest()) != 0 ) {
             goto _exit;
         }
-        printf( "Status is query!\n\n" );
+        printf( "Status is returned!\n\n" );
         sleep( 2 );
     }
 
