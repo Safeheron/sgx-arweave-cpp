@@ -14,7 +14,7 @@
 #include "keyshare_param.h"
 #include <pthread.h>
 
-// Define thread function pointer
+// Define task callback function pointer
 typedef int (*task_handler) ( void* );
 
 class ThreadTask

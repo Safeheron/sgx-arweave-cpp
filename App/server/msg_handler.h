@@ -51,7 +51,7 @@ public:
     
 public:
     static std::string CreateRequestID( const std::string & prefix );
-    static std::string GetMessageReply( const std::string & request_id, bool success, const std::string & message );
+    static std::string GetMessageReply( const std::string & request_id, bool success, int code, const std::string & message );
     static int CreateEnclaveReport( const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
     static void DestoryThreadPool();
 

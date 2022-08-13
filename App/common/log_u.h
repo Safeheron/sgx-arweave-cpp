@@ -17,6 +17,9 @@
 // only output file name, but not full path in log
 #define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1):__FILE__)
 
+#define FUNC_BEGIN INFO( "Begin!" )
+#define FUNC_END INFO( "End!" )
+
 //// Basic macro
 //#define LOG(level, format, args...)                                   \
 //    do{                                                               \

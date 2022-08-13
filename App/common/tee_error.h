@@ -3,6 +3,22 @@
 
 #include <sgx_error.h>
 
+/**
+ * customize error codes
+ */
+#define APP_OK  0
+#define APP_ERROR_BASE                      0x20000000
+#define APP_ERROR_INVALID_PARAMETER         APP_ERROR_BASE + 0x1
+#define APP_ERROR_INVALID_REQ_PATH          APP_ERROR_BASE + 0x2
+#define APP_ERROR_MALLOC_FAILED             APP_ERROR_BASE + 0x3
+#define APP_ERROR_INVALID_PUBLIC_KEY_LIST   APP_ERROR_BASE + 0x4
+#define APP_ERROR_INVALID_K                 APP_ERROR_BASE + 0x5
+#define APP_ERROR_INVALID_L                 APP_ERROR_BASE + 0x6
+#define APP_ERROR_INVALID_KEYBITS           APP_ERROR_BASE + 0x7
+#define APP_ERROR_SERVER_IS_BUSY            APP_ERROR_BASE + 0x8
+#define APP_ERROR_FAILED_TO_START_THREAD    APP_ERROR_BASE + 0x9
+
+
 typedef struct _ra_errlist_t {
     int err;
     const char *msg;

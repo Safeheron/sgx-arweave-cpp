@@ -54,6 +54,8 @@ void listen_svr::HandleMessage( const http_request & message )
     std::string path = message.request_uri().path();
     auto req_body = message.extract_json().get();
 
+    FUNC_BEGIN;
+
     if ( path.length() == 0 ) {
         message.reply( status_codes::BadRequest, "Unknow request path!" );
     }
@@ -61,7 +63,9 @@ void listen_svr::HandleMessage( const http_request & message )
     msg_handler handler;
     std::string resp_body;
     handler.process( path, req_body.serialize(), resp_body );
-    message.reply( status_codes::OK, resp_body );
+    message.reply( status_codes::OK, json::value::parse( resp_body ) );
+
+    FUNC_END;
 }
 
 // Post a message to client

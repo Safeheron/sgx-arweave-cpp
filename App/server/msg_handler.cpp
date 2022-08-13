@@ -68,9 +68,13 @@ static int GenerateKeyShare_Task( void* keyshare_param )
     KeyShareParam* param = (KeyShareParam*) keyshare_param;
     web::json::value result_json;
 
+    FUNC_BEGIN;
+
     if ( !param ) {
         ERROR( "keyshare_param is null in GenerateKeyShare()!" );
-        return -1;
+        reply_body = msg_handler::GetMessageReply( request_id, false, APP_ERROR_INVALID_PARAMETER, "keyshare_param is null in GenerateKeyShare()!" );
+        ret = APP_ERROR_INVALID_PARAMETER;
+        goto _exit;
     }
     param_string = param->to_json_string();
     request_id = param->request_id_;
@@ -80,16 +84,15 @@ static int GenerateKeyShare_Task( void* keyshare_param )
           param_string.c_str(), param_string.length(), &result, &result_len )) != SGX_SUCCESS) {
         ERROR( "Request ID: %s,  ecall_run() encounter an error! sgx_status: %d, error message: %s", 
             request_id.c_str(), sgx_status, t_strerror( (int)sgx_status));
-        reply_body = msg_handler::GetMessageReply( request_id, false, "ECALL encounter an error!" );
-        ret = -1;
+        reply_body = msg_handler::GetMessageReply( request_id, false, sgx_status, "ECALL encounter an error!" );
+        ret = sgx_status;
         goto _exit;
     }
     if ( 0 != ret ) {
         ERROR( "Request ID: %s,  ecall_run() failed with eTaskType_Generate! ret: 0x%x, error message: %s", 
             request_id.c_str(), ret, result ? result : "" );
         ERROR( "Request ID: %s,  param_string: %s", request_id.c_str(), param_string.c_str() );
-        reply_body = msg_handler::GetMessageReply( request_id, false, result );
-        ret = -1;
+        reply_body = msg_handler::GetMessageReply( request_id, false, ret, result ? result : "" );
         goto _exit;
     }
     INFO_OUTPUT_CONSOLE("Request ID: %s, generate key share successfully.", request_id.c_str());
@@ -102,7 +105,6 @@ static int GenerateKeyShare_Task( void* keyshare_param )
     if ( (ret = msg_handler::CreateEnclaveReport( request_id, pubkey_list_hash, enclave_report)) != 0 ) {
         ERROR( "Request ID: %s,  msg_handler::CreateEnclaveReport() failed! pubkey_list_hash: %s, ret: %d", 
             request_id.c_str(), pubkey_list_hash.c_str(), ret );
-        ret = -1;
         goto _exit;
     }
 
@@ -134,6 +136,8 @@ _exit:
         param = nullptr;
     }
 
+    FUNC_END;
+
     return ret;
 }
 
@@ -162,6 +166,8 @@ int msg_handler::process(
 {
     int ret = 0;
 
+    FUNC_BEGIN;
+
     if ( req_path == HTTP_REQ_GENERATE_KEYSHARE ) {
         ret = GenerateKeyShare( req_body, resp_body );
     }
@@ -170,9 +176,11 @@ int msg_handler::process(
     }
     else {
         ERROR( "Request path is unknown! req_path: %s", req_path.c_str() );
-        resp_body = GetMessageReply( "", false, "Request path is unknown!" );
-        ret = -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_INVALID_REQ_PATH, "Request path is unknown!" );
+        ret = APP_ERROR_INVALID_REQ_PATH;
     }
+
+    FUNC_END;
 
     return ret;
 }
@@ -193,11 +201,13 @@ std::string msg_handler::CreateRequestID( const std::string & prefix )
 std::string msg_handler::GetMessageReply( 
     const std::string & request_id, 
     bool success, 
+    int code,
     const std::string & message )
 {
     json::value root = json::value::object( true );
     root["request_id"] = json::value( request_id );
     root["success"] = json::value( success );
+    root["code"] = json::value( code );
     root["message"] = json::value( message );
     return root.serialize();
 }
@@ -222,6 +232,8 @@ int msg_handler::CreateEnclaveReport(
     FILE *fptr = nullptr;
     bool is_out_of_proc = false;
     char *out_of_proc = getenv(SGX_AESM_ADDR);
+
+    FUNC_BEGIN;
 
     if ( request_id.length() == 0 ) {
         ERROR( "Request ID is null!" );
@@ -351,6 +363,7 @@ int msg_handler::CreateEnclaveReport(
 
     // OK
     ret = 0;
+    FUNC_END;
 
 _exit:
     if ( !p_quote_buffer ) {
@@ -385,6 +398,8 @@ int msg_handler::GenerateKeyShare(
     int ret = 0;
     std::string pubkey_list_hash;
     KeyShareParam* req_param = nullptr;
+
+    FUNC_BEGIN;
     
     std::lock_guard<std::mutex> lock( s_thread_lock );
 
@@ -392,7 +407,7 @@ int msg_handler::GenerateKeyShare(
     for ( auto it = s_thread_pool.begin(); it != s_thread_pool.end(); ) {
         if ( (*it)->is_stopped() ) {
             delete *it;
-            s_thread_pool.erase( it );
+            it = s_thread_pool.erase( it );
         }
         else {
             it++;
@@ -403,28 +418,28 @@ int msg_handler::GenerateKeyShare(
     // all parameters must be OK!
     if ( !(req_param = new KeyShareParam( req_body )) ) {
         ERROR( "new KeyShareParam object failed!" );
-        resp_body = GetMessageReply( "", false, "new KeyShareParam object failed!" );
-        return -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_MALLOC_FAILED, "new KeyShareParam object failed!" );
+        return APP_ERROR_MALLOC_FAILED;
     }
     if ( !req_param->pubkey_list_is_ok() ) {
         ERROR( "User pubkey list is wrong! size: %d", (int)req_param->pubkey_list_.size() );
-        resp_body = GetMessageReply( "", false, "User pubkey list is wrong!" );
-        return -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "User pubkey list is wrong!" );
+        return APP_ERROR_INVALID_PUBLIC_KEY_LIST;
     }
     if ( !req_param->k_is_ok() ) {
         ERROR( "Parameter k is wrong! k: %d", req_param->k_ );
-        resp_body = GetMessageReply( "", false, "Parameter k is wrong!" );
-        return -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_INVALID_K, "Parameter k is wrong!" );
+        return APP_ERROR_INVALID_K;
     }
     if ( !req_param->l_is_ok() ) {
         ERROR( "Parameter l is wrong! l: %d", req_param->l_ );
-        resp_body = GetMessageReply( "", false, "Parameter l is wrong!" );
-        return -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_INVALID_L, "Parameter l is wrong!" );
+        return APP_ERROR_INVALID_L;
     }
     if ( !req_param->key_length_is_ok() ) {
         ERROR( "Parameter key length is wrong! key_legnth: %d", req_param->key_length_ );
-        resp_body = GetMessageReply( "", false, "Parameter key length is wrong!" );
-        return -1;
+        resp_body = GetMessageReply( "", false, APP_ERROR_INVALID_KEYBITS, "Parameter key length is wrong!" );
+        return APP_ERROR_INVALID_KEYBITS;
     }
 
     // calc pubkey list hash for request_id
@@ -438,23 +453,25 @@ int msg_handler::GenerateKeyShare(
     // return is thread pool is full
     s_thread_lock.lock();
     if ( s_thread_pool.size() >= MAX_TASKTHREAD_COUNT ) {
-        resp_body = GetMessageReply( req_param->request_id_, false, "TEE service is busy!" );
-        return -1;
+        resp_body = GetMessageReply( req_param->request_id_, false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
+        return APP_ERROR_SERVER_IS_BUSY;
     }
     s_thread_lock.unlock();
 
     // create a thread for generation task
     ThreadTask* task = new ThreadTask( GenerateKeyShare_Task, req_param );
     if ( (ret = task->start()) != 0 ) {
-        resp_body = GetMessageReply( req_param->request_id_, false, "Create task thread failed!" );
-        return -1;
+        resp_body = GetMessageReply( req_param->request_id_, false, APP_ERROR_FAILED_TO_START_THREAD, "Create task thread failed!" );
+        return APP_ERROR_FAILED_TO_START_THREAD;
     }
     s_thread_lock.lock();
     s_thread_pool.push_back( task );
     s_thread_lock.unlock();
 
     // return OK
-    resp_body = GetMessageReply( req_param->request_id_, true, "Request has been accepted." );
+    resp_body = GetMessageReply( req_param->request_id_, true, 0, "Request has been accepted." );
+
+    FUNC_END;
 
     return ret;
 }
@@ -473,6 +490,8 @@ int msg_handler::QueryKeyShareState(
     std::string request_id;
     web::json::value req_json = json::value::parse(req_body);
 
+    FUNC_BEGIN;
+
     request_id = CreateRequestID( "" );
 
     // return error message if request body is invalid
@@ -480,7 +499,7 @@ int msg_handler::QueryKeyShareState(
          !req_json.at( NODE_NAME_PUBKEY_LIST_HASH ).is_string() ) {
         ERROR( "Request ID: %s, %s node is not in request body or has a wrong type!", 
             request_id.c_str(), NODE_NAME_PUBKEY_LIST_HASH );
-        resp_body = GetMessageReply( request_id, false, "invalid input, please check your data.");
+        resp_body = GetMessageReply( request_id, false, APP_ERROR_INVALID_PARAMETER,  "invalid input, please check your data.");
         ret = -1;
         goto _exit;
     }
@@ -491,14 +510,14 @@ int msg_handler::QueryKeyShareState(
           pubkey_list_hash.c_str(), pubkey_list_hash.length(), &result, &result_len )) != SGX_SUCCESS) {
         ERROR( "Request ID: %s,  ecall_run() encounter an error! sgx_status: %d, error message: %s", 
             request_id.c_str(), sgx_status, t_strerror( (int)sgx_status));
-        resp_body = GetMessageReply( request_id, false, "ECALL encounter an error!");
+        resp_body = GetMessageReply( request_id, false, sgx_status, "ECALL encounter an error!");
         ret = -1;
         goto _exit;
     }
     if ( 0 != ret ) {
         ERROR( "Request ID: %s,  ecall_run() failed with eTaskType_Query! pubkey_list_hash: %s, ret: 0x%x, error message: %s", 
             request_id.c_str(), pubkey_list_hash.c_str(), ret, result ? result : "" );
-        resp_body = GetMessageReply( request_id, false, result );
+        resp_body = GetMessageReply( request_id, false, ret, result ? result : "" );
         ret = -1;
         goto _exit;
     }
@@ -506,6 +525,8 @@ int msg_handler::QueryKeyShareState(
     // OK
     resp_body = result;
     ret = 0;
+
+    FUNC_END;
 
 _exit:
     if ( result ) {

@@ -111,7 +111,7 @@ int GenerateTask::execute(
     for (const auto& it : input_pubkey_list) 
         INFO("Request ID: %s, pubkey: %s", request_id_.c_str(), it.c_str());
 
-    // Checking the same parameters key shards is generating or not
+    // Calc users input public key list hash (SHA256) after sorted
     std::sort( input_pubkey_list.begin(), input_pubkey_list.end() );
     if ( (ret = get_pubkey_hash( input_pubkey_list, pubkey_hash )) != TEE_OK ) {
         error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with input_pubkey_list! ret : 0x%x", 
@@ -119,9 +119,12 @@ int GenerateTask::execute(
         ERROR( "%s", error_msg.c_str() );
         return ret;
     }
+
+    // Checking the same public key list hash is in context list or not.
+    // Return if it is, even if it's status is finished!!!
     g_list_mutex.lock();
     if ( g_keyContext_list.count( pubkey_hash ) ) {
-        error_msg = format_msg( "Request ID: %s, a same request is generating!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, a same request is in queue!", request_id_.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_REQUEST_IS_EXIST;
     }
@@ -181,6 +184,8 @@ int GenerateTask::del_expired_context( int duration )
 {
     long current_time = 0;
 
+    FUNC_BEGIN;
+
     // return OK if list is empty
     if ( g_keyContext_list.size() == 0 ) {
         return TEE_OK;
@@ -197,16 +202,17 @@ int GenerateTask::del_expired_context( int duration )
             it = g_keyContext_list.erase( it );
         } 
         // free item if it's finished and duration is expired
-        else if ( it->second->key_status == eKeyStatus_Finished ) {
-            if ( (current_time - it->second->finished_time) > duration ) {
+        else if ( (it->second->key_status == eKeyStatus_Finished) && 
+                  ((current_time - it->second->finished_time) > duration) ) {
                 delete it->second;
                 it = g_keyContext_list.erase( it );
-            }
         } 
         else {
-            ++it;
+            it++;
         }
     }
+
+    FUNC_END;
 
     return TEE_OK;
 }
@@ -218,6 +224,8 @@ int GenerateTask::get_pubkey_hash(
 {
     int ret = 0;
     std::string pubkey_string;
+
+    FUNC_BEGIN;
 
     if ( pubkey_list.size() == 0 ) {
         ERROR( "Request ID: %s, pubkey_list is null!", request_id_.c_str() );
@@ -234,6 +242,8 @@ int GenerateTask::get_pubkey_hash(
         ERROR( "Request ID: %s, get_sha256_hash() failed with pubkey_list!", request_id_.c_str() );
         return TEE_ERROR_CALC_HASH_FAILED;
     }
+
+    FUNC_END;
  
     return TEE_OK;
 }
@@ -301,6 +311,8 @@ int GenerateTask::get_reply_string(
     JSON::Root root;
     std::list<JSON::Root> pkg_array;
 
+    FUNC_BEGIN;
+
     // add node for "pubkey_list_hash"
     root["pubkey_list_hash"] = input_pubkey_hash;
 
@@ -327,6 +339,8 @@ int GenerateTask::get_reply_string(
 
     // return JSON string
     out_str = JSON::Root::write( root );
+
+    FUNC_END;
 
     return TEE_OK;
 }
@@ -370,6 +384,8 @@ int GenerateTask::get_privkey_info_cipher(
     ECIES ecies;
     CurvePoint ec_pubkey;
 
+    FUNC_BEGIN;
+
     // add node for "key_meta"
     key_meta.ToJsonString( key_meta_str );
     key_meta_node = JSON::Root::parse( key_meta_str );
@@ -405,6 +421,8 @@ int GenerateTask::get_privkey_info_cipher(
 
     // convert cipher data to hex string
     out_str = safeheron::encode::hex::EncodeToHex( ecies_cipher );
+
+    FUNC_END;
 
     return TEE_OK;
 }
