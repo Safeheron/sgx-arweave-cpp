@@ -77,14 +77,6 @@ int GenerateTask::execute(
 
     std::lock_guard<std::mutex> lock( g_list_mutex );
 
-    // Traverse context list, and remove which status is error or expired
-    if ( (ret = del_expired_context( KEY_CONTEXT_ALIVE_DURATION )) ) {
-        error_msg = format_msg( "Request ID: %s, del_expired_context() failed! ret: 0x%x", 
-            request_id_.c_str(), ret );
-        ERROR( "%s", error_msg.c_str() );
-        return TEE_ERROR_INVALID_PARAMETER;
-    }
-
     // Return busy is context list is full
     if ( g_keyContext_list.size() >= MAX_TASK_COUNT ) {
         error_msg = format_msg( "Request ID: %s, Key connext list in TEE is full! current size: %d", 
@@ -176,46 +168,6 @@ int GenerateTask::execute(
     FUNC_END;
 
     return ret;
-}
-
-// Traverse context_list and remove item if it's one of below:
-// 1. it's status is error
-// 2. it's current_time - finished_time > duration
-int GenerateTask::del_expired_context( int duration )
-{
-    long current_time = 0;
-
-    FUNC_BEGIN;
-
-    // return OK if list is empty
-    if ( g_keyContext_list.size() == 0 ) {
-        return TEE_OK;
-    }
-
-    current_time = get_system_time();
-
-    // traverse list for items status and duration checking
-    for ( auto it = g_keyContext_list.begin(); 
-          it != g_keyContext_list.end(); ) {
-        // free item if it's status is error
-        if ( it->second->key_status == eKeyStatus_Error ) {
-            delete it->second;
-            it = g_keyContext_list.erase( it );
-        } 
-        // free item if it's finished and duration is expired
-        else if ( (it->second->key_status == eKeyStatus_Finished) && 
-                  ((current_time - it->second->finished_time) > duration) ) {
-                delete it->second;
-                it = g_keyContext_list.erase( it );
-        } 
-        else {
-            it++;
-        }
-    }
-
-    FUNC_END;
-
-    return TEE_OK;
 }
 
 // Calc the hash of the public key list

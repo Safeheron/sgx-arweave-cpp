@@ -36,7 +36,6 @@ public:
     virtual int get_task_type( );
 
 private:
-    int del_expired_context( int duration );
     int get_pubkey_hash( const PUBKEY_LIST & pubkey_list, std::string & hash_hex );
     int get_keymeta_hash( const RSAKeyMeta & key_meta, std::string & hash_hex );
     int get_reply_string( const std::string & input_pubkey_hash, const PUBKEY_LIST & input_pubkey_list, const RSAPublicKey & pubkey, const PRIKEYSHARE_LIST & prikey_list, const RSAKeyMeta & key_meta,  std::string & out_str );

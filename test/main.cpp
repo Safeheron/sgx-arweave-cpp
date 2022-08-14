@@ -77,7 +77,7 @@ int main()
 
     // Generate users ECC keypair for encrypting private key shard
     printf( "Try to generate users ECC keypair...\n" );
-#if 1
+#if 0
     if ( (ret = InputUserECCKeyPairs()) != 0 ) {
         goto _exit;
     }

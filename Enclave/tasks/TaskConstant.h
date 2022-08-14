@@ -20,11 +20,6 @@
 #define MAX_TASK_COUNT      1000
 
 /**
- * The duration time (s) for a finished context
- */
-#define KEY_CONTEXT_ALIVE_DURATION  10
-
-/**
  *  TEE tasks type definition
 */
 enum eTaskType

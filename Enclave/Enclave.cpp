@@ -7,9 +7,17 @@
 #include "tasks/GenerateTask.h"
 #include "tasks/QueryTask.h"
 
+/**
+ * The duration time (s) for a finished context
+ */
+#define KEY_CONTEXT_ALIVE_DURATION  10
+
 Dispatcher g_dispatcher;
 std::mutex g_list_mutex;
 std::map<std::string, KeyShardContext*> g_keyContext_list;
+
+// Traverse g_keyContext_list, and free item which status is error or is expired.
+void release_expired_context( int duration );
 
 /**
  *  To initliaze the enclave
@@ -54,6 +62,9 @@ int ecall_run(
     INFO("--->type: %d\n", type);
     INFO("--->request_id: %s\n", request_id);
     INFO("--->plain_request: %s\n", plain_request.c_str());
+
+    // At first, release context in list if its status is error or is expired.
+    release_expired_context( KEY_CONTEXT_ALIVE_DURATION );
 
     // Dispatch request
     if ( ( ret = g_dispatcher.dispatch(type, request_id, plain_request, result_data, error_msg) ) != 0 ) {
@@ -185,4 +196,39 @@ int ecall_create_report(
     FUNC_END;
 
     return ret;
+}
+
+// Traverse g_keyContext_list and remove item if it's one of below:
+// 1. it's status is error
+// 2. it's current_time - finished_time > duration
+void release_expired_context( int duration )
+{
+    long current_time = 0;
+
+    FUNC_BEGIN;
+
+    current_time = get_system_time();
+
+    std::lock_guard<std::mutex> lock( g_list_mutex );
+
+    // traverse list for items status and duration checking
+    for ( auto it = g_keyContext_list.begin();
+          it != g_keyContext_list.end(); ) {
+        // free item if it's status is error
+        if ( it->second->key_status == eKeyStatus_Error ) {
+            delete it->second;
+            it = g_keyContext_list.erase( it );
+        }
+        // free item if it's finished and duration is expired
+        else if ( (it->second->key_status == eKeyStatus_Finished) &&
+                  ((current_time - it->second->finished_time) > duration) ) {
+                delete it->second;
+                it = g_keyContext_list.erase( it );
+        }
+        else {
+            it++;
+        }
+    }
+
+    FUNC_END;
 }

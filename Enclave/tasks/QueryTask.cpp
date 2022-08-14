@@ -60,16 +60,24 @@ int QueryTask::execute(
 
     std::lock_guard<std::mutex> lock( g_list_mutex );
 
-    // return success = false if this pubkey list hash is not exist
-    if ( !(context = g_keyContext_list.at(input_pubkey_hash)) ) {
-        error_msg = format_msg( "Request ID: %s, input_pubkey_hash is not exist! input_pubkey_hash: %s", 
+    // find context by pubkey list hasd, and return success = false if it's not exist.
+    if ( !g_keyContext_list.count( input_pubkey_hash ) ) {
+        error_msg = format_msg( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", 
             request_id_.c_str(), input_pubkey_hash.c_str() );
-        INFO( "%s", error_msg.c_str() );
-        ret = TEE_ERROR_PUBKEY_IS_WRONG;
+        ERROR( "%s", error_msg.c_str() );
+        ret = TEE_ERROR_PUBLIST_KEY_HASH;
         root["success"] = false;
         goto _exit;
     }
-    
+    if ( !(context = g_keyContext_list.at( input_pubkey_hash )) ) {
+        error_msg = format_msg( "Request ID: %s, input_pubkey_hash is exist, but the context is null! input_pubkey_hash: %s", 
+            request_id_.c_str(), input_pubkey_hash.c_str() );
+        ERROR( "%s", error_msg.c_str() );
+        ret = TEE_ERROR_INTERNAL_ERROR;
+        root["success"] = false;
+        goto _exit;
+    }
+
     // return success = true
     root["success"] = true;
     root["status_code"] = context->key_status;
