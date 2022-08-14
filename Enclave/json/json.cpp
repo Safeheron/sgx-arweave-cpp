@@ -191,7 +191,6 @@ namespace JSON
 
         cJSON* root = ( cJSON* )m_root;
         if ( root ) {
-            //cJSON_AddItemToObject( root, m_key.c_str(), cJSON_Duplicate(arrary, true) );
             cJSON_AddItemToObject( root, m_key.c_str(), arrary );
         }
     }
