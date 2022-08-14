@@ -40,11 +40,12 @@ std::string g_query_path = "/arweave/query_key_shard_state";
 //
 int g_k = 2;
 int g_l = 3;
-int g_key_bits = 1024;
+int g_key_bits = 4096;
 std::string g_callback_addr = "http://127.0.0.1:8008";
 std::string g_callback_path = "/keyShareCallback";
 std::map<std::string, std::string> g_users_ecc_key;
 //
+int InputUserECCKeyPairs();
 int GenerateUserECCKeyPairs();
 int PostGenerateKeyShareRequest();
 int PostQueryStatusRequest();
@@ -76,10 +77,16 @@ int main()
 
     // Generate users ECC keypair for encrypting private key shard
     printf( "Try to generate users ECC keypair...\n" );
+#if 1
+    if ( (ret = InputUserECCKeyPairs()) != 0 ) {
+        goto _exit;
+    }
+#else
     if ( (ret = GenerateUserECCKeyPairs()) != 0 ) {
         printf( "GenerateUserECCKeyPairs() failed! ret: %d\n", ret );
         goto _exit;
     }
+#endif //
     printf( "Users ECC keypair are generated!\n\n" );
 
     // Post a key share generation request
@@ -89,7 +96,9 @@ int main()
     }
     printf( "Key share generation request is post, waiting for result...\n\n" );
 
-    // waiting for generating result, and query it's status per 2s.
+    // Waiting for generating result, and query it's status per 2s.
+    // You can post a generation request agian if query request's response is failed 
+    // or current status is unknown or error.
     for (;;) {
         if ( g_result_received) break;
 
@@ -103,6 +112,7 @@ int main()
     }
 
     // key shards result is received, parse it!
+    printf( "Key shards result: %s\n\n", g_genkey_result.c_str() );
     printf( "Result is received! Try to parse it...\n" );
     if ( (ret = ParseKeyShareResult( g_genkey_result ) ) != 0 ) {
         printf( "ParseKeyShareResult() failed! ret: %d\n", ret );
@@ -116,6 +126,32 @@ _exit:
 
     printf( "\nEnd! Press and key to exit!\n" );
     getchar();
+
+    return 0;
+}
+
+/**
+ * @brief Use a const group user ECC key pairs for test 
+ * 
+ * @return int 
+ */
+int InputUserECCKeyPairs()
+{
+    std::string priv[] = { "8bab3e786c5e1ffd30dc475f62f3a5cb1aa0c5efe8ba2019e528c77ac2ba99bc",
+                           "a37359cf38aab6208599416a74e5fef293cbc3cb5e03a038e3ef37eb65ad1289",
+                           "2207e9e61ac486f2c01cfd926fe3f24252b36a68d40ce6bfdf3c5f2e5b72b7e8"
+    };
+    std::string pubkey[] = { "049f992995affb335b576a7186316fc0ecfcca3d88f78dfb00e0e76e1f9a9766135230831442e4b1975f2caf81756a250032ea5e165ba1631606795be04a00d42c",
+                             "04e30cd9f1283b95251e2721ee6f1fcbbc6ea56f32c924c0000f6f4e6a91d474dd1ff40d39fb8601b4b4066027952ede10e2d144f1b3aa5b2b1bf4210f4cc93e3d",
+                             "0424c0853bdcb04fb8d50eaaa779f2c0d5f01c79b30b58f6a2fe739070e236cd142e32b8114f06b60b46b00f39745c874e8297ec9da01366927ac199072a103356"
+    };
+
+    g_users_ecc_key.clear();
+    for ( int i = 0; i < sizeof(priv)/sizeof(priv[0]); i++ ) {
+        g_users_ecc_key.insert(std::pair<std::string, std::string>(pubkey[i], priv[i]));
+        printf("--->%d: Private Key: %s\n", i+1, priv[i].c_str());
+        printf("--->%d: Public Key: %s\n", i+1, pubkey[i].c_str());
+    }
 
     return 0;
 }
