@@ -1,17 +1,12 @@
 # CMake for application
 #
 # Set safeheron library paths
-#set(SAFEHERON_INCLUDE_DIR /usr/local/include/safeheron)
-#set(SAFEHERON_LIB /usr/local/lib/libCryptoSuites.so)
-
+set(SAFEHERON_INCLUDE_DIR /usr/local/include/safeheron)
+set(SAFEHERON_LIB /usr/local/lib/libCryptoSuites.so)
 
 # Set all flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SGX_COMMON_CFLAGS} -fPIC -Wno-attributes")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_C_FLAGS} -std=c++11")
-
-# Set safeheron library paths
-set(SAFEHERON_INCLUDE_DIR /usr/local/include/safeheron)
-set(SAFEHERON_LIB /usr/local/lib/libCryptoSuites.so)
 
 include_directories(
 		${SAFEHERON_INCLUDE_DIR}
