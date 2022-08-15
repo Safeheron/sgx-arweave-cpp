@@ -1,3 +1,7 @@
+# Set all flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${SGX_COMMON_CFLAGS} -nostdinc -fvisibility=hidden -fpie -fstack-protector")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${CMAKE_C_FLAGS} -nostdinc++")
+
 message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 
 add_definitions(-DPB_ENABLE_SGX)
@@ -44,18 +48,14 @@ include_directories(
 # Needed for the generated file Enclave_t.h
 target_include_directories(enclave PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-# Set all flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${SGX_COMMON_CFLAGS} -nostdinc -fvisibility=hidden -fpie -fstack-protector")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${CMAKE_C_FLAGS} -nostdinc++")
-
 # No "lib" prefix for output file name
 set_target_properties(enclave PROPERTIES PREFIX "")
         
 # Link flags
 target_link_libraries(enclave "${SGX_COMMON_CFLAGS} \
         -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L${SGX_LIBRARY_PATH} \
-        -Wl,--whole-archive -l${SGX_TRTS_LIB} -Wl,--no-whole-archive \
-        -Wl,--start-group ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl.a ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_usgxssl.a ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoTSSRSA.a ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoSuites.a -lsgx_pthread -lsgx_protobuf ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl_crypto.a -lsgx_tstdc -lsgx_tcxx -lsgx_tcrypto -lsgx_tprotected_fs -l${SGX_TSVC_LIB} -Wl,--end-group \
+        -Wl,--whole-archive -l${SGX_TRTS_LIB} ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl.a -Wl,--no-whole-archive \
+        -Wl,--start-group ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoTSSRSA.a ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoSuites.a -lsgx_pthread -lsgx_protobuf ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl_crypto.a -lsgx_tstdc -lsgx_tcxx -lsgx_tcrypto -lsgx_tprotected_fs -l${SGX_TSVC_LIB} -Wl,--end-group \
         -Wl,-Bstatic -Wl,-Bsymbolic -Wl,--no-undefined  \
         -Wl,-pie,-eenclave_entry -Wl,--export-dynamic \
         -Wl,--defsym,__ImageBase=0"
@@ -72,11 +72,4 @@ add_custom_command(TARGET enclave
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 message(STATUS "COMMAND: ${SGX_ENCLAVE_SIGNER} signing enclave.so => ${CMAKE_CURRENT_BINARY_DIR}/enclave.signed.so")
-
-# Install target file
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/enclave.signed.so
-        DESTINATION ./
-        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-)
-
 message(STATUS "\n\n")
