@@ -26,6 +26,7 @@ using namespace http;
 using namespace web::http;
 using namespace web::http::client;
 using namespace http::experimental::listener;
+using safeheron::bignum::BN;
 using safeheron::curve::Curve;
 using safeheron::curve::CurvePoint;
 using safeheron::curve::CurveType;
