@@ -15,14 +15,18 @@ set(SGX_BUILD RELEASE CACHE STRING "Build: DEBUG, PRERELEASE or RELEASE")
 include (cmake/Init.cmake)
 include (cmake/ConfigSGX.cmake)
 
-set(CMAKE_PREFIX_PATH "/opt/protobuf/lib/pkgconfig")
+#set(CMAKE_PREFIX_PATH "/opt/protobuf/lib/pkgconfig")
 #set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
 #set(PROTOC  "/opt/protobuf/bin/protoc")
-find_package(PkgConfig REQUIRED)
+#find_package(PkgConfig REQUIRED)
 
-set(SGX_SUITS_TSS_ROOT ${CMAKE_SOURCE_DIR}/3rdparty/sgx-crypto-suites-tss-rsa)
-set(SGX_SUITS_TSS_INCLUDE_DIR ${SGX_SUITS_TSS_ROOT}/include)
-set(SGX_SUITS_TSS_LIBRARY_DIR ${SGX_SUITS_TSS_ROOT}/lib)
+# sgx openssl
+set(SGX_OPENSSL_ROOT /opt/intel/sgxssl)
+set(SGX_OPENSSL_INCLUDE_DIR ${SGX_OPENSSL_ROOT}/include)
+set(SGX_OPENSSL_LIBRARY_DIR ${SGX_OPENSSL_ROOT}/lib64)
+set(SGX_OPENSSL_LIBRARY_FILE_TSSL ${SGX_OPENSSL_ROOT}/lib64/libsgx_tsgxssl.a)
+set(SGX_OPENSSL_LIBRARY_FILE_USSL ${SGX_OPENSSL_ROOT}/lib64/libsgx_usgxssl.a)
+set(SGX_OPENSSL_LIBRARY_FILE_TCRYPTO ${SGX_OPENSSL_ROOT}/lib64/libsgx_tsgxssl_crypto.a)
 
 option(DEBUG "option for debug" OFF)
 if (DEBUG)
@@ -38,14 +42,6 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION})
 add_subdirectory(App)
 add_subdirectory(Enclave)
 add_subdirectory(test)
-
-
-# package installed files to an tar.gz file.
-add_custom_target(package
-        COMMAND tar -zcvf ${PROJECT_NAME}-${PROJECT_VERSION}.tar.gz ${PROJECT_NAME}-${PROJECT_VERSION}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-message(STATUS "COMMAND: tar -zcvf ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.tar.gz ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}")
 
 message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
