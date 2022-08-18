@@ -1,3 +1,7 @@
+# Thirdparty libraries
+find_package(SGXSafeheronCryptoSuites REQUIRED)
+find_package(SGXCryptoTSSRSA REQUIRED)
+
 # Set all flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${SGX_COMMON_CFLAGS} -nostdinc -fvisibility=hidden -fpie -fstack-protector")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/safeheron ${CMAKE_C_FLAGS} -nostdinc++")
@@ -39,7 +43,7 @@ add_library(enclave SHARED
 # Additional include paths
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${SGX_SUITS_TSS_INCLUDE_DIR}
+        ${SGXCryptoTSSRSA_INCLUDE_DIR}
         ${SGX_SDK}/include
         ${SGX_SDK}/include/tlibc
         ${SGX_SDK}/include/libcxx
@@ -54,8 +58,8 @@ set_target_properties(enclave PROPERTIES PREFIX "")
 # Link flags
 target_link_libraries(enclave "${SGX_COMMON_CFLAGS} \
         -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L${SGX_LIBRARY_PATH} \
-        -Wl,--whole-archive -l${SGX_TRTS_LIB} ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl.a -Wl,--no-whole-archive \
-        -Wl,--start-group ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoTSSRSA.a ${SGX_SUITS_TSS_LIBRARY_DIR}/libCryptoSuites.a -lsgx_pthread -lsgx_protobuf ${SGX_SUITS_TSS_LIBRARY_DIR}/libsgx_tsgxssl_crypto.a -lsgx_tstdc -lsgx_tcxx -lsgx_tcrypto -lsgx_tprotected_fs -l${SGX_TSVC_LIB} -Wl,--end-group \
+        -Wl,--whole-archive -l${SGX_TRTS_LIB} ${SGX_OPENSSL_LIBRARY_FILE_TSSL} -Wl,--no-whole-archive \
+        -Wl,--start-group ${SGXCryptoTSSRSA_LIBRARY} ${SGXSafeheronCryptoSuites_LIBRARY} -lsgx_pthread -lsgx_protobuf ${SGX_OPENSSL_LIBRARY_FILE_TCRYPTO} -lsgx_tstdc -lsgx_tcxx -lsgx_tcrypto -lsgx_tprotected_fs -l${SGX_TSVC_LIB} -Wl,--end-group \
         -Wl,-Bstatic -Wl,-Bsymbolic -Wl,--no-undefined  \
         -Wl,-pie,-eenclave_entry -Wl,--export-dynamic \
         -Wl,--defsym,__ImageBase=0"

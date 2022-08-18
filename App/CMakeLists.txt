@@ -1,15 +1,7 @@
 # CMake for application
 #
-set(CMAKE_PREFIX_PATH "/opt/protobuf/lib/pkgconfig")
-#set(ENV{PKG_CONFIG_PATH}  "/opt/protobuf/lib/pkgconfig")
-#set(PROTOC  "/opt/protobuf/bin/protoc")
-
-# Set safeheron library paths
-set(SAFEHERON_INCLUDE_DIR /usr/local/include/safeheron)
-set(SAFEHERON_LIB /usr/local/lib/libCryptoSuites.so)
-
-# Threads library is needed for cpprest
-#find_package(Threads REQUIRED)
+# Safeheron crypto suites library
+find_package(SafeheronCryptoSuites REQUIRED)
 # glog library is needed for log file
 find_package(glog REQUIRED)
 
@@ -46,7 +38,7 @@ add_executable(${PROJECT_NAME}
 )
 
 include_directories(
-		${SAFEHERON_INCLUDE_DIR}
+		${SafeheronCryptoSuites_INCLUDE_DIR}
 		${SGX_SDK}/include
 )
 # Needed for the generated file Enclave_u.h
@@ -57,10 +49,11 @@ message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
 
 target_link_libraries(${PROJECT_NAME}
         -L${SGX_LIBRARY_PATH} -l${SGX_URTS_LIB} -l${SGX_USVC_LIB} -lsgx_uprotected_fs
-        #-lpthread
-		#Threads::Threads
+		${SafeheronCryptoSuites_LIBRARY}
 		glog::glog
-		-lboost_system -lcrypto -lssl -lcpprest -lsgx_dcap_ql -lsgx_quote_ex -lsgx_urts ${SAFEHERON_LIB}
+		-lcrypto -lssl
+		-lboost_system -lcpprest 
+		-lsgx_dcap_ql -lsgx_quote_ex -lsgx_urts 
 		-lz
 )
 
