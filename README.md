@@ -34,7 +34,7 @@ This service provides two main functions: **Private Key Shard Creation** and **C
 
 # Deployment Document
 
-You can follow the [Dependency-Installation](../../Desktop/8月13日/doc/Dependency-Installation.md) to deploy this service.
+You can follow the [Dependency-Installation](doc/Dependency-Installation.md) to deploy this service.
 
 
 
