@@ -41,7 +41,7 @@ You can follow the [Dependency-Installation](doc/Dependency-Installation.md) to 
 
 # Prerequisites
 
-- [sgx-crypto-suits-cpp](https://github.com/Safeheron/sgx-crypto-suites-cpp): The SGX-supported version of **crypto-suits-cpp** library implemented by Safeheron.
+- [sgx-safeheron-crypto-suites-cpp](https://github.com/Safeheron/sgx-safeheron-crypto-suites-cpp): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
 - [sgx-tss-rsa-cpp](https://github.com/Safeheron/sgx-tss-rsa-cpp): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
 
 
