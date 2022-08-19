@@ -38,6 +38,8 @@ using namespace utility;
 
 // defined in file App.cpp
 extern sgx_enclave_id_t global_eid;
+extern std::string g_key_shard_creation_path;
+extern std::string g_key_shard_query_path;
 
 // thread pool and mutex object
 std::list<ThreadTask*> msg_handler::s_thread_pool;
@@ -168,10 +170,10 @@ int msg_handler::process(
 
     FUNC_BEGIN;
 
-    if ( req_path == HTTP_REQ_GENERATE_KEYSHARE ) {
+    if ( req_path == g_key_shard_creation_path ) {
         ret = GenerateKeyShare( req_id, req_body, resp_body );
     }
-    else if ( req_path == HTTP_REQ_QUERY_KEYSTATE ) {
+    else if ( req_path == g_key_shard_query_path ) {
         ret = QueryKeyShareState( req_id, req_body, resp_body );
     }
     else {

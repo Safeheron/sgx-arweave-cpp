@@ -36,8 +36,8 @@ bool g_result_received = false;
 std::string g_genkey_result;
 //
 std::string g_arweave_server = "http://127.0.0.1:40000";
-std::string g_genkey_path = "/arweave/create_key_share";
-std::string g_query_path = "/arweave/query_key_shard_state";
+std::string g_genkey_path = "/arweave/create_key_shard";
+std::string g_query_path = "/arweave/query_key_shard";
 //
 int g_k = 2;
 int g_l = 3;

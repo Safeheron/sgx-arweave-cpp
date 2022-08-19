@@ -17,12 +17,6 @@
 #include <mutex>
 
 /**
- * HTTP request paths defintion
- */
-#define HTTP_REQ_GENERATE_KEYSHARE  "/arweave/create_key_share"
-#define HTTP_REQ_QUERY_KEYSTATE     "/arweave/query_key_shard_state"
-
-/**
  * Max thread count in s_thread_pool
  * s_thread_pool is a thread pool to save
  * all asynchronous task threads

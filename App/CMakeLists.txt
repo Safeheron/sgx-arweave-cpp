@@ -12,8 +12,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=/
 # Source files
 set(APP_SRC_FILES 
         App.cpp
-		common/tee_error.cpp 
+		common/iniconfig.cpp 
 		common/log_u.cpp
+		common/tee_error.cpp 
 		#
 		ocall/ocall.cpp
 		#
@@ -59,6 +60,10 @@ target_link_libraries(${PROJECT_NAME}
 
 # Install target file
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
+        DESTINATION ./
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ WORLD_READ
+)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/server.ini
         DESTINATION ./
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ WORLD_READ
 )
