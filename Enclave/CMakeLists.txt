@@ -76,4 +76,11 @@ add_custom_command(TARGET enclave
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 message(STATUS "COMMAND: ${SGX_ENCLAVE_SIGNER} signing enclave.so => ${CMAKE_CURRENT_BINARY_DIR}/enclave.signed.so")
+
+# Install target file
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/enclave.signed.so
+        DESTINATION ./
+        PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
+)
+
 message(STATUS "\n\n")
