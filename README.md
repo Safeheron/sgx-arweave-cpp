@@ -32,12 +32,6 @@ This service provides two main functions: **Private Key Shard Creation** and **C
 
 
 
-# Deployment Document
-
-You can follow the [Dependency-Installation](./doc/Dependency-Installation.md) to deploy this service.
-
-
-
 
 # Prerequisites
 
