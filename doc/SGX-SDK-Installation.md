@@ -1,5 +1,11 @@
 # SGX-SDK Installation
 
+Install dkms first.
+
+```shell
+$ sudo apt install dkms
+```
+
 - on ubuntu 18.04
 
 ```shell
