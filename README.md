@@ -34,15 +34,23 @@ This service provides two main functions: **Private Key Shard Creation** and **C
 
 # Deployment Document
 
-You can follow the [Dependency-Installation](doc/Dependency-Installation.md) to deploy this service.
+You can follow the [Dependency-Installation](./doc/Dependency-Installation.md) to deploy this service.
 
 
 
 
 # Prerequisites
 
-- [sgx-safeheron-crypto-suites-cpp](https://github.com/Safeheron/sgx-safeheron-crypto-suites-cpp): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
+- [SGX Components](https://01.org/intel-software-guard-extensions/downloads)
+  - SGX Driver. See [SGX-Driver-Installation](doc/SGX-Driver-Installation.md).
+  - SGX SDK (SGX SDK 2.16 or later is required). See [SGX-SDK-Installation](doc/SGX-SDK-Installation.md).
+  - SGX DCAP. See [Intel SGX DCAP Installation Procedure](https://www.intel.com/content/www/us/en/developer/articles/guide/intel-software-guard-extensions-data-center-attestation-primitives-quick-install-guide.html). 
+- [Intel SGX-SSL](https://github.com/intel/intel-sgx-ssl.git). See [SGX-SSL-Installation](doc/SGX-SSL-Installation.md).
+- [cpprest](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md)
+- [safeheron-crypto-suites-cpp](https://github.com/Safeheron/safeheron-crypto-suites-cpp.git): an assembly of all the basic libraries and cryptography protocols from Safeheron.
+- [sgx-safeheron-crypto-suites-cpp](https://github.com/Safeheron/sgx-safeheron-crypto-suites-cpp.git): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
 - [sgx-tss-rsa-cpp](https://github.com/Safeheron/sgx-tss-rsa-cpp): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
+
 
 
 
@@ -214,7 +222,7 @@ The formula of the **User Data** is:
 ## Query Request Details
 
 ### Interface URL Example
-> http://YOUR_HOST/arweave/query_key_shard
+> http://YOURHOST//arweave/query_key_shard
 
 ### Request Method
 > POST
