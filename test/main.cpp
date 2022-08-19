@@ -255,7 +255,7 @@ int PostGenerateKeyShareRequest()
  *    "pubkey_list_hash": "" //SHA256 of users ecc public key list, use it as the unique ID to find task in TEE server
  *  }
  *
- * The response body is a JSON like below:
+ * If the query ID (pubkey_list_hash) is exist, the response body is a JSON like below:
  * {
  *   "alive_time_seconds":0,  // this key shards generating duration, in seconds.
  *   "k":2, 
@@ -265,6 +265,11 @@ int PostGenerateKeyShareRequest()
  *   "status_text":"Generating",
  *   "success":true
  *   }
+ *
+ * Othereise, the response body like below:
+ * {
+ *   "success":false
+ * }
  * 
  * @return int 
  */
