@@ -79,7 +79,6 @@ The fields in the configuration file:
 - `host_address` The host address of your server. example: `http://127.0.0.1:8008`;
 - `key_shard_creation_path` The path of key shard creation request to your server, for example `/arweave/create_key_shard`;
 - `key_shard_query_path`  The path of key shard query request to your server, for example `/arweave/query_key_shard`;
-- `webhook_address` Webhook address, for example `http://127.0.0.1:8008/webhook`;
 - `log_path` The absolute path to store logs, for example: `/root/glog-arweave`;
 
 
