@@ -105,7 +105,7 @@ int SGX_CDECL main(int argc, char *argv[])
         ret = -1;
         goto _exit;
     }
-    INFO_OUTPUT_CONSOLE( "ecall_init() is called!", );
+    INFO_OUTPUT_CONSOLE( "ecall_init() is called!");
     
     // Initializing the REST service listener
     HttpServer_Start( listen_addr );
