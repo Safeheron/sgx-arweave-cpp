@@ -1,5 +1,5 @@
 # openssl Installation
 
 ```shell
-$ sudo apt-apt install openssl
+$ sudo apt-get install openssl
 ```
