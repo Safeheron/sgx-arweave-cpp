@@ -14,7 +14,7 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
 * [Build & Run](#build--run)
 * [Usage](#usage)
     * [Configuration File](#configuration-file)
-    * [Creation Request Details](#creation-request-details)
+    * [Generation Request Details](#generation-request-details)
     * [Query Request Details](#query-request-details)
 * [Intel® SGX Remote Attestation](#intel-sgx-remote-attestation)
 * [Contributions & Contact](#contributions--contact)
@@ -23,11 +23,11 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
 
 
 # Service Workflow
-This service provides two main functions: **Private Key Shard Creation** and **Creation Status Query**.
-- **Private Key Shard Creation**: Create the private key shards and generate a remote attestation report. The request is processed asynchronously and will be returned immediately. When the request processing is finished, the service will send the generated key shards data and the certification report to the specified service address as an HTTP POST request by using a webhook.
+This service provides two main functions: **Private Key Shard Generation** and **Generation Status Query**.
+- **Private Key Shard Generation**: Generate the private key shards and generate a remote attestation report. The request is processed asynchronously and will be returned immediately. When the request processing is finished, the service will send the generated key shards data and the certification report to the specified service address as an HTTP POST request by using a webhook.
 
 
-- **Creation status query**: Query whether there is a matching task currently being created based on the request ID and return the query result.
+- **Generation status query**: Query whether there is a matching task currently being generated based on the request ID and return the query result.
 
 
 
@@ -77,17 +77,17 @@ Before you start, please modify the configuration file first.
 The fields in the configuration file:
 
 - `host_address` The host address of your server. example: `http://127.0.0.1:8008`;
-- `key_shard_creation_path` The path of key shard creation request to your server, for example `/arweave/create_key_shard`;
+- `key_shard_generation_path` The path of key shard generation request to your server, for example `/arweave/generate_key_shard`;
 - `key_shard_query_path`  The path of key shard query request to your server, for example `/arweave/query_key_shard`;
 - `log_path` The absolute path to store logs, for example: `/root/glog-arweave`;
 
 
 
 
-## Creation Request Details
+## Generation Request Details
 
 ### Interface URL Example
-> http://YOUR_HOST/arweave/create_key_shard
+> http://YOUR_HOST/arweave/generate_key_shard
 
 ### Request Method
 > POST
