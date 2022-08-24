@@ -30,7 +30,7 @@
 #include <vector>
 #include <list>
 
-typedef std::vector<std::string> STR_ARRARY;
+typedef std::vector<std::string> STR_ARRAY;
 
 namespace JSON
 {
@@ -56,7 +56,7 @@ namespace JSON
         virtual std::string asString() const;
         virtual bool asBool() const;
         virtual Root asJson() const;
-        virtual STR_ARRARY asStringArrary() const;
+        virtual STR_ARRAY asStringArrary() const;
     public:/* internal values, don't use them directly! */
         void*   m_root;
         void*   m_node;

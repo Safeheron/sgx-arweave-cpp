@@ -258,9 +258,9 @@ namespace JSON
         return root;     
     }
 
-    STR_ARRARY Value::asStringArrary() const
+    STR_ARRAY Value::asStringArrary() const
     {
-        STR_ARRARY result;
+        STR_ARRAY result;
         cJSON* node = (cJSON*)m_node;
 
         if ( node && node->type == cJSON_Array ) {
