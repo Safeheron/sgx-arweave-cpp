@@ -16,12 +16,10 @@ Dispatcher g_dispatcher;
 std::mutex g_list_mutex;
 std::map<std::string, KeyShardContext*> g_keyContext_list;
 
-// Traverse g_keyContext_list, and free item which status is error or is expired.
-void release_expired_context( int duration );
+// Traverse g_keyContext_list, and clear the element which status is an error or is expired
+void clear_context(int duration );
 
-/**
- *  To initliaze the enclave
- */
+// Initialize the enclave
 int ecall_init()
 {
     int ret = TEE_OK;
@@ -37,9 +35,7 @@ int ecall_init()
     return ret;
 }
 
-/**
- *  To run a TEE task in enclave
- */
+// Execute a TEE task in enclave
 int ecall_run(
     uint32_t type, 
     const char* request_id,
@@ -63,19 +59,19 @@ int ecall_run(
     INFO("--->request_id: %s\n", request_id);
     INFO("--->plain_request: %s\n", plain_request.c_str());
 
-    // At first, release context in list if its status is error or is expired.
-    release_expired_context( KEY_CONTEXT_ALIVE_DURATION );
+    // Clear context in list if its status is an error or is expired
+  clear_context(KEY_CONTEXT_ALIVE_DURATION);
 
-    // Dispatch request
+    // Dispatch requests
     if ( ( ret = g_dispatcher.dispatch(type, request_id, plain_request, result_data, error_msg) ) != 0 ) {
         ERROR( "Request ID: %s, Failed to dispatch! ret: 0x%x, error_msg: %s", request_id, ret, error_msg.c_str() );
-        plain_reply = error_msg;    // output error message in reply
+        plain_reply = error_msg;    // Output error message for reply
     } 
     else {
-        plain_reply = result_data;  // output result data in reply
+        plain_reply = result_data;  // Output result data for reply
     }
 
-    // Write memory of output reply
+    // Allocate a block of untrusted memory to pass the result from enclave to app
     reply_len = plain_reply.length();
     outside_buff = malloc_outside( reply_len );
     if ( !outside_buff ) {
@@ -93,9 +89,7 @@ _exit:
     return ret;
 }
 
-/**
- *  To deallocate memory in the enclave
- */
+// Free memory in the enclave
 void ecall_free()
 {
     FUNC_BEGIN;
@@ -112,9 +106,7 @@ void ecall_free()
     FUNC_END;
 }
 
-/**
- *  To return this enclave id in hex string
- */
+// Return enclave id in hexadecimal
 int ecall_get_enclave_id(
     char **output, 
     uint64_t *output_len)
@@ -143,9 +135,7 @@ int ecall_get_enclave_id(
     return TEE_OK;
 }
 
-/**
- *  To generate the enclave quote
- */
+// Generate the enclave quote
 int ecall_create_report(
     const char* request_id, 
     const char* pubkey_list_hash,
@@ -162,7 +152,7 @@ int ecall_create_report(
 
     FUNC_BEGIN;
 
-    // get the key meta hash string from context list
+    // Get the key meta hash string from key context list
     std::lock_guard<std::mutex> lock( g_list_mutex );
     if ( !g_keyContext_list.count( pubkey_list_hash ) ) {
         ERROR( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", request_id, pubkey_list_hash );
@@ -183,11 +173,11 @@ int ecall_create_report(
         return TEE_ERROR_CALC_HASH_FAILED;
     }
 
-    // convert hex string to bytes, and put it into report data
+    // Convert hex string to bytes, and put it into report's user data
     total_hash = safeheron::encode::hex::DecodeFromHex( total_hash_hex );
     memcpy( report_data.d, total_hash.c_str(), 32 );
 
-    // Generate the report of this enclave
+    // Generate report
     if ( (ret = sgx_create_report( p_qe3_target, &report_data, p_report )) != SGX_SUCCESS ) {
         ERROR( "Request ID: %s, sgx_create_report() failed! ret: %d", key_meta_hash.c_str(), ret );
         return ret;
@@ -198,10 +188,12 @@ int ecall_create_report(
     return ret;
 }
 
-// Traverse g_keyContext_list and remove item if it's one of below:
-// 1. it's status is error
-// 2. it's current_time - finished_time > duration
-void release_expired_context( int duration )
+/**
+ * Traverse g_keyContext_list and clear the item if:
+ * 1. its status is an error
+ * 2. its current_time - finished_time > duration
+ */
+void clear_context(int duration )
 {
     long current_time = 0;
 
@@ -211,15 +203,15 @@ void release_expired_context( int duration )
 
     std::lock_guard<std::mutex> lock( g_list_mutex );
 
-    // traverse list for items status and duration checking
+    // Traverse the list for checking status and duration
     for ( auto it = g_keyContext_list.begin();
           it != g_keyContext_list.end(); ) {
-        // free item if it's status is error
+        // Free the item if its status is an error
         if ( it->second->key_status == eKeyStatus_Error ) {
             delete it->second;
             it = g_keyContext_list.erase( it );
         }
-        // free item if it's finished and duration is expired
+        // Free item if it is finished and the alive time is bigger than duration
         else if ( (it->second->key_status == eKeyStatus_Finished) &&
                   ((current_time - it->second->finished_time) > duration) ) {
                 delete it->second;

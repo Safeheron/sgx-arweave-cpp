@@ -1,13 +1,8 @@
 /**
  * @file TaskConstant.h
- * @author your name (you@domain.com)
  * @brief All constant definitions for TEE tasks
  *
- * @version 0.1
- * @date 2022-08-03
- * 
  * @copyright Copyright (c) 2022
- * 
  */
 #ifndef _TASK_CONSTANT_H_
 #define _TASK_CONSTANT_H_

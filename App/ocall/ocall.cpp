@@ -1,14 +1,3 @@
-/**
- * @file ocall.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
- * @copyright Copyright (c) 2022
- * 
- */
-
 #include "Enclave_u.h"
 #include "../common/log_u.h"
 #include <stdio.h>
@@ -24,17 +13,17 @@ extern __int64_t time_usec();
 extern "C"{
 #endif
 
-/*
-*  Output message to console in enclave
-*/
+/**
+ *  Output message to console in enclave
+ */
 void ocall_printf( const char *str )
 {
     fprintf( stdout, "%s", str );
 }
 
 /**
- * get current system time (time_t) from application
-*/
+ *  Get current system time (time_t) from untrusted environment.
+ */
 void ocall_get_system_time( int64_t** now )
 {
     int64_t* t_now = nullptr;
@@ -52,9 +41,9 @@ void ocall_get_system_time( int64_t** now )
     *now = t_now;
 }
 
-/*
-*  malloc a buffer in the untrusted memory
-*/
+/**
+ *  Malloc a buffer in the untrusted memory.
+ */
 void ocall_malloc( size_t size, uint8_t** ret )
 {
     if ( size > 0 ) {
@@ -68,10 +57,10 @@ void ocall_malloc( size_t size, uint8_t** ret )
     }
 }
 
-/*
-*  free a buffer in the untrusted memory,
-*  which is malloc by calling ocall_malloc()
-*/
+/**
+ *  Free a buffer in the untrusted memory,
+ *  which is malloc by calling ocall_malloc().
+ */
 void ocall_free( uint8_t* p_out_side )
 {
     if ( p_out_side ) {
@@ -81,13 +70,11 @@ void ocall_free( uint8_t* p_out_side )
 }
 
 /**
- * Output log messag with glog library.
- * add log prefix by hand, don't use the default prefix in glog (set FLAGS_log_prefix = false)
- * because we need to use a standard log format which is defined
- * by log monitor server.
- * the standard log format is below:
- * yyyy-MM-dd HH:mm:ss.SSS[${PROJECT_NAME}][LEVEL] - message
-*/
+ *  Output log message with glog.
+ *  Add log prefix manually, don't use the default prefix of glog (set FLAGS_log_prefix = false)
+ *  The standard log format is below:
+ *  yyyy-MM-dd HH:mm:ss.SSS[${PROJECT_NAME}][LEVEL] - message
+ */
 void ocall_log(uint32_t level, char * message ){
     __int64_t t_usec;
     double wall_time;

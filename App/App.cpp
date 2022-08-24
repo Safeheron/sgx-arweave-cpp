@@ -12,9 +12,9 @@
 #define PROJECT_NAME    "tee-arweave"
 
 sgx_enclave_id_t global_eid = 0;
-//
+
 std::unique_ptr<listen_svr> g_httpServer = nullptr;
-std::string g_key_shard_creation_path;
+std::string g_key_shard_generation_path;
 std::string g_key_shard_query_path;
 
 // Start the HTTP listen server, and receive
@@ -51,43 +51,43 @@ int SGX_CDECL main(int argc, char *argv[])
     std::string input_line;
     TeeLogHelper* glog_helper = nullptr;
 
-    // Read configure file server.ini
+    // Read configuration file server.ini
     if ((ret = cfg.load_file("./server.ini")) != ERR_INI_OK) {
-        INFO_OUTPUT_CONSOLE( "Failed to load configure file ./erver.ini!" );
+        INFO_OUTPUT_CONSOLE( "Failed to load configure file ./server.ini!" );
         return -1;
     }
     listen_addr = cfg.get_string( "server", "host_address");
     if ( listen_addr.length() == 0 ) {
-        INFO_OUTPUT_CONSOLE( "Failed to read 'host_address' from configure file ./server.ini!" );
+        INFO_OUTPUT_CONSOLE( "Failed to read 'host_address' from configuration file ./server.ini!" );
         return -1;
     }
-    g_key_shard_creation_path = cfg.get_string( "server", "key_shard_creation_path");
+  g_key_shard_generation_path = cfg.get_string("server", "key_shard_generation_path");
     if ( listen_addr.length() == 0 ) {
-        INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_creation_path' from configure file ./server.ini!" );
+        INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_generation_path' from configuration file ./server.ini!" );
         return -1;
     }
     g_key_shard_query_path = cfg.get_string( "server", "key_shard_query_path");
     if ( listen_addr.length() == 0 ) {
-        INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_query_path' from configure file ./server.ini!" );
+        INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_query_path' from configuration file ./server.ini!" );
         return -1;
     }
     log_enable = cfg.get_int( "log", "log_enable" );
     log_path = cfg.get_string( "log", "log_path" );
-    INFO_OUTPUT_CONSOLE( "Server configure file ./server.ini is loaded!" );
+    INFO_OUTPUT_CONSOLE( "Configuration file ./server.ini is loaded!" );
 
     // Initialize log file
     if ( 1 == log_enable ) {
         if ( log_path.length() == 0 ) {
-            INFO_OUTPUT_CONSOLE( "Log is enabled, but failed to read 'log_path' from configure file ./server.ini!" );
+            INFO_OUTPUT_CONSOLE( "Log service is enabled, but failed to read 'log_path' from configuration file ./server.ini!" );
         }
         glog_helper = new TeeLogHelper( log_path.c_str(), PROJECT_NAME );
     }
-    INFO_OUTPUT_CONSOLE( "Log is enabled and log file will be written in %s!", log_path.c_str() );
+    INFO_OUTPUT_CONSOLE( "Log service is enabled and log file will be written in %s!", log_path.c_str() );
 
-    // Initialize trusted execution environment
+    // Initialize enclave
     sgx_status = sgx_create_enclave( (const char*)argv[1], 0, nullptr, nullptr, &global_eid, nullptr );
     if (sgx_status != SGX_SUCCESS ) {
-        ERROR("initialize enclave failed! enclave file: %s, error message: %s", argv[1], t_strerror((int)sgx_status));
+        ERROR("Initialize enclave failed! enclave file: %s, error message: %s", argv[1], t_strerror((int)sgx_status));
         ret = -1;
         goto _exit;
     }
@@ -105,7 +105,7 @@ int SGX_CDECL main(int argc, char *argv[])
         ret = -1;
         goto _exit;
     }
-    INFO_OUTPUT_CONSOLE( "ecall_init() is called!", );
+    INFO_OUTPUT_CONSOLE( "ecall_init() is called successfully!");
     
     // Initializing the REST service listener
     HttpServer_Start( listen_addr );
@@ -115,14 +115,14 @@ int SGX_CDECL main(int argc, char *argv[])
     getline(std::cin, input_line);
 
 _exit:
-    /** Server exit */
+    // Server exit
     INFO_OUTPUT_CONSOLE( "Server closed!");
     HttpServer_Shutdown();
 
-    /** Free enclave resources */
+    // Free enclave
     ecall_free( global_eid );
 
-    /** Destroy enclave */
+    // Destroy enclave
     sgx_destroy_enclave(global_eid);
 
     if ( glog_helper) {

@@ -1,13 +1,3 @@
-/**
- * @file listen_svr.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
- * @copyright Copyright (c) 2022
- * 
- */
 #include "listen_svr.h"
 #include "msg_handler.h"
 #include "../common/log_u.h"
@@ -37,21 +27,21 @@ listen_svr::~listen_svr()
 {
 }
 
-// Start to listen
+// Start listening
 pplx::task<void> listen_svr::open() 
 { 
     return listener_.open(); 
 }
 
-// Stop to listen
+// Stop listening
 pplx::task<void> listen_svr::close() 
-{ 
-    msg_handler::DestoryThreadPool();
+{
+  msg_handler::DestroyThreadPool();
 
     return listener_.close(); 
 }
 
-// A HTTP request message is received
+// An HTTP request message is received
 void listen_svr::HandleMessage( const http_request & message )
 {
     std::string request_id;
@@ -60,16 +50,16 @@ void listen_svr::HandleMessage( const http_request & message )
 
     FUNC_BEGIN;
 
-    // generate an unique ID for log lines
+    // Generate an unique ID for the log of each HTTP request
     request_id = CreateRequestID();
     INFO_OUTPUT_CONSOLE( "Request ID: %s is received!", request_id.c_str() );
 
     if ( path.length() == 0 ) {
         ERROR( "Request ID: %s, path is null!", request_id.c_str() );
-        message.reply( status_codes::BadRequest, "Unknow request path!" );
+        message.reply( status_codes::BadRequest, "Unknown request path!" );
     }
 
-    // process request and reply its response to client
+    // Process the request and reply with the corresponding response to callback address
     msg_handler handler;
     std::string resp_body;
     handler.process( request_id, path, req_body.serialize(), resp_body );
@@ -82,20 +72,20 @@ void listen_svr::HandleMessage( const http_request & message )
     FUNC_END;
 }
 
-// Generate an uniqne ID for every request process, and this ID
-// will be output log file to identify logs for this request process.
+// Generate a unique ID for each HTTP request and this ID
+// will be written into the log file to identify different requests
 std::string listen_svr::CreateRequestID( const std::string & prefix )
 {
     std::string ret;
 
-    // generate an 8 bytes rand number as the ID
+    // Generate an 8 bytes rand number as the ID
     BN rand_bn = safeheron::rand::RandomBNStrict( 64 );
     rand_bn.ToHexStr( ret );
 
     return prefix + ret;
 }
 
-// Post a message to client
+// Callback function. Send a message to callback address using POST method
 pplx::task<void> listen_svr::PostRequest( 
     const std::string & request_id, 
     const std::string & client_url, 

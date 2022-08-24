@@ -1,7 +1,7 @@
 /*************************************************
  * File name : json.h
  * Introduce : The header file for json, which defines
- *             read/write funtions for json string. You
+ *             read/write functions for json string. You
  *             can use this library like:
  * 
  *             #include "json.h"
@@ -20,8 +20,6 @@
  *             wroot["INT"] = 200;
  *             std::string new_json = JSON::Root::write( wroot );
  *             printf( "New Json: %s\n", new_json.c_str() );
- * 
- * Create: 2021-07-13 by yyf
  * 
  *************************************************/
 #ifndef _JSON_H_

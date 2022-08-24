@@ -18,7 +18,7 @@ set(APP_SRC_FILES
 		#
 		ocall/ocall.cpp
 		#
-		server/keyshare_param.cpp
+		server/keyshard_param.cpp
 		server/listen_svr.cpp
 		server/msg_handler.cpp
 		server/thread_task.cpp

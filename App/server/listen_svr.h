@@ -1,12 +1,10 @@
 /**
  * @file listen_svr.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
+ * @brief : HTTP request listen server.
+ *          A CPPREST http_listener is used in this class to listen an HTTP request, only POST request is supported.
+ *          Callback function PostRequest() will called if a POST request is received!
+ *
  * @copyright Copyright (c) 2022
- * 
  */
 #ifndef _LISTEN_SVR_H_
 #define _LISTEN_SVR_H_
@@ -20,15 +18,6 @@ using namespace http;
 using namespace utility;
 using namespace http::experimental::listener;
 
-/**
- * HTTP request listen server
- * 
- * A cpprest http_listener is used in this class for
- * HTTP request listening, only POST request is supported.
- * 
- * Callback function PostRequest() will called if a POST request is received!
- * 
- */
 class listen_svr
 {
 public:
@@ -45,7 +34,7 @@ private:
     std::string CreateRequestID( const std::string & prefix = "" );
 
 private:
-    http_listener   listener_;
+    http_listener   listener_;   //CPPREST listener
 };
 
 #endif //_LISTEN_SVR_H_

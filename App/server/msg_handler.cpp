@@ -1,17 +1,7 @@
-/**
- * @file msg_handler.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
- * @copyright Copyright (c) 2022
- * 
- */
 #include "msg_handler.h"
 #include "listen_svr.h"
 #include "Enclave_u.h"
-#include "keyshare_param.h"
+#include "keyshard_param.h"
 #include "../common/define.h"
 #include "../common/log_u.h"
 #include "../common/tee_error.h"
@@ -24,6 +14,7 @@
 #include <sgx_error.h>
 #include <sgx_quote_3.h>
 #include <list>
+#include "../App.h"
 
 using namespace web;
 using namespace http;
@@ -36,24 +27,24 @@ using namespace utility;
 #define ENCLAVE_PATH "enclave.signed.so"
 #endif
 
-// defined in file App.cpp
+// Defined in App.cpp
 extern sgx_enclave_id_t global_eid;
-extern std::string g_key_shard_creation_path;
+extern std::string g_key_shard_generation_path;
 extern std::string g_key_shard_query_path;
 
-// thread pool and mutex object
+// Thread pool and mutex
 std::list<ThreadTask*> msg_handler::s_thread_pool;
 std::mutex msg_handler::s_thread_lock;
 
 /**
- * @brief : To call ECALL generate a group key share,
- *          this function will be called in task thread function 
- *          because it will take a few seconds. 
- * 
- * @param keyshare_param 
- * @return int 
+ * @brief : Call ECALL to enter the enclave. The key shards will be generated in TEE.
+ *          This function is called by generation request task thread
+ *          as it will take some time to calculate.
+ *
+ * @param[in] keyshard_param : The context of GenerateKeyShard_Task.
+ * @return int: return 0 if success, otherwise return an error code.
  */
-static int GenerateKeyShare_Task( void* keyshare_param )
+static int GenerateKeyShard_Task(void* keyshard_param )
 {
     int ret;
     size_t result_len = 0;
@@ -64,26 +55,26 @@ static int GenerateKeyShare_Task( void* keyshare_param )
     std::string param_string;
     std::string enclave_report;
     std::string reply_body;
-    KeyShareParam* param = (KeyShareParam*) keyshare_param;
+    KeyShardParam* param = (KeyShardParam*) keyshard_param;
     web::json::value result_json;
 
     FUNC_BEGIN;
 
     if ( !param ) {
-        ERROR( "keyshare_param is null in GenerateKeyShare()!" );
-        reply_body = msg_handler::GetMessageReply( false, APP_ERROR_INVALID_PARAMETER, "keyshare_param is null in GenerateKeyShare()!" );
+        ERROR( "keyshard_param is null in GenerateKeyShard()!" );
+        reply_body = msg_handler::GetMessageReply( false, APP_ERROR_INVALID_PARAMETER, "keyshard_param is null in GenerateKeyShard()!" );
         ret = APP_ERROR_INVALID_PARAMETER;
         goto _exit;
     }
     param_string = param->to_json_string();
     request_id = param->request_id_;
 
-    // call ECALL to generate keys status in TEE
+    // Call ECALL to generate keys shards in TEE
     if ( (sgx_status = ecall_run( global_eid, &ret, eTaskType_Generate, request_id.c_str(), 
           param_string.c_str(), param_string.length(), &result, &result_len )) != SGX_SUCCESS) {
-        ERROR( "Request ID: %s,  ecall_run() encounter an error! sgx_status: %d, error message: %s", 
+        ERROR( "Request ID: %s,  ecall_run() raised an error! sgx_status: %d, error message: %s",
             request_id.c_str(), sgx_status, t_strerror( (int)sgx_status));
-        reply_body = msg_handler::GetMessageReply( false, sgx_status, "ECALL encounter an error!" );
+        reply_body = msg_handler::GetMessageReply( false, sgx_status, "ECALL raised an error!" );
         ret = sgx_status;
         goto _exit;
     }
@@ -94,25 +85,25 @@ static int GenerateKeyShare_Task( void* keyshare_param )
         reply_body = msg_handler::GetMessageReply( false, ret, result ? result : "" );
         goto _exit;
     }
-    INFO_OUTPUT_CONSOLE("Request ID: %s, generate key share successfully.", request_id.c_str());
+    INFO_OUTPUT_CONSOLE("Request ID: %s, generate key shards successfully.", request_id.c_str());
 
-    // get public key list hash in result
+    // Get public key list hash in result
     result_json = json::value::parse( result );
-    pubkey_list_hash = result_json.at( NODE_NAME_PUBKEY_LIST_HASH ).as_string();
+    pubkey_list_hash = result_json.at(FIELD_NAME_PUBKEY_LIST_HASH ).as_string();
 
-    // create enclave quote
-    if ( (ret = msg_handler::CreateEnclaveReport( request_id, pubkey_list_hash, enclave_report)) != 0 ) {
-        ERROR( "Request ID: %s,  msg_handler::CreateEnclaveReport() failed! pubkey_list_hash: %s, ret: %d", 
+    // Generate enclave quote
+    if ( (ret = msg_handler::GenerateEnclaveReport(request_id, pubkey_list_hash, enclave_report)) != 0 ) {
+        ERROR( "Request ID: %s,  msg_handler::GenerateEnclaveReport() failed! pubkey_list_hash: %s, ret: %d",
             request_id.c_str(), pubkey_list_hash.c_str(), ret );
         goto _exit;
     }
 
     INFO_OUTPUT_CONSOLE("Request ID: %s, generate remote attestation report successfully.", request_id.c_str());
 
-    // add remote attestation report to Json object
+    // Add remote attestation report to JSON object
     result_json["tee_report"] = json::value( enclave_report );
 
-    // serialize Json object to a String
+    // Serialize JSON object to a string
     reply_body = result_json.serialize();
 
     INFO_OUTPUT_CONSOLE("Request ID: %s, second time packing data successfully.", request_id.c_str());
@@ -122,8 +113,8 @@ static int GenerateKeyShare_Task( void* keyshare_param )
 
 _exit:
     try {
-        listen_svr::PostRequest( param->request_id_, param->callback_, reply_body ).wait();
-        INFO_OUTPUT_CONSOLE("Request ID: %s, key share result has post to callback address successfully.", request_id.c_str());
+        listen_svr::PostRequest(param->request_id_, param->webhook_url_, reply_body ).wait();
+        INFO_OUTPUT_CONSOLE("Request ID: %s, key shard generation result has post to callback address successfully.", request_id.c_str());
     } catch ( const std::exception &e ) {
         ERROR( "Request ID: %s Error exception: %s", param->request_id_.c_str(), e.what() );
     }
@@ -150,16 +141,6 @@ msg_handler::~msg_handler()
     
 }
 
-
-/**
- * @brief : The HTTP message handle function
- * 
- * @param req_id : the request id for log lines
- * @param req_path : the request path name string
- * @param req_body : a JSON string for request body
- * @param resp_body : return the response body string, in JSON
- * @return int : return 0 if success, otherwise return an error code.
- */
 int msg_handler::process( 
     const std::string & req_id,
     const std::string & req_path, 
@@ -170,11 +151,11 @@ int msg_handler::process(
 
     FUNC_BEGIN;
 
-    if ( req_path == g_key_shard_creation_path ) {
-        ret = GenerateKeyShare( req_id, req_body, resp_body );
+    if ( req_path == g_key_shard_generation_path ) {
+        ret = GenerateKeyShard(req_id, req_body, resp_body);
     }
     else if ( req_path == g_key_shard_query_path ) {
-        ret = QueryKeyShareState( req_id, req_body, resp_body );
+        ret = QueryKeyShardState(req_id, req_body, resp_body);
     }
     else {
         ERROR( "Request path is unknown! req_path: %s", req_path.c_str() );
@@ -200,8 +181,8 @@ std::string msg_handler::GetMessageReply(
     return root.serialize();
 }
 
-// create the report for current enclave
-int msg_handler::CreateEnclaveReport( 
+// Generate the report for current enclave
+int msg_handler::GenerateEnclaveReport(
     const std::string & request_id, 
     const std::string& pubkey_list_hash, 
     std::string & report )
@@ -361,8 +342,8 @@ _exit:
     return ret;
 }
 
-// free all thread objects in s_thread_pool
-void msg_handler::DestoryThreadPool()
+// Free all thread objects in s_thread_pool
+void msg_handler::DestroyThreadPool()
 {
     std::lock_guard<std::mutex> lock( s_thread_lock );
     for ( auto it = s_thread_pool.begin(); 
@@ -373,25 +354,19 @@ void msg_handler::DestoryThreadPool()
     }
 }
 
-// To generate a key shards group in TEE
-// This message will be handled in asynchronous, 
-// we create a child thread and return immediately in this function.
-// In the child thread function, we will call ECALL to generate a key shard group,
-// and the result will be send to requester by callback function.
-// 
-int msg_handler::GenerateKeyShare( 
+int msg_handler::GenerateKeyShard(
     const std::string & req_id, 
     const std::string & req_body, 
     std::string & resp_body )
 {
     int ret = 0;
-    KeyShareParam* req_param = nullptr;
+    KeyShardParam* req_param = nullptr;
 
     FUNC_BEGIN;
     
     std::lock_guard<std::mutex> lock( s_thread_lock );
 
-    // free all stopped task threads in pool
+    // Free all stopped task threads in pool
     for ( auto it = s_thread_pool.begin(); it != s_thread_pool.end(); ) {
         if ( (*it)->is_stopped() ) {
             delete *it;
@@ -403,44 +378,44 @@ int msg_handler::GenerateKeyShare(
     }
     s_thread_lock.unlock();
 
-    // all parameters must be OK!
-    if ( !(req_param = new KeyShareParam( req_body )) ) {
-        ERROR( "Request ID: %s, new KeyShareParam object failed!", req_id.c_str() );
-        resp_body = GetMessageReply( false, APP_ERROR_MALLOC_FAILED, "new KeyShareParam object failed!" );
+    // All parameters must be valid!
+    if ( !(req_param = new KeyShardParam(req_body )) ) {
+        ERROR( "Request ID: %s, new KeyShardParam object failed!", req_id.c_str() );
+        resp_body = GetMessageReply( false, APP_ERROR_MALLOC_FAILED, "new KeyShardParam object failed!" );
         return APP_ERROR_MALLOC_FAILED;
     }
     if ( !req_param->pubkey_list_is_ok() ) {
-        ERROR( "Request ID: %s, User pubkey list is wrong! size: %d", req_id.c_str(), (int)req_param->pubkey_list_.size() );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "User pubkey list is wrong!" );
+        ERROR( "Request ID: %s, User pubkey list is invalid! size: %d", req_id.c_str(), (int)req_param->pubkey_list_.size() );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "User pubkey list is invalid!" );
         return APP_ERROR_INVALID_PUBLIC_KEY_LIST;
     }
     if ( !req_param->k_is_ok() ) {
-        ERROR( "Request ID: %s, Parameter k is wrong! k: %d", req_id.c_str(), req_param->k_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Parameter k is wrong!" );
+        ERROR( "Request ID: %s, Parameter k is invalid! k: %d", req_id.c_str(), req_param->k_ );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Parameter k is invalid!" );
         return APP_ERROR_INVALID_K;
     }
     if ( !req_param->l_is_ok() ) {
-        ERROR( "Request ID: %s, Parameter l is wrong! l: %d", req_id.c_str(), req_param->l_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Parameter l is wrong!" );
+        ERROR( "Request ID: %s, Parameter l is invalid! l: %d", req_id.c_str(), req_param->l_ );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Parameter l is invalid!" );
         return APP_ERROR_INVALID_L;
     }
     if ( !req_param->key_length_is_ok() ) {
-        ERROR( "Request ID: %s, Parameter key length is wrong! key_legnth: %d", req_id.c_str(), req_param->key_length_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Parameter key length is wrong!" );
+        ERROR( "Request ID: %s, Parameter key length is invalid! key_length: %d", req_id.c_str(), req_param->key_length_ );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Parameter key length is invalid!" );
         return APP_ERROR_INVALID_KEYBITS;
     }
     req_param->request_id_ = req_id;
 
-    // return is thread pool is full
+    // Return if thread pool has no thread resource
     s_thread_lock.lock();
-    if ( s_thread_pool.size() >= MAX_TASKTHREAD_COUNT ) {
+    if ( s_thread_pool.size() >= MAX_THREAD_TASK_COUNT ) {
         resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
         return APP_ERROR_SERVER_IS_BUSY;
     }
     s_thread_lock.unlock();
 
-    // create a thread for generation task
-    ThreadTask* task = new ThreadTask( GenerateKeyShare_Task, req_param );
+    // Create a thread for generation task
+    ThreadTask* task = new ThreadTask(GenerateKeyShard_Task, req_param);
     if ( (ret = task->start()) != 0 ) {
         resp_body = GetMessageReply( false, APP_ERROR_FAILED_TO_START_THREAD, "Create task thread failed!" );
         return APP_ERROR_FAILED_TO_START_THREAD;
@@ -457,9 +432,7 @@ int msg_handler::GenerateKeyShare(
     return ret;
 }
 
-// To query key shard's status in TEE
-// This message will be handled in synchronous
-int msg_handler::QueryKeyShareState( 
+int msg_handler::QueryKeyShardState(
     const std::string & req_id, 
     const std::string & req_body, 
     std::string & resp_body )
@@ -474,15 +447,15 @@ int msg_handler::QueryKeyShareState(
     FUNC_BEGIN;
 
     // return error message if request body is invalid
-    if ( !req_json.has_field( NODE_NAME_PUBKEY_LIST_HASH ) ||
-         !req_json.at( NODE_NAME_PUBKEY_LIST_HASH ).is_string() ) {
-        ERROR( "Request ID: %s, %s node is not in request body or has a wrong type!", 
-            req_id.c_str(), NODE_NAME_PUBKEY_LIST_HASH );
+    if ( !req_json.has_field(FIELD_NAME_PUBKEY_LIST_HASH ) ||
+         !req_json.at(FIELD_NAME_PUBKEY_LIST_HASH ).is_string() ) {
+        ERROR("Request ID: %s, %s node is not in request body or has a wrong type!",
+              req_id.c_str(), FIELD_NAME_PUBKEY_LIST_HASH );
         resp_body = GetMessageReply( false, APP_ERROR_INVALID_PARAMETER,  "invalid input, please check your data.");
         ret = -1;
         goto _exit;
     }
-    pubkey_list_hash = req_json.at( NODE_NAME_PUBKEY_LIST_HASH ).as_string();
+    pubkey_list_hash = req_json.at(FIELD_NAME_PUBKEY_LIST_HASH ).as_string();
 
     // call ECALL to query keys status in TEE
     if ( (sgx_status = ecall_run( global_eid, &ret, eTaskType_Query, req_id.c_str(), 

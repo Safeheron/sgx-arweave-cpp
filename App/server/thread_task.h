@@ -1,20 +1,15 @@
 /**
  * @file thread_task.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
  */
 #ifndef _THREAD_TASK_H_
 #define _THREAD_TASK_H_
 
-#include "keyshare_param.h"
+#include "keyshard_param.h"
 #include <pthread.h>
 
-// Define task callback function pointer
+// Define callback function task pointer
 typedef int (*task_handler) ( void* );
 
 class ThreadTask

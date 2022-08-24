@@ -1,12 +1,11 @@
 /**
  * @file msg_handler.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
+ * @brief : msg_handler.h contains HTTP request handler which processes the requests from listen_svr.
+ *          Each request will be passed into GenerateKeyShard() or QueryKeyShardState() by process().
+ *          For generation requests, Each request will be served as a thread task to ecall into the enclave.
+ *          For query requests, Each request will ecall into the enclave directly.
+ *
  * @copyright Copyright (c) 2022
- * 
  */
 #ifndef _MSG_HANDLER_H_
 #define _MSG_HANDLER_H_
@@ -17,16 +16,11 @@
 #include <mutex>
 
 /**
- * Max thread count in s_thread_pool
- * s_thread_pool is a thread pool to save
- * all asynchronous task threads
+ * Max number of threads in s_thread_pool.
+ * s_thread_pool is a thread pool to allocate thread resources.
  */
-#define MAX_TASKTHREAD_COUNT       100
+#define MAX_THREAD_TASK_COUNT       100
 
-/**
- * Class for HTTP request message handler
- * 
- */
 class msg_handler
 {
 public:
@@ -34,24 +28,43 @@ public:
     virtual ~msg_handler();
 public:
     /**
-     * @brief : The HTTP message handle function
+     * @brief : The HTTP request processing function.
      * 
-     * @param req_id : the request id for log lines
-     * @param req_path : the request path name string
-     * @param req_body : a JSON string for request body
-     * @param resp_body : return the response body string, in JSON
+     * @param[in] req_id : the request id corresponding to each HTTP request.
+     * @param[in] req_path : the request path.
+     * @param[in] req_body : the request body in JSON string format.
+     * @param[out] resp_body : the response body in JSON string format.
      * @return int : return 0 if success, otherwise return an error code.
      */
     int process( const std::string & req_id, const std::string & req_path, const std::string & req_body, std::string & resp_body );
     
 public:
     static std::string GetMessageReply( bool success, int code, const std::string & message );
-    static int CreateEnclaveReport( const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
-    static void DestoryThreadPool();
+    static int GenerateEnclaveReport(const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
+    static void DestroyThreadPool();
 
 private:
-    int GenerateKeyShare( const std::string & req_id, const std::string & req_body, std::string & resp_body );
-    int QueryKeyShareState( const std::string & req_id, const std::string & req_body, std::string & resp_body );
+    /**
+     * @brief : Generate key shards in TEE. The generation request is handled asynchronously.
+     *          In this function, it creates a child thread to process the key shard generation and replies immediately.
+     *          The kye shards generation result will be sent to webhook address once the request processing is finished.
+     *
+     * @param[in] req_id : the request id corresponding to each HTTP request.
+     * @param[in] req_body : the request body in JSON string format.
+     * @param[out] resp_body : the response body in JSON string format.
+     * @return int : return 0 if success, otherwise return an error code.
+     */
+    int GenerateKeyShard(const std::string & req_id, const std::string & req_body, std::string & resp_body );
+
+    /**
+     * @brief : Query key shards' status in TEE. The query request is handled synchronously
+     *
+     * @param[in] req_id : the request id corresponding to each HTTP request.
+     * @param[in] req_body : the request body in JSON string format.
+     * @param[out] resp_body : the response body in JSON string format.
+     * @return int : return 0 if success, otherwise return an error code.
+     */
+    int QueryKeyShardState(const std::string & req_id, const std::string & req_body, std::string & resp_body );
 private:
     static std::mutex   s_thread_lock;
     static std::list<ThreadTask*>  s_thread_pool;

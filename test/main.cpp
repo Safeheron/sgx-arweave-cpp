@@ -90,12 +90,12 @@ int main()
 #endif //
     printf( "Users ECC keypair are generated!\n\n" );
 
-    // Post a key share generation request
-    printf( "Try to post key share generation request...\n" );
+    // Post a key shard generation request
+    printf( "Try to post key shard generation request...\n" );
     if ( (ret = PostGenerateKeyShareRequest()) != 0 ) {
         goto _exit;
     }
-    printf( "Key share generation request is post, waiting for result...\n\n" );
+    printf( "Key shard generation request is post, waiting for result...\n\n" );
 
     // Waiting for generating result, and query it's status per 2s.
     // You can post a generation request agian if query request's response is failed 
@@ -190,7 +190,7 @@ int GenerateUserECCKeyPairs()
 }
 
 /**
- * @brief POST a key share generation request to TEE server, 
+ * @brief POST a key shard generation request to TEE server,
  *        the request body is a JSON as below:
  *  {
  *   "userPublicKeyList": [], //user ecc public key arrary, in hex string
@@ -232,7 +232,7 @@ int PostGenerateKeyShareRequest()
     // new a client to POST request to arweave server
     http_client client( g_arweave_server.c_str() );
 
-    // post generate key share request to server, because server handles this request
+    // post generate key shard request to server, because server handles this request
     // in async model and returns immediately, so we can code in sysnc model here.
     http_response response = client.request( methods::POST, g_genkey_path.c_str(), req_obj.serialize().c_str(), "application/json" ).get();
     std::string resp_body = response.extract_json().get().serialize();
@@ -249,7 +249,7 @@ int PostGenerateKeyShareRequest()
 }
 
 /**
- * @brief POST a key share generation's status query request to TEE server, 
+ * @brief POST a key shard generation's status query request to TEE server,
  *        the request body is a JSON as below:
  *  {
  *    "pubkey_list_hash": "" //SHA256 of users ecc public key list, use it as the unique ID to find task in TEE server
@@ -301,7 +301,7 @@ int PostQueryStatusRequest()
     // new a client to POST request to arweave server
     http_client client( g_arweave_server.c_str() );
 
-    // post key share generation's status request to server
+    // post key shard generation's status request to server
     pplx::task<void> requestTask = client.request( methods::POST, g_query_path.c_str(), req_obj.serialize().c_str(), "application/json" )
         .then([]( http_response response ) {
             std::string resp_body = response.extract_json().get().serialize();

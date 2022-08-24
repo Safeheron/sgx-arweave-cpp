@@ -1,7 +1,3 @@
-//
-// Created by max on 19-12-19.
-//
-
 #include "Dispatcher.h"
 #include "common/tee_error.h"
 

@@ -1,19 +1,6 @@
-/**
- * @file thread_task.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-07
- * 
- * @copyright Copyright (c) 2022
- * 
- */
-
 #include "thread_task.h"
 
-/**
- * thread function
-*/
+// Thread function
 void* task_thread_func( void *ptr )
 {
     ThreadTask* task = (ThreadTask*)ptr;
@@ -63,13 +50,12 @@ bool ThreadTask::is_stopped()
     return stopped_;
 }
 
-// Call specificed task process function by 
-// callback in the thread function
+// Call specified task process function by callback in the thread function
 void ThreadTask::thread_func()
 {
     int ret = 0;
 
-    // call the specificed task process function
+    // call the specified task process function
     if ( task_func_ ) {
         ret = task_func_( task_param_ );
     }

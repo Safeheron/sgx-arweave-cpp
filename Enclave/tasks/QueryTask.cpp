@@ -1,14 +1,3 @@
-/**
- * @file QueryTask.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-06
- * 
- * @copyright Copyright (c) 2022
- * 
- */
-
 #include "QueryTask.h"
 #include "TaskConstant.h"
 #include "common/tee_util.h"
@@ -21,21 +10,11 @@
 extern std::mutex g_list_mutex;
 extern std::map<std::string, KeyShardContext*> g_keyContext_list;
 
-/**
- *  Return the task's type
- */
 int QueryTask::get_task_type( )
 {
     return eTaskType_Query;
 }
-/**
- * Introduce: this task's process function 
- * Params:request_id[IN]:unqine ID for this requesting, it will be output to log for debug
- *        request[IN]:request data string, in plian
- *        reply[OUT]:reply data string
- *        error_msg[OUT]:return an error message string while failed
- * Return:TEE_OK if successful, otherwise return an error code
-*/
+
 int QueryTask::execute( 
     const std::string & request_id, 
     const std::string & request, 
@@ -49,7 +28,7 @@ int QueryTask::execute(
     
     FUNC_BEGIN;
 
-    // checking
+    // Check if request_id is null
     request_id_ = request_id;
     if (request.length() == 0) {
         error_msg = format_msg( "Request ID: %s, request is null!", request_id_.c_str() );
@@ -60,7 +39,8 @@ int QueryTask::execute(
 
     std::lock_guard<std::mutex> lock( g_list_mutex );
 
-    // find context by pubkey list hasd, and return success = false if it's not exist.
+    // Check if there is an alive key context corresponding to pubkey list hash in g_keyContext_list.
+    // Return success = false if there is not.
     if ( !g_keyContext_list.count( input_pubkey_hash ) ) {
         error_msg = format_msg( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", 
             request_id_.c_str(), input_pubkey_hash.c_str() );
@@ -78,7 +58,7 @@ int QueryTask::execute(
         goto _exit;
     }
 
-    // return success = true
+    // Return success = true
     root["success"] = true;
     root["status_code"] = context->key_status;
     root["status_text"] = get_status_text( context->key_status );
@@ -96,12 +76,6 @@ _exit:
     return ret;
 }
 
-/**
- * @brief Return key share generation's status text
- * 
- * @param status : status code, one of eKeyStatus
- * @return std::string 
- */
 std::string QueryTask::get_status_text( int status )
 {
     switch ( status ) {

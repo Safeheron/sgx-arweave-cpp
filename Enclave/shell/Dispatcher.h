@@ -1,7 +1,3 @@
-//
-// Created by max on 19-12-19.
-//
-
 #ifndef PROJECT_DISPATCHER_H
 #define PROJECT_DISPATCHER_H
 #include <iostream>
