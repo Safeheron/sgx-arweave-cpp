@@ -1,10 +1,10 @@
 /**
  * @file GenerateTask.h
  * @brief : GenerateTask.h contains the execution of generation requests. The process has 3 steps.
- *          Firstly, The public key list hash value is calculated according to the "user_public_key_list"
+ *          Firstly, The public key list hash is calculated according to the "user_public_key_list"
  *          from request body and Safeheron's API is called to generate the private key shards.
  *          Then, the private key shards' information is encrypted using the public key from "user_public_key_list".
- *          Finally, all the results are packed into a JSON structure and returned
+ *          Finally, all the results are packed into a JSON structure and returned.
  *
  * @copyright Copyright (c) 2022
  * 
@@ -68,7 +68,7 @@ private:
 
     /**
      * @brief : Construct a JSON string after the key shard generation is done.
-     *          The key shard information is encrypted a "s a field named "encrypt_key_info".
+     *          The key shard information is encrypted and assigned to a JSON field named "encrypt_key_info".
      * @param input_pubkey_hash[in] : The public key list hash.
      * @param input_pubkey_list [in] : The public key list.
      * @param pubkey [in] : The public key corresponding to the generated private key shards.
