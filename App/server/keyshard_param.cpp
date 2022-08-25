@@ -18,22 +18,22 @@ KeyShardParam::KeyShardParam(
 {
     web::json::value root = json::value::parse( json_str );
 
-    // node "user_public_key_list"
+    // Field "user_public_key_list"
     auto array = root.at(FIELD_NAME_USER_PUBLICKEY_LIST ).as_array();
     for ( const auto & value : array ) {
         pubkey_list_.emplace_back( value.as_string() );
     }
 
-    // node "k"
+    // Field "k"
     k_ = root.at(FIELD_NAME_NUMERATOR_K ).as_integer();
 
-    // node "l"
+    // Field "l"
     l_ = root.at(FIELD_NAME_DENOMINATOR_L ).as_integer();
 
-    // node "key_length"
+    // Field "key_length"
     key_length_ = root.at(FIELD_NAME_KEY_LENGTH ).as_integer();
 
-    // node "webhook_url"
+    // Field "webhook_url"
     webhook_url_ = root.at(FIELD_NAME_WEBHOOK_URL ).as_string();
 }
 KeyShardParam::KeyShardParam(
