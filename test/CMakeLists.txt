@@ -23,6 +23,7 @@ target_link_libraries(test
 			-lboost_system
 			-lcrypto -lssl
 			-lcpprest
+			-lpthread
 )
 
 message(STATUS "\n\n")
