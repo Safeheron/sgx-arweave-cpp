@@ -115,7 +115,7 @@ int GenerateTask::execute(
     g_keyContext_list.insert(std::pair<std::string, KeyShardContext*>(pubkey_hash, context));
     g_list_mutex.unlock();
 
-    // Create key shards by calling safeheron API
+    // Create key shards by calling Safeheron API
     if ( !(ret = safeheron::tss_rsa::GenerateKey(key_bits, l, k, private_key_list, pubkey, key_meta )) ) {
         error_msg = format_msg( "Request ID: %s, GenerateKey failed!", request_id_.c_str() );
         ERROR( "%s", error_msg.c_str() );
