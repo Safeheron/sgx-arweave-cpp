@@ -25,7 +25,7 @@ enum eTaskType
 };
 
 /**
- *  Key shards status definition
+ *  Key shard status definition
 */
 enum eKeyStatus {
     eKeyStatus_Unknown      = 0,
@@ -35,7 +35,7 @@ enum eKeyStatus {
 };
 
 /**
- * Key shards generation context data definition
+ * Key shard generation context data definition
  */
 struct KeyShardContext {
     KeyShardContext() {

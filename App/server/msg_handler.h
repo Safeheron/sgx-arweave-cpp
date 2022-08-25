@@ -57,7 +57,7 @@ private:
     int GenerateKeyShard(const std::string & req_id, const std::string & req_body, std::string & resp_body );
 
     /**
-     * @brief : Query key shards' status in TEE. The query request is handled synchronously
+     * @brief : Query key shard's status in TEE. The query request is handled synchronously
      *
      * @param[in] req_id : the request id corresponding to each HTTP request.
      * @param[in] req_body : the request body in JSON string format.

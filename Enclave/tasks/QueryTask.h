@@ -15,7 +15,7 @@ public:
      * @brief : The execution of query tasks.
      * @param request_id[in] : The unique ID of each request.
      * @param request[in] : The request body, JSON string.
-     * @param reply[out] : The key shards generation result, JSON string
+     * @param reply[out] : The key shard generation result, JSON string
      * @param error_msg[out] : An error message is returned when the execution is failed.
      * @return int : return 0 if success, otherwise return an error code.
      */

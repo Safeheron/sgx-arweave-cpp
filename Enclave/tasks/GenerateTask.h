@@ -3,7 +3,7 @@
  * @brief : GenerateTask.h contains the execution of generation requests. The process has 3 steps.
  *          Firstly, The public key list hash value is calculated according to the "user_public_key_list"
  *          from request body and Safeheron's API is called to generate the private key shards.
- *          Then, the private key shards information is encrypted using the public key from "user_public_key_list".
+ *          Then, the private key shards' information is encrypted using the public key from "user_public_key_list".
  *          Finally, all the results are packed into a JSON structure and returned
  *
  * @copyright Copyright (c) 2022
@@ -37,7 +37,7 @@ public:
      * @brief : The execution of generation tasks.
      * @param request_id[in] : The unique ID of each request.
      * @param request[in] : The request body, JSON string.
-     * @param reply[out] : The key shards generation result, JSON string
+     * @param reply[out] : The key shard generation result, JSON string
      * @param error_msg[out] : An error message is returned when the execution is failed.
      * @return int : return 0 if success, otherwise return an error code.
      */
@@ -67,19 +67,19 @@ private:
     int get_keymeta_hash( const RSAKeyMeta & key_meta, std::string & hash_hex );
 
     /**
-     * @brief : Construct a JSON string after the key shards generation is done.
-     *          The key shards information is encrypted a "s a field named "encrypt_key_info".
+     * @brief : Construct a JSON string after the key shard generation is done.
+     *          The key shard information is encrypted a "s a field named "encrypt_key_info".
      * @param input_pubkey_hash[in] : The public key list hash.
      * @param input_pubkey_list [in] : The public key list.
      * @param pubkey [in] : The public key corresponding to the generated private key shards.
-     * @param private_key_list[in] : The private key shards list. Each key shard will eb added into this list
+     * @param private_key_list[in] : The private key shard list. Each key shard will eb added into this list
      *                               after successful generation.
      * @param key_meta[in] : The collateral generated with the private key shards.
-     * @param out_str[out] : A JSON string that contains the generation result.
+     * @param out_str[out] : A JSON string that represents the generation result.
      *                       The JSON structure is shown as below.
      *   {
      *     "pubkey_list_hash": "public key list hash",
-     *     "key_shard_pubkey": "generated public key of private key shard",
+     *     "key_shard_pubkey": "The public key corresponding to the generated private key shard",
      *     "key_shard_pkg": [
      *         {
      *             "public_key": "pubkey1 hex string",
@@ -101,7 +101,7 @@ private:
     int get_reply_string(const std::string & input_pubkey_hash, const PUBKEY_LIST & input_pubkey_list, const RSAPublicKey & pubkey, const PRIVATE_KEYSHARD_LIST & private_key_list, const RSAKeyMeta & key_meta, std::string & out_str );
 
     /**
-     * @brief : Encrypt the key shards information using the public key in public key list.
+     * @brief : Encrypt the key shards' information using the public key in public key list.
      *          The plain text is a JSON string and the JSON structure is shown as below:
      *   {
      *       "key_meta": {
@@ -120,8 +120,8 @@ private:
      *                   "private_key_shard": "kasdkajshdasd"
      *               }
      *   }
-     * @param index[in] : The index of private key shard.
-     * @param input_pubkey[in] : The public key to encrypt key shard information.
+     * @param index[in] : The index of the private key shard.
+     * @param input_pubkey[in] : The public key to encrypt key shards' information.
      * @param private_key[in] : The private key shard.
      * @param key_meta[in] : The collateral generated with the private key shards.
      * @param out_str[out] : A string that represented the encrypted key shard information.
