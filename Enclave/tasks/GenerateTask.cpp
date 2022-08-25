@@ -181,7 +181,7 @@ int GenerateTask::get_pubkey_hash(
     return TEE_OK;
 }
 
-// Calc the hash of a RSAKeyMeta content
+// Calculate the hash of a RSAKeyMeta content
 int GenerateTask::get_keymeta_hash( 
     const RSAKeyMeta & key_meta, 
     std::string & hash_hex )
