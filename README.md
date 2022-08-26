@@ -9,7 +9,6 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
 
 # Contents
 * [Service Workflow](#service-workflow)
-* [Deployment Document](#deployment-document)
 * [Prerequisites](#prerequisites)
 * [Build & Run](#build--run)
 * [Usage](#usage)
