@@ -42,8 +42,8 @@ This service provides two main functions: **Private Key Shard Generation** and *
 - [Intel SGX-SSL](https://github.com/intel/intel-sgx-ssl.git). See [SGX-SSL-Installation](doc/SGX-SSL-Installation.md).
 - [CPPREST SDK](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md).
 - [Glog](https://github.com/google/glog.git). See [glog-Installation](doc/glog-Installation.md).
-- [Open-SSL](https://github.com/openssl/openssl.git). See [openssl-Installation](doc/openssl-Installation.md).
-- [Boost-System](http://www.boost.org/). See [boost-system-Installation](doc/boost-system-Installation.md).
+- [OpenSSL](https://github.com/openssl/openssl.git). See [openssl-Installation](doc/openssl-Installation.md).
+- [Boost](http://www.boost.org/). See [boost-Installation](doc/boost-system-Installation.md).
 - [safeheron-crypto-suites-cpp](https://github.com/Safeheron/safeheron-crypto-suites-cpp.git): an assembly of all the basic libraries and cryptography protocols from Safeheron.
 - [sgx-safeheron-crypto-suites-cpp](https://github.com/Safeheron/sgx-safeheron-crypto-suites-cpp.git): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
 - [sgx-tss-rsa-cpp](https://github.com/Safeheron/sgx-tss-rsa-cpp): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
