@@ -39,7 +39,7 @@ This service provides two main functions: **Private Key Shard Generation** and *
   - SGX SDK (SGX SDK 2.16 or later is required). See [SGX-SDK-Installation](doc/SGX-SDK-Installation.md).
   - SGX DCAP. See [Intel SGX DCAP Installation Procedure](https://www.intel.com/content/www/us/en/developer/articles/guide/intel-software-guard-extensions-data-center-attestation-primitives-quick-install-guide.html). 
 - [Intel SGX-SSL](https://github.com/intel/intel-sgx-ssl.git). See [SGX-SSL-Installation](doc/SGX-SSL-Installation.md).
-- [CPPREST SDK](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md).
+- [CPPRESTSDK](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md).
 - [Glog](https://github.com/google/glog.git). See [glog-Installation](doc/glog-Installation.md).
 - [OpenSSL](https://github.com/openssl/openssl.git). See [openssl-Installation](doc/openssl-Installation.md).
 - [Boost](http://www.boost.org/). See [boost-Installation](doc/boost-system-Installation.md).
