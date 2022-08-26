@@ -97,13 +97,13 @@ The fields in the configuration file:
 
 ### Request Body
 
-Parameter |   Type   | Required  | Description
-:---: |:--------:|:---------:| :---:
-user_public_key_list |  String  |    YES    | This field represents the user public key list, which collects the ECDSA public key of each user. Users can decrypt the encrypted key shard information by using their private keys corresponding to the public keys.
-k | Integer  |    YES    | Threshold numerator.
-l | Integer  |    YES    | Threshold denominator.
-key_length | Integer  |    YES    | The length of the private key to be generated. Only in 1024, 2048, 3072 and 4096.
-webhook_url |  String  |    YES    | Webhook address. The generated results will be called back to this address via a webhook service.
+Parameter | Type    | Required  | Description
+--- |---------|-----------| ------
+user_public_key_list | String  | YES       | This field represents the user public key list, which collects the ECDSA public key of each user. Users can decrypt the encrypted key shard information by using their private keys corresponding to the public keys.
+k | Integer | YES       | Threshold numerator.
+l | Integer | YES       | Threshold denominator.
+key_length | Integer | YES       | The length of the private key to be generated. Only in 1024, 2048, 3072 and 4096.
+webhook_url | String  | YES       | Webhook address. The generated results will be called back to this address via a webhook service.
 
 ```json
 {
