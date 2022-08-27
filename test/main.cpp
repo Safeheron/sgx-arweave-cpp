@@ -220,13 +220,13 @@ int PostGenerateKeyShareRequest()
     json::value req_obj = json::value::object( true );
     req_obj["k"] = json::value( g_k );
     req_obj["l"] = json::value( g_l );
-    req_obj["keyLength"] = json::value( g_key_bits );
-    req_obj["callBackAddress"] = json::value( callback_url );
+    req_obj["key_length"] = json::value( g_key_bits );
+    req_obj["webhook_url"] = json::value( callback_url );
     std::vector<json::value> pubkey_array;
     for ( auto & keypair : g_users_ecc_key ) {
         pubkey_array.push_back( json::value(keypair.first) );
     }
-    req_obj["userPublicKeyList"] = json::value::array( pubkey_array );
+    req_obj["user_public_key_list"] = json::value::array( pubkey_array );
     printf( "req_body: %s\n", req_obj.serialize().c_str() );
 
     // new a client to POST request to arweave server
@@ -237,13 +237,17 @@ int PostGenerateKeyShareRequest()
     http_response response = client.request( methods::POST, g_genkey_path.c_str(), req_obj.serialize().c_str(), "application/json" ).get();
     std::string resp_body = response.extract_json().get().serialize();
     printf( "resp_body: %s\n", resp_body.c_str() );
-    if ( response.status_code() == status_codes::OK ) {
-        printf( "Request post successfully!\n" );
-    }
-    else {
+    if ( response.status_code() != status_codes::OK ) {
         printf( "Request post failed! code: %d\n", response.status_code() );
         return -1;
     }
+    json::value resp_obj = json::value::parse( resp_body );
+    if ( !resp_obj.at( "success" ).as_bool() ) {
+        printf( "Server return error! code: %d, messge: %s\n", 
+            resp_obj.at( "code" ).as_integer(), resp_obj.at( "message" ).as_string().c_str() );
+        return -1;
+    }
+    printf( "Request post successfully!\n" );
 
     return 0;
 }

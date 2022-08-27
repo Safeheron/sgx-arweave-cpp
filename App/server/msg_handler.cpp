@@ -180,6 +180,23 @@ std::string msg_handler::GetMessageReply(
     root["message"] = json::value( message );
     return root.serialize();
 }
+std::string msg_handler::GetMessageReply( 
+    bool success, 
+    int code, 
+    const char* format, ... )
+{
+    char message[ 4096 ] = { 0 };
+    va_list args;
+    va_start( args, format ); 
+    vsnprintf( message, sizeof(message)-1, format, args );
+    va_end( args );
+
+    json::value root = json::value::object( true );
+    root["success"] = json::value( success );
+    root["code"] = json::value( code );
+    root["message"] = json::value( message );
+    return root.serialize();
+}
 
 // Generate the report for current enclave
 int msg_handler::GenerateEnclaveReport(
@@ -384,25 +401,30 @@ int msg_handler::GenerateKeyShard(
         resp_body = GetMessageReply( false, APP_ERROR_MALLOC_FAILED, "new KeyShardParam object failed!" );
         return APP_ERROR_MALLOC_FAILED;
     }
-    if ( !req_param->pubkey_list_is_ok() ) {
+    if ( !req_param->check_pubkey_list() ) {
         ERROR( "Request ID: %s, User pubkey list is invalid! size: %d", req_id.c_str(), (int)req_param->pubkey_list_.size() );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "User pubkey list is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "Field '%s' value is invalid!", FIELD_NAME_USER_PUBLICKEY_LIST );
         return APP_ERROR_INVALID_PUBLIC_KEY_LIST;
     }
-    if ( !req_param->k_is_ok() ) {
+    if ( !req_param->check_k() ) {
         ERROR( "Request ID: %s, Parameter k is invalid! k: %d", req_id.c_str(), req_param->k_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Parameter k is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Field '%s' value is invalid!", FIELD_NAME_NUMERATOR_K );
         return APP_ERROR_INVALID_K;
     }
-    if ( !req_param->l_is_ok() ) {
+    if ( !req_param->check_l() ) {
         ERROR( "Request ID: %s, Parameter l is invalid! l: %d", req_id.c_str(), req_param->l_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Parameter l is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Field '%s' value is invalid!", FIELD_NAME_DENOMINATOR_L );
         return APP_ERROR_INVALID_L;
     }
-    if ( !req_param->key_length_is_ok() ) {
+    if ( !req_param->check_key_length() ) {
         ERROR( "Request ID: %s, Parameter key length is invalid! key_length: %d", req_id.c_str(), req_param->key_length_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Parameter key length is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Field '%s' value is invalid!", FIELD_NAME_KEY_LENGTH );
         return APP_ERROR_INVALID_KEYBITS;
+    }
+    if ( !req_param->check_webhook_url() ) {
+        ERROR( "Request ID: %s, Parameter webhook url is invalid! webhook url: %s", req_id.c_str(), req_param->webhook_url_.c_str() );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_WEBHOOK_URL, "Field '%s' value is invalid!", FIELD_NAME_WEBHOOK_URL );
+        return APP_ERROR_INVALID_WEBHOOK_URL;
     }
     req_param->request_id_ = req_id;
 

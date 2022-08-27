@@ -61,7 +61,7 @@ int SGX_CDECL main(int argc, char *argv[])
         INFO_OUTPUT_CONSOLE( "Failed to read 'host_address' from configuration file ./server.ini!" );
         return -1;
     }
-  g_key_shard_generation_path = cfg.get_string("server", "key_shard_generation_path");
+    g_key_shard_generation_path = cfg.get_string("server", "key_shard_generation_path");
     if ( listen_addr.length() == 0 ) {
         INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_generation_path' from configuration file ./server.ini!" );
         return -1;

@@ -239,19 +239,19 @@ int GenerateTask::get_reply_string(
         JSON::Root arrary_node;
         std::string keyInfo_cipher;
 
-        ++index;
-
         // Encrypt the private key shard and key meta
-        if ( (ret = get_private_key_info_cipher(index, input_pubkey_list[index - 1],
+        if ( (ret = get_private_key_info_cipher(index + 1, input_pubkey_list[index],
                                                 prikey, key_meta, keyInfo_cipher)) != TEE_OK ) {
             ERROR( "Request ID: %s, get_private_key_info_cipher() failed with index: %d!", request_id_.c_str(), index );
             return ret;
         }
 
         // Add the element to "key_shard_pkg"
-        arrary_node["public_key"] = input_pubkey_list[index - 1];
+        arrary_node["public_key"] = input_pubkey_list[index];
         arrary_node["encrypt_key_info"] = keyInfo_cipher;
         pkg_array.push_back( arrary_node );
+
+        ++index;
     }
     root["key_shard_pkg"] = pkg_array;
 

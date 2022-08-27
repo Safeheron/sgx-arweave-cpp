@@ -19,22 +19,32 @@ KeyShardParam::KeyShardParam(
     web::json::value root = json::value::parse( json_str );
 
     // Field "user_public_key_list"
-    auto array = root.at(FIELD_NAME_USER_PUBLICKEY_LIST ).as_array();
-    for ( const auto & value : array ) {
-        pubkey_list_.emplace_back( value.as_string() );
+    if ( root.has_array_field(FIELD_NAME_USER_PUBLICKEY_LIST) ) {
+        auto array = root.at( FIELD_NAME_USER_PUBLICKEY_LIST ).as_array();
+        for ( const auto & value : array ) {
+            pubkey_list_.emplace_back( value.as_string() );
+        }
     }
 
     // Field "k"
-    k_ = root.at(FIELD_NAME_NUMERATOR_K ).as_integer();
+    if ( root.has_integer_field(FIELD_NAME_NUMERATOR_K) ) {
+        k_ = root.at( FIELD_NAME_NUMERATOR_K ).as_integer();
+    }
 
     // Field "l"
-    l_ = root.at(FIELD_NAME_DENOMINATOR_L ).as_integer();
+    if ( root.has_integer_field(FIELD_NAME_DENOMINATOR_L) ) {
+        l_ = root.at( FIELD_NAME_DENOMINATOR_L ).as_integer();
+    }
 
     // Field "key_length"
-    key_length_ = root.at(FIELD_NAME_KEY_LENGTH ).as_integer();
+    if ( root.has_integer_field(FIELD_NAME_KEY_LENGTH) ) {
+        key_length_ = root.at( FIELD_NAME_KEY_LENGTH ).as_integer();
+    }
 
     // Field "webhook_url"
-    webhook_url_ = root.at(FIELD_NAME_WEBHOOK_URL ).as_string();
+    if ( root.has_string_field(FIELD_NAME_WEBHOOK_URL) ) {
+        webhook_url_ = root.at( FIELD_NAME_WEBHOOK_URL ).as_string();
+    }
 }
 KeyShardParam::KeyShardParam(
     PUBKEY_LIST& pubkey_list, 
@@ -53,7 +63,7 @@ KeyShardParam::~KeyShardParam()
 }
 
 // User public key must be a P256 curve point
-bool KeyShardParam::pubkey_list_is_ok()
+bool KeyShardParam::check_pubkey_list()
 {
     if ( pubkey_list_.size() != l_) return false;
 
@@ -77,7 +87,7 @@ bool KeyShardParam::pubkey_list_is_ok()
 // The threshold numerator must be greater than 0
 // The threshold numerator must be greater than half of threshold denominator
 // The threshold numerator must be smaller than or equal to the threshold denominator
-bool KeyShardParam::k_is_ok()
+bool KeyShardParam::check_k()
 {
     if ( k_ <= 0 || k_ < l_/2 + 1 || k_ > l_ )
         return false;
@@ -86,7 +96,7 @@ bool KeyShardParam::k_is_ok()
 
 // The threshold denominator must be greater than 1
 // The threshold denominator must be smaller than 21
-bool KeyShardParam::l_is_ok()
+bool KeyShardParam::check_l()
 {
     if ( l_ <= 1 || l_ >= 21 )
         return false;
@@ -94,7 +104,7 @@ bool KeyShardParam::l_is_ok()
 }
 
 // Supported RSA key length: 1024/2048/3072/4096 
-bool KeyShardParam::key_length_is_ok()
+bool KeyShardParam::check_key_length()
 {
     if ( key_length_ != 1024 && key_length_ != 2048 && 
          key_length_ != 3072 && key_length_ != 4096 ) 
@@ -103,7 +113,7 @@ bool KeyShardParam::key_length_is_ok()
 }
 
 // Callback address MUST not be null!
-bool KeyShardParam::webhook_url_is_ok()
+bool KeyShardParam::check_webhook_url()
 {
     return webhook_url_.length() == 0 ? false : true;
 }

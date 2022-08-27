@@ -40,6 +40,7 @@ public:
     
 public:
     static std::string GetMessageReply( bool success, int code, const std::string & message );
+    static std::string GetMessageReply( bool success, int code, const char* format, ... );
     static int GenerateEnclaveReport(const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
     static void DestroyThreadPool();
 
