@@ -60,7 +60,7 @@ int ecall_run(
     INFO("--->plain_request: %s\n", plain_request.c_str());
 
     // Clear context in list if its status is an error or is expired
-  clear_context(KEY_CONTEXT_ALIVE_DURATION);
+    clear_context( KEY_CONTEXT_ALIVE_DURATION );
 
     // Dispatch requests
     if ( ( ret = g_dispatcher.dispatch(type, request_id, plain_request, result_data, error_msg) ) != 0 ) {

@@ -10,11 +10,6 @@
 #include <string>
 
 /**
- * The max count for generating key shard task
- */
-#define MAX_TASK_COUNT      1000
-
-/**
  *  TEE tasks type definition
 */
 enum eTaskType
