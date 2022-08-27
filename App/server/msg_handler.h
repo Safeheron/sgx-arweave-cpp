@@ -15,12 +15,6 @@
 #include <list>
 #include <mutex>
 
-/**
- * Max number of threads in s_thread_pool.
- * s_thread_pool is a thread pool to allocate thread resources.
- */
-#define MAX_THREAD_TASK_COUNT       100
-
 class msg_handler
 {
 public:

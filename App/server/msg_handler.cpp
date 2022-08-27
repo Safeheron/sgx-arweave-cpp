@@ -31,6 +31,7 @@ using namespace utility;
 extern sgx_enclave_id_t global_eid;
 extern std::string g_key_shard_generation_path;
 extern std::string g_key_shard_query_path;
+extern int g_max_thread_task_count;
 
 // Thread pool and mutex
 std::list<ThreadTask*> msg_handler::s_thread_pool;
@@ -430,7 +431,7 @@ int msg_handler::GenerateKeyShard(
 
     // Return if thread pool has no thread resource
     s_thread_lock.lock();
-    if ( s_thread_pool.size() >= MAX_THREAD_TASK_COUNT ) {
+    if ( s_thread_pool.size() >= g_max_thread_task_count ) {
         resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
         return APP_ERROR_SERVER_IS_BUSY;
     }

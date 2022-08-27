@@ -16,6 +16,7 @@ sgx_enclave_id_t global_eid = 0;
 std::unique_ptr<listen_svr> g_httpServer = nullptr;
 std::string g_key_shard_generation_path;
 std::string g_key_shard_query_path;
+int g_max_thread_task_count = 100;
 
 // Start the HTTP listen server, and receive
 // request from clients
@@ -52,23 +53,28 @@ int SGX_CDECL main(int argc, char *argv[])
     TeeLogHelper* glog_helper = nullptr;
 
     // Read configuration file server.ini
-    if ((ret = cfg.load_file("./server.ini")) != ERR_INI_OK) {
+    if ( (ret = cfg.load_file("./server.ini")) != ERR_INI_OK ) {
         INFO_OUTPUT_CONSOLE( "Failed to load configure file ./server.ini!" );
         return -1;
     }
-    listen_addr = cfg.get_string( "server", "host_address");
+    listen_addr = cfg.get_string( "server", "host_address" );
     if ( listen_addr.length() == 0 ) {
         INFO_OUTPUT_CONSOLE( "Failed to read 'host_address' from configuration file ./server.ini!" );
         return -1;
     }
-    g_key_shard_generation_path = cfg.get_string("server", "key_shard_generation_path");
-    if ( listen_addr.length() == 0 ) {
+    g_key_shard_generation_path = cfg.get_string( "server", "key_shard_generation_path" );
+    if ( g_key_shard_generation_path.length() == 0 ) {
         INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_generation_path' from configuration file ./server.ini!" );
         return -1;
     }
-    g_key_shard_query_path = cfg.get_string( "server", "key_shard_query_path");
-    if ( listen_addr.length() == 0 ) {
+    g_key_shard_query_path = cfg.get_string( "server", "key_shard_query_path" );
+    if ( g_key_shard_query_path.length() == 0 ) {
         INFO_OUTPUT_CONSOLE( "Failed to read 'key_shard_query_path' from configuration file ./server.ini!" );
+        return -1;
+    }
+    g_max_thread_task_count = cfg.get_int( "server", "max_thread_task_count" );
+    if ( g_max_thread_task_count <= 0 ) {
+        INFO_OUTPUT_CONSOLE( "Failed to read 'max_thread_task_count' from configuration file ./server.ini!" );
         return -1;
     }
     log_enable = cfg.get_int( "log", "log_enable" );
