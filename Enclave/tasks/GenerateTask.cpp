@@ -13,7 +13,6 @@
 #include <mutex>
 #include <map>
 
-
 #include "Enclave_t.h"
 
 using safeheron::curve::Curve;
@@ -97,8 +96,8 @@ int GenerateTask::execute(
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_MALLOC_FAILED;
     }
-    context->start_time = get_system_time();
     context->key_status = eKeyStatus_Generating;
+    context->start_time = get_system_time();
     g_list_mutex.lock();
     g_keyContext_list.insert(std::pair<std::string, KeyShardContext*>(pubkey_hash, context));
     g_list_mutex.unlock();
@@ -130,8 +129,8 @@ int GenerateTask::execute(
         context->key_status = eKeyStatus_Error;
         return ret;
     }
-    context->key_status = eKeyStatus_Finished;
-    context->finished_time = get_system_time();
+    context->key_status = eKeyStatus_Reporting;
+    context->generated_time = get_system_time();
 
     FUNC_END;
 

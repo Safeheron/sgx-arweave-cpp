@@ -96,6 +96,7 @@ static int GenerateKeyShard_Task(void* keyshard_param )
     if ( (ret = msg_handler::GenerateEnclaveReport(request_id, pubkey_list_hash, enclave_report)) != 0 ) {
         ERROR( "Request ID: %s,  msg_handler::GenerateEnclaveReport() failed! pubkey_list_hash: %s, ret: %d",
             request_id.c_str(), pubkey_list_hash.c_str(), ret );
+        reply_body = msg_handler::GetMessageReply( false, ret, "Failed to create enclave report!" );
         goto _exit;
     }
 
@@ -114,10 +115,12 @@ static int GenerateKeyShard_Task(void* keyshard_param )
 
 _exit:
     try {
-        listen_svr::PostRequest(param->request_id_, param->webhook_url_, reply_body ).wait();
+        listen_svr::PostRequest( request_id, param->webhook_url_, reply_body ).wait();
+        ecall_set_generation_status( global_eid, &ret, request_id.c_str(), pubkey_list_hash.c_str(), eKeyStatus_Finished );
         INFO_OUTPUT_CONSOLE("Request ID: %s, key shard generation result has post to callback address successfully.", request_id.c_str());
     } catch ( const std::exception &e ) {
-        ERROR( "Request ID: %s Error exception: %s", param->request_id_.c_str(), e.what() );
+        ecall_set_generation_status( global_eid, &ret, request_id.c_str(), pubkey_list_hash.c_str(), eKeyStatus_Error );
+        ERROR( "Request ID: %s Error exception: %s", request_id.c_str(), e.what() );
     }
     if ( result ) {
         free( result );

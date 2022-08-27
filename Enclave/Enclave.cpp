@@ -8,9 +8,9 @@
 #include "tasks/QueryTask.h"
 
 /**
- * The duration time (s) for a finished context
+ * The duration time (s) for the finished context
  */
-#define KEY_CONTEXT_ALIVE_DURATION  10
+#define KEY_CONTEXT_ALIVE_DURATION  5
 
 Dispatcher g_dispatcher;
 std::mutex g_list_mutex;
@@ -135,6 +135,27 @@ int ecall_get_enclave_id(
     return TEE_OK;
 }
 
+//  To set a status to the key shard generation task
+//  status MUST be one of eKeyStatus
+int ecall_set_generation_status(
+    const char* request_id, 
+    const char* pubkey_list_hash, 
+    int current_status)
+{
+    std::lock_guard<std::mutex> lock( g_list_mutex );
+    if ( !g_keyContext_list.count( pubkey_list_hash ) ) {
+        ERROR( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", request_id, pubkey_list_hash );
+        return TEE_ERROR_PUBLIST_KEY_HASH;
+    }
+    if ( current_status == eKeyStatus_Finished ) {
+        g_keyContext_list.at( pubkey_list_hash )->finished_time = get_system_time();
+    }
+    g_keyContext_list.at( pubkey_list_hash )->key_status = (eKeyStatus)current_status;
+    g_list_mutex.unlock();
+
+    return TEE_OK;
+}
+        
 // Generate the enclave quote
 int ecall_create_report(
     const char* request_id, 
@@ -170,7 +191,8 @@ int ecall_create_report(
         ERROR( "Request ID: %s, get_sha256_hash() failed with pubkey_and_meta!", request_id );
         ERROR( "Request ID: %s, pubkey_list_hash: %s", request_id, pubkey_list_hash );
         ERROR( "Request ID: %s, key_meta_hash: %s", request_id, key_meta_hash.c_str() );
-        return TEE_ERROR_CALC_HASH_FAILED;
+        ret = TEE_ERROR_CALC_HASH_FAILED;
+        goto _exit;
     }
 
     // Convert hex string to bytes, and put it into report's user data
@@ -180,8 +202,16 @@ int ecall_create_report(
     // Generate report
     if ( (ret = sgx_create_report( p_qe3_target, &report_data, p_report )) != SGX_SUCCESS ) {
         ERROR( "Request ID: %s, sgx_create_report() failed! ret: %d", key_meta_hash.c_str(), ret );
-        return ret;
+        ret = TEE_ERROR_GEN_REPORT_FAILED;
+        goto _exit;
     }
+
+_exit:
+    // update context status
+    // if no error, the next step is post result by callback
+    g_list_mutex.lock();
+    g_keyContext_list.at( pubkey_list_hash )->key_status = ( 0 != ret ) ? eKeyStatus_Error : eKeyStatus_Callback;
+    g_list_mutex.unlock();
 
     FUNC_END;
 
@@ -206,8 +236,9 @@ void clear_context(int duration )
     // Traverse the list for checking status and duration
     for ( auto it = g_keyContext_list.begin();
           it != g_keyContext_list.end(); ) {
-        // Free the item if its status is an error
-        if ( it->second->key_status == eKeyStatus_Error ) {
+        // Free the item if its status is error or unknown
+        if ( it->second->key_status == eKeyStatus_Error ||
+             it->second->key_status == eKeyStatus_Unknown ) {
             delete it->second;
             it = g_keyContext_list.erase( it );
         }
