@@ -175,17 +175,6 @@ int msg_handler::process(
 // Construct a reply JSON string with nodes "success" and "message".
 std::string msg_handler::GetMessageReply( 
     bool success, 
-    int code,
-    const std::string & message )
-{
-    json::value root = json::value::object( true );
-    root["success"] = json::value( success );
-    root["code"] = json::value( code );
-    root["message"] = json::value( message );
-    return root.serialize();
-}
-std::string msg_handler::GetMessageReply( 
-    bool success, 
     int code, 
     const char* format, ... )
 {
