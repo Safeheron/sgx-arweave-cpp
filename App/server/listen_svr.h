@@ -9,6 +9,7 @@
 #ifndef _LISTEN_SVR_H_
 #define _LISTEN_SVR_H_
 
+#include "thread_task.h"
 #include <cpprest/http_listener.h>
 #include <cpprest/http_client.h>
 #include <list>
@@ -33,8 +34,11 @@ private:
     void HandleMessage( const http_request & message );
     std::string CreateRequestID( const std::string & prefix = "" );
 
+public:
+    bool            is_stopping_;
 private:
-    http_listener   listener_;   //CPPREST listener
+    http_listener   listener_;      // CPPREST listener
+    ThreadTask*     timer_thread_;  // a timer thread to release stopped tasks thread in pool.
 };
 
 #endif //_LISTEN_SVR_H_

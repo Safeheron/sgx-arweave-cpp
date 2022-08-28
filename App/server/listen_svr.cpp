@@ -10,8 +10,39 @@ using namespace web::http;
 using namespace web::http::client;
 using safeheron::bignum::BN;
 
+/**
+ * @brief This is a timer thread, use to release stopped 
+ *        threads in msg_handler::s_thread_pool.
+ * 
+ * @param param a listen_svr objects
+ * @return int 
+ */
+static int timer_thread_func( void* param )
+{
+    int timer_interval = 10; // seconds
+    listen_svr* svr = (listen_svr*)param;
+
+    if ( !svr ) return -1;
+
+    do {
+        for (int i = 0; i < timer_interval; i++) {
+            // If server is stopping, goto exit!
+            if ( svr->is_stopping_ ) goto _exit;
+            sleep( 1 );
+        }
+        // Check msg_handler::s_thread_pool, and release stopped threads
+        msg_handler::ReleaseStoppedThreads();
+    }while (1);
+
+_exit:   
+    return 0;
+}
+
+// The HTTP listen server class
 listen_svr::listen_svr( const std::string & url )
  : listener_( url )
+ , timer_thread_( nullptr )
+ , is_stopping_( false )
 {
     listener_.support(methods::POST, 
                       std::bind(&listen_svr::HandleMessage, 
@@ -30,13 +61,37 @@ listen_svr::~listen_svr()
 // Start listening
 pplx::task<void> listen_svr::open() 
 { 
+    int ret = 0;
+
+    // free old object
+    if ( timer_thread_ ) {
+        is_stopping_ = true;
+        timer_thread_->stop();
+        delete timer_thread_;
+        timer_thread_ = nullptr;
+    }
+    
+    // start the timer thread to check msg_handler::s_thread_pool
+    is_stopping_ = false;
+    timer_thread_ = new ThreadTask( timer_thread_func, this );
+    timer_thread_->start();
+
     return listener_.open(); 
 }
 
 // Stop listening
 pplx::task<void> listen_svr::close() 
 {
-  msg_handler::DestroyThreadPool();
+    // stop timer thread at first
+    if ( timer_thread_ ) {
+        is_stopping_ = true;
+        timer_thread_->stop();
+        delete timer_thread_;
+        timer_thread_ = nullptr;
+    }
+
+    // clean msg_handler::s_thread_pool
+    msg_handler::DestroyThreadPool();
 
     return listener_.close(); 
 }

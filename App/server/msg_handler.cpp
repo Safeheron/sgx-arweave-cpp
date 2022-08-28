@@ -352,28 +352,9 @@ _exit:
     return ret;
 }
 
-// Free all thread objects in s_thread_pool
-void msg_handler::DestroyThreadPool()
+// Free all threads which are stopped in s_thread_pool
+void msg_handler::ReleaseStoppedThreads()
 {
-    std::lock_guard<std::mutex> lock( s_thread_lock );
-    for ( auto it = s_thread_pool.begin(); 
-          it != s_thread_pool.end(); 
-        ) {
-        delete *it;
-        it = s_thread_pool.erase( it );
-    }
-}
-
-int msg_handler::GenerateKeyShard(
-    const std::string & req_id, 
-    const std::string & req_body, 
-    std::string & resp_body )
-{
-    int ret = 0;
-    KeyShardParam* req_param = nullptr;
-
-    FUNC_BEGIN;
-    
     std::lock_guard<std::mutex> lock( s_thread_lock );
 
     // Free all stopped task threads in pool
@@ -386,8 +367,31 @@ int msg_handler::GenerateKeyShard(
             it++;
         }
     }
-    s_thread_lock.unlock();
+}
 
+// Free all thread objects in s_thread_pool
+void msg_handler::DestroyThreadPool()
+{
+    std::lock_guard<std::mutex> lock( s_thread_lock );
+    for ( auto it = s_thread_pool.begin(); 
+          it != s_thread_pool.end(); 
+        ) {
+        delete *it;
+        it = s_thread_pool.erase( it );
+    }
+}
+
+// Generating key shard message handler
+int msg_handler::GenerateKeyShard(
+    const std::string & req_id, 
+    const std::string & req_body, 
+    std::string & resp_body )
+{
+    int ret = 0;
+    KeyShardParam* req_param = nullptr;
+
+    FUNC_BEGIN;
+    
     // All parameters must be valid!
     if ( !(req_param = new KeyShardParam(req_body )) ) {
         ERROR( "Request ID: %s, new KeyShardParam object failed!", req_id.c_str() );
@@ -422,7 +426,7 @@ int msg_handler::GenerateKeyShard(
     req_param->request_id_ = req_id;
 
     // Return if thread pool has no thread resource
-    s_thread_lock.lock();
+    std::lock_guard<std::mutex> lock( s_thread_lock );
     if ( s_thread_pool.size() >= g_max_thread_task_count ) {
         resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
         return APP_ERROR_SERVER_IS_BUSY;
