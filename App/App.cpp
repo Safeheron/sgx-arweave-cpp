@@ -122,8 +122,9 @@ int SGX_CDECL main(int argc, char *argv[])
 
 _exit:
     // Server exit
-    INFO_OUTPUT_CONSOLE( "Server closed!");
+    INFO_OUTPUT_CONSOLE( "Waiting for running tasks to end...\n");
     HttpServer_Shutdown();
+    INFO_OUTPUT_CONSOLE( "\nServer closed!");
 
     // Free enclave
     ecall_free( global_eid );
