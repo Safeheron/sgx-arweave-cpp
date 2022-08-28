@@ -392,6 +392,14 @@ int msg_handler::GenerateKeyShard(
 
     FUNC_BEGIN;
     
+    // Return if thread pool has no thread resource
+    std::lock_guard<std::mutex> lock( s_thread_lock );
+    if ( s_thread_pool.size() >= g_max_thread_task_count ) {
+        resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
+        return APP_ERROR_SERVER_IS_BUSY;
+    }
+    s_thread_lock.unlock();
+
     // All parameters must be valid!
     if ( !(req_param = new KeyShardParam(req_body )) ) {
         ERROR( "Request ID: %s, new KeyShardParam object failed!", req_id.c_str() );
@@ -424,14 +432,6 @@ int msg_handler::GenerateKeyShard(
         return APP_ERROR_INVALID_WEBHOOK_URL;
     }
     req_param->request_id_ = req_id;
-
-    // Return if thread pool has no thread resource
-    std::lock_guard<std::mutex> lock( s_thread_lock );
-    if ( s_thread_pool.size() >= g_max_thread_task_count ) {
-        resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
-        return APP_ERROR_SERVER_IS_BUSY;
-    }
-    s_thread_lock.unlock();
 
     // Create a thread for generation task
     ThreadTask* task = new ThreadTask(GenerateKeyShard_Task, req_param);
