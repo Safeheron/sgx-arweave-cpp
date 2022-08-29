@@ -228,7 +228,7 @@ int GenerateTask::get_reply_string(
     // Add string "pubkey_list_hash" to JSON object root
     root["pubkey_list_hash"] = input_pubkey_hash;
 
-    // add string "key_shard_pubkey" to JSON object root
+    // Add string "key_shard_pubkey" to JSON object root
     std::string pubkey_json_str;
     pubkey.ToJsonString( pubkey_json_str );
     JSON::Root pubkey_root = JSON::Root::parse( pubkey_json_str );

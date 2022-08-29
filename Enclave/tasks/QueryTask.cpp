@@ -42,7 +42,7 @@ int QueryTask::execute(
     // Check if there is an alive key context corresponding to pubkey list hash in g_keyContext_list.
     // Return success = false if there is not.
     if ( !g_keyContext_list.count( input_pubkey_hash ) ) {
-        error_msg = format_msg( "Request ID: %s, Input pubkey list hash is not exist! pubkey_list_hash: %s", 
+        error_msg = format_msg( "Request ID: %s, input_pubkey_hash dose not exist! pubkey_list_hash: %s",
             request_id_.c_str(), input_pubkey_hash.c_str() );
         ERROR( "%s", error_msg.c_str() );
         ret = TEE_ERROR_PUBLIST_KEY_HASH;
@@ -50,7 +50,7 @@ int QueryTask::execute(
         goto _exit;
     }
     if ( !(context = g_keyContext_list.at( input_pubkey_hash )) ) {
-        error_msg = format_msg( "Request ID: %s, input_pubkey_hash is exist, but the context is null! input_pubkey_hash: %s", 
+        error_msg = format_msg( "Request ID: %s, input_pubkey_hash exist, but the context is null! input_pubkey_hash: %s",
             request_id_.c_str(), input_pubkey_hash.c_str() );
         ERROR( "%s", error_msg.c_str() );
         ret = TEE_ERROR_INTERNAL_ERROR;
