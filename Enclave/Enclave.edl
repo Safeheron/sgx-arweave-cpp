@@ -32,6 +32,13 @@ enclave {
         public int ecall_get_enclave_id([user_check] char **output, [out] uint64_t *output_len);
 
         /**
+         *  To set a status to the key shard generation task
+         *  status MUST be one of eKeyStatus
+         */
+        public int ecall_set_generation_status([in, string]const char* request_id, 
+                                               [in, string]const char* pubkey_list_hash, 
+                                               int current_status);
+        /**
          *  To generate the enclave quote
          */
         public int ecall_create_report([in, string]const char* request_id, 

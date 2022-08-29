@@ -64,9 +64,15 @@ int QueryTask::execute(
     root["status_text"] = get_status_text( context->key_status );
     root["k"] = context->k;
     root["l"] = context->l;
-    root["alive_time_seconds"] = (context->finished_time == 0) ? 
-                                 int(get_system_time() - context->start_time) :
-                                 int(context->finished_time - context->start_time);
+    if ( eKeyStatus_Unknown == context->key_status || 
+         eKeyStatus_Error == context->key_status ) {
+        root["alive_time_seconds"] = 0;
+    }
+    else {
+        root["alive_time_seconds"] = (context->finished_time == 0) ? 
+                                    int(get_system_time() - context->start_time) :
+                                    int(context->finished_time - context->start_time);
+    }
 
     FUNC_END;
 
@@ -81,6 +87,10 @@ std::string QueryTask::get_status_text( int status )
     switch ( status ) {
     case eKeyStatus_Generating:
         return "Generating";
+    case eKeyStatus_Reporting:
+        return "Reporting";
+    case eKeyStatus_Callback:
+        return "Callbacking";
     case eKeyStatus_Finished:
         return "Finished";
     case eKeyStatus_Error:

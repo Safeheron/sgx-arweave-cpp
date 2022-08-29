@@ -10,11 +10,6 @@
 #include <string>
 
 /**
- * The max count for generating key shard task
- */
-#define MAX_TASK_COUNT      1000
-
-/**
  *  TEE tasks type definition
 */
 enum eTaskType
@@ -29,9 +24,11 @@ enum eTaskType
 */
 enum eKeyStatus {
     eKeyStatus_Unknown      = 0,
-    eKeyStatus_Generating   = 1,
-    eKeyStatus_Finished     = 2,
-    eKeyStatus_Error        = 3
+    eKeyStatus_Generating   = 1,    // generating key shard
+    eKeyStatus_Reporting    = 2,    // creating the report
+    eKeyStatus_Callback     = 3,    // doing result callback
+    eKeyStatus_Finished     = 4,    // the task is finished
+    eKeyStatus_Error        = 0xFF
 };
 
 /**
@@ -43,6 +40,7 @@ struct KeyShardContext {
         l = 0;
         key_bits = 0;
         start_time = 0;
+        generated_time = 0;
         finished_time = 0;
         key_status = eKeyStatus_Unknown;
     }
@@ -51,6 +49,7 @@ struct KeyShardContext {
         l = l_;
         key_bits = key_bits_;
         start_time = 0;
+        generated_time = 0;
         finished_time = 0;
         key_status = eKeyStatus_Unknown;
     }
@@ -58,6 +57,7 @@ struct KeyShardContext {
     int l;
     int key_bits;
     long start_time;
+    long generated_time;
     long finished_time;
     eKeyStatus key_status;
     std::string key_meta_hash;

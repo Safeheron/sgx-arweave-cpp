@@ -34,11 +34,11 @@ public:
     KeyShardParam(PUBKEY_LIST& pubkey_list, int k, int l, int key_length, const std::string & callback );
     virtual ~KeyShardParam();
 public:
-    bool pubkey_list_is_ok();
-    bool k_is_ok();
-    bool l_is_ok();
-    bool key_length_is_ok();
-    bool webhook_url_is_ok();
+    bool check_pubkey_list();
+    bool check_k();
+    bool check_l();
+    bool check_key_length();
+    bool check_webhook_url();
     std::string calc_pubkey_list_hash();
     std::string to_json_string();
 public:

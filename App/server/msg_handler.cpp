@@ -31,6 +31,7 @@ using namespace utility;
 extern sgx_enclave_id_t global_eid;
 extern std::string g_key_shard_generation_path;
 extern std::string g_key_shard_query_path;
+extern int g_max_thread_task_count;
 
 // Thread pool and mutex
 std::list<ThreadTask*> msg_handler::s_thread_pool;
@@ -95,6 +96,7 @@ static int GenerateKeyShard_Task(void* keyshard_param )
     if ( (ret = msg_handler::GenerateEnclaveReport(request_id, pubkey_list_hash, enclave_report)) != 0 ) {
         ERROR( "Request ID: %s,  msg_handler::GenerateEnclaveReport() failed! pubkey_list_hash: %s, ret: %d",
             request_id.c_str(), pubkey_list_hash.c_str(), ret );
+        reply_body = msg_handler::GetMessageReply( false, ret, "Failed to create enclave report!" );
         goto _exit;
     }
 
@@ -113,10 +115,12 @@ static int GenerateKeyShard_Task(void* keyshard_param )
 
 _exit:
     try {
-        listen_svr::PostRequest(param->request_id_, param->webhook_url_, reply_body ).wait();
+        listen_svr::PostRequest( request_id, param->webhook_url_, reply_body ).wait();
+        ecall_set_generation_status( global_eid, &ret, request_id.c_str(), pubkey_list_hash.c_str(), eKeyStatus_Finished );
         INFO_OUTPUT_CONSOLE("Request ID: %s, key shard generation result has post to callback address successfully.", request_id.c_str());
     } catch ( const std::exception &e ) {
-        ERROR( "Request ID: %s Error exception: %s", param->request_id_.c_str(), e.what() );
+        ecall_set_generation_status( global_eid, &ret, request_id.c_str(), pubkey_list_hash.c_str(), eKeyStatus_Error );
+        ERROR( "Request ID: %s Error exception: %s", request_id.c_str(), e.what() );
     }
     if ( result ) {
         free( result );
@@ -171,9 +175,15 @@ int msg_handler::process(
 // Construct a reply JSON string with nodes "success" and "message".
 std::string msg_handler::GetMessageReply( 
     bool success, 
-    int code,
-    const std::string & message )
+    int code, 
+    const char* format, ... )
 {
+    char message[ 4096 ] = { 0 };
+    va_list args;
+    va_start( args, format ); 
+    vsnprintf( message, sizeof(message)-1, format, args );
+    va_end( args );
+
     json::value root = json::value::object( true );
     root["success"] = json::value( success );
     root["code"] = json::value( code );
@@ -342,28 +352,9 @@ _exit:
     return ret;
 }
 
-// Free all thread objects in s_thread_pool
-void msg_handler::DestroyThreadPool()
+// Free all threads which are stopped in s_thread_pool
+void msg_handler::ReleaseStoppedThreads()
 {
-    std::lock_guard<std::mutex> lock( s_thread_lock );
-    for ( auto it = s_thread_pool.begin(); 
-          it != s_thread_pool.end(); 
-        ) {
-        delete *it;
-        it = s_thread_pool.erase( it );
-    }
-}
-
-int msg_handler::GenerateKeyShard(
-    const std::string & req_id, 
-    const std::string & req_body, 
-    std::string & resp_body )
-{
-    int ret = 0;
-    KeyShardParam* req_param = nullptr;
-
-    FUNC_BEGIN;
-    
     std::lock_guard<std::mutex> lock( s_thread_lock );
 
     // Free all stopped task threads in pool
@@ -376,6 +367,37 @@ int msg_handler::GenerateKeyShard(
             it++;
         }
     }
+}
+
+// Free all thread objects in s_thread_pool
+void msg_handler::DestroyThreadPool()
+{
+    std::lock_guard<std::mutex> lock( s_thread_lock );
+    for ( auto it = s_thread_pool.begin(); 
+          it != s_thread_pool.end(); 
+        ) {
+        delete *it;
+        it = s_thread_pool.erase( it );
+    }
+}
+
+// Generating key shard message handler
+int msg_handler::GenerateKeyShard(
+    const std::string & req_id, 
+    const std::string & req_body, 
+    std::string & resp_body )
+{
+    int ret = 0;
+    KeyShardParam* req_param = nullptr;
+
+    FUNC_BEGIN;
+    
+    // Return if thread pool has no thread resource
+    std::lock_guard<std::mutex> lock( s_thread_lock );
+    if ( s_thread_pool.size() >= g_max_thread_task_count ) {
+        resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
+        return APP_ERROR_SERVER_IS_BUSY;
+    }
     s_thread_lock.unlock();
 
     // All parameters must be valid!
@@ -384,35 +406,32 @@ int msg_handler::GenerateKeyShard(
         resp_body = GetMessageReply( false, APP_ERROR_MALLOC_FAILED, "new KeyShardParam object failed!" );
         return APP_ERROR_MALLOC_FAILED;
     }
-    if ( !req_param->pubkey_list_is_ok() ) {
+    if ( !req_param->check_pubkey_list() ) {
         ERROR( "Request ID: %s, User pubkey list is invalid! size: %d", req_id.c_str(), (int)req_param->pubkey_list_.size() );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "User pubkey list is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_PUBLIC_KEY_LIST, "Field '%s' value is invalid!", FIELD_NAME_USER_PUBLICKEY_LIST );
         return APP_ERROR_INVALID_PUBLIC_KEY_LIST;
     }
-    if ( !req_param->k_is_ok() ) {
+    if ( !req_param->check_k() ) {
         ERROR( "Request ID: %s, Parameter k is invalid! k: %d", req_id.c_str(), req_param->k_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Parameter k is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_K, "Field '%s' value is invalid!", FIELD_NAME_NUMERATOR_K );
         return APP_ERROR_INVALID_K;
     }
-    if ( !req_param->l_is_ok() ) {
+    if ( !req_param->check_l() ) {
         ERROR( "Request ID: %s, Parameter l is invalid! l: %d", req_id.c_str(), req_param->l_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Parameter l is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_L, "Field '%s' value is invalid!", FIELD_NAME_DENOMINATOR_L );
         return APP_ERROR_INVALID_L;
     }
-    if ( !req_param->key_length_is_ok() ) {
+    if ( !req_param->check_key_length() ) {
         ERROR( "Request ID: %s, Parameter key length is invalid! key_length: %d", req_id.c_str(), req_param->key_length_ );
-        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Parameter key length is invalid!" );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_KEYBITS, "Field '%s' value is invalid!", FIELD_NAME_KEY_LENGTH );
         return APP_ERROR_INVALID_KEYBITS;
     }
-    req_param->request_id_ = req_id;
-
-    // Return if thread pool has no thread resource
-    s_thread_lock.lock();
-    if ( s_thread_pool.size() >= MAX_THREAD_TASK_COUNT ) {
-        resp_body = GetMessageReply( false, APP_ERROR_SERVER_IS_BUSY, "TEE service is busy!" );
-        return APP_ERROR_SERVER_IS_BUSY;
+    if ( !req_param->check_webhook_url() ) {
+        ERROR( "Request ID: %s, Parameter webhook url is invalid! webhook url: %s", req_id.c_str(), req_param->webhook_url_.c_str() );
+        resp_body = GetMessageReply( false, APP_ERROR_INVALID_WEBHOOK_URL, "Field '%s' value is invalid!", FIELD_NAME_WEBHOOK_URL );
+        return APP_ERROR_INVALID_WEBHOOK_URL;
     }
-    s_thread_lock.unlock();
+    req_param->request_id_ = req_id;
 
     // Create a thread for generation task
     ThreadTask* task = new ThreadTask(GenerateKeyShard_Task, req_param);

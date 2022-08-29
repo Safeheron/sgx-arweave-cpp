@@ -15,12 +15,6 @@
 #include <list>
 #include <mutex>
 
-/**
- * Max number of threads in s_thread_pool.
- * s_thread_pool is a thread pool to allocate thread resources.
- */
-#define MAX_THREAD_TASK_COUNT       100
-
 class msg_handler
 {
 public:
@@ -39,8 +33,9 @@ public:
     int process( const std::string & req_id, const std::string & req_path, const std::string & req_body, std::string & resp_body );
     
 public:
-    static std::string GetMessageReply( bool success, int code, const std::string & message );
+    static std::string GetMessageReply( bool success, int code, const char* format, ... );
     static int GenerateEnclaveReport(const std::string & request_id, const std::string& pubkey_list_hash, std::string & report );
+    static void ReleaseStoppedThreads();
     static void DestroyThreadPool();
 
 private:

@@ -13,7 +13,6 @@
 #include <mutex>
 #include <map>
 
-
 #include "Enclave_t.h"
 
 using safeheron::curve::Curve;
@@ -55,18 +54,6 @@ int GenerateTask::execute(
         return TEE_ERROR_INVALID_PARAMETER;
     }
 
-    std::lock_guard<std::mutex> lock( g_list_mutex );
-
-    // Return busy if the size of key context list is bigger than 1000
-    if ( g_keyContext_list.size() >= MAX_TASK_COUNT ) {
-        error_msg = format_msg( "Request ID: %s, Key context list exceeds its maximum capacity! Current size is: %d",
-            request_id_.c_str(), (int)g_keyContext_list.size() );
-        ERROR( "%s", error_msg.c_str() );
-        return TEE_ERROR_ENCLAVE_IS_BUSY;
-    }
-
-    g_list_mutex.unlock();
-
     // Parse request parameters from request body data
     req_root = JSON::Root::parse( request );
     if ( !req_root.is_valid() ) {
@@ -95,7 +82,7 @@ int GenerateTask::execute(
 
     // Check if there is a same public key list hash in context list
     // Return if there is, even if its status is finished!!!
-    g_list_mutex.lock();
+    std::lock_guard<std::mutex> lock( g_list_mutex );
     if ( g_keyContext_list.count( pubkey_hash ) ) {
         error_msg = format_msg( "Request ID: %s, a same request is in queue!", request_id_.c_str() );
         ERROR( "%s", error_msg.c_str() );
@@ -109,8 +96,8 @@ int GenerateTask::execute(
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_MALLOC_FAILED;
     }
-    context->start_time = get_system_time();
     context->key_status = eKeyStatus_Generating;
+    context->start_time = get_system_time();
     g_list_mutex.lock();
     g_keyContext_list.insert(std::pair<std::string, KeyShardContext*>(pubkey_hash, context));
     g_list_mutex.unlock();
@@ -142,8 +129,8 @@ int GenerateTask::execute(
         context->key_status = eKeyStatus_Error;
         return ret;
     }
-    context->key_status = eKeyStatus_Finished;
-    context->finished_time = get_system_time();
+    context->key_status = eKeyStatus_Reporting;
+    context->generated_time = get_system_time();
 
     FUNC_END;
 
@@ -239,19 +226,19 @@ int GenerateTask::get_reply_string(
         JSON::Root arrary_node;
         std::string keyInfo_cipher;
 
-        ++index;
-
         // Encrypt the private key shard and key meta
-        if ( (ret = get_private_key_info_cipher(index, input_pubkey_list[index - 1],
+        if ( (ret = get_private_key_info_cipher(index + 1, input_pubkey_list[index],
                                                 prikey, key_meta, keyInfo_cipher)) != TEE_OK ) {
             ERROR( "Request ID: %s, get_private_key_info_cipher() failed with index: %d!", request_id_.c_str(), index );
             return ret;
         }
 
         // Add the element to "key_shard_pkg"
-        arrary_node["public_key"] = input_pubkey_list[index - 1];
+        arrary_node["public_key"] = input_pubkey_list[index];
         arrary_node["encrypt_key_info"] = keyInfo_cipher;
         pkg_array.push_back( arrary_node );
+
+        ++index;
     }
     root["key_shard_pkg"] = pkg_array;
 
