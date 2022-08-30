@@ -21,8 +21,10 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
 
 
 # Service Workflow
-This service provides two main functions: **Private Key Shard Generation** and **Generation Status Query**.
 ![img](doc/Project%20Structure.png)
+
+This service provides two main functions: **Private Key Shard Generation** and **Generation Status Query**.
+
 - **Private Key Shard Generation**: Generate the private key shards and generate a remote attestation report. The request is processed asynchronously and will be returned immediately. When the request processing is finished, the service will send the generated key shards data and the certification report to the specified service address as an HTTP POST request by using a webhook.
 
 
