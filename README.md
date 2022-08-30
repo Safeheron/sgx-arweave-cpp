@@ -16,7 +16,7 @@ This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard serv
     * [Generation Request Details](#generation-request-details)
     * [Query Request Details](#query-request-details)
 * [Intel® SGX Remote Attestation](#intel-sgx-remote-attestation)
-* [Contributions & Contact](#contributions--contact)
+* [Development Process & Contact](#development-process--contact)
 
 
 
