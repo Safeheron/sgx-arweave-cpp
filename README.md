@@ -81,6 +81,7 @@ The fields in the configuration file:
 - `key_shard_generation_path` The path of key shard generation request to your server, for example `/arweave/generate_key_shard`;
 - `key_shard_query_path`  The path of key shard query request to your server, for example `/arweave/query_key_shard`;
 - `log_path` The absolute path to store logs, for example: `/root/glog-arweave`;
+- `max_thread_task_count` The maximum number of task threads that can be allocated by the thread pool;
 
 
 
