@@ -262,7 +262,7 @@ The formula of the **User Data** is:
 ## Query Request Details
 
 ### Interface URL Example
-> http://YOUR_HOST//arweave/query_key_shard
+> http://YOUR_HOST/arweave/query_key_shard
 
 ### Request Method
 > POST
