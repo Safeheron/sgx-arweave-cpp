@@ -124,6 +124,9 @@ void listen_svr::HandleMessage( const http_request & message )
 
     INFO_OUTPUT_CONSOLE( "Request ID: %s is replied!", request_id.c_str() );
 
+    // when a thread is about to stop in situations that openssl it-self cannot recycle resources, we need call OPENSSL_thread_stop()
+    OPENSSL_thread_stop();
+
     FUNC_END;
 }
 
