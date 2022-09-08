@@ -19,7 +19,7 @@ void Dispatcher::register_task( Task * t )
 void Dispatcher::release_task()
 {
     for ( auto it = m_vTask.begin(); it != m_vTask.end(); ) {
-        delete it;
+        delete *it;
         it = m_vTask.erase( it );
     }
 }
