@@ -313,7 +313,7 @@ In this project, we use Intel SGX DCAP to support remote attestation to provide 
 
 Therefore, we offer a simple verification demo [safeheron-sgx-remote-attestation-js](https://github.com/Safeheron/safeheron-sgx-remote-attestation-js) for this specific project to verify the validation of the remote attestation certification (the report).
 
-Please note that before you use **safeheron-sgx-remote-attestation-js**, please make sure that the **MRENCLAVE** of your deployed service is the same as the [current MRENCLAVE]() (MRENCLAVE is the measurement of Enclave. Any change of the code and initial data in Enclave will result in a different value).
+Please note that before you use **safeheron-sgx-remote-attestation-js**, please make sure that the **MRENCLAVE** of your deployed service is the same as the [current MRENCLAVE](doc/MRENCLAVE_TABLE.md) (MRENCLAVE is the measurement of Enclave. Any change of the code and initial data in Enclave will result in a different value).
 
 
 For more details on DCAP and remote attestation, please refer to the [Intel® Documentation](https://download.01.org/intel-sgx/sgx-dcap/1.14/linux/docs/).
