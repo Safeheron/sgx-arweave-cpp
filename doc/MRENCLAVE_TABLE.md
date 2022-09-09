@@ -1,5 +1,7 @@
 # TEE_ARWEAVE_CPP MRENCLAVE TABLE
 
+
+
 - version 0.0.1
 
 <body><table>
@@ -39,10 +41,10 @@
 </tr>
 
 <tr>
-<td>Linker ld</td>
-<td>intel Linker ld</td>
+<td>linker ld</td>
+<td>intel linker ld</td>
 <td>system linker ld</td>
-<td>intel Linker ld</td>
+<td>intel linker ld</td>
 <td>system linker ld</td>
 </tr>
 
