@@ -16,7 +16,7 @@ void Dispatcher::register_task( Task * t )
     m_vTask.push_back( t );
 }
 
-void Dispatcher::release_task()
+void Dispatcher::unregister_task()
 {
     for ( auto it = m_vTask.begin(); it != m_vTask.end(); ) {
         delete *it;
