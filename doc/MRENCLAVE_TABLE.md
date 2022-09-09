@@ -5,10 +5,6 @@
 - version 0.0.1
 
 <body><table>
-<tr>
-<td>MRENCLAVE influencing factors</td>
-<td colspan="4">version</td>
-</tr>
 
 <tr>
 <td>operating system</td>
