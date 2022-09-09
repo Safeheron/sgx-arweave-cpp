@@ -38,7 +38,7 @@ This service provides two main functions: **Private Key Shard Generation** and *
 
 - [SGX Components](https://01.org/intel-software-guard-extensions/downloads):
   - SGX Driver. See [SGX-Driver-Installation](doc/SGX-Driver-Installation.md).
-  - SGX SDK (SGX SDK 2.16 or later is required). See [SGX-SDK-Installation](doc/SGX-SDK-Installation.md).
+  - SGX SDK (SGX SDK 2.17 or later is required). See [SGX-SDK-Installation](doc/SGX-SDK-Installation.md).
   - SGX DCAP. See [Intel SGX DCAP Installation Procedure](https://www.intel.com/content/www/us/en/developer/articles/guide/intel-software-guard-extensions-data-center-attestation-primitives-quick-install-guide.html). 
 - [Intel SGX-SSL](https://github.com/intel/intel-sgx-ssl.git). See [SGX-SSL-Installation](doc/SGX-SSL-Installation.md).
 - [CPPRESTSDK](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md).
