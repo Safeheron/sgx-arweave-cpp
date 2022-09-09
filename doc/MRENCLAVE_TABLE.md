@@ -31,7 +31,7 @@
 </tr>
 
 <tr>
-<td>intel-sgx-ssl's openssl_source</td>
+<td>OpenSSL(to compile sgxssl)</td>
 <td colspan="2">openssl-1.1.1q.tar.gz</td>
 <td colspan="2">openssl-1.1.1q.tar.gz</td>
 </tr>
