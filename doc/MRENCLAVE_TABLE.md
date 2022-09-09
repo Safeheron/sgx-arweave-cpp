@@ -7,7 +7,7 @@
 <body><table>
 
 <tr>
-<td>operating system</td>
+<td>Operating System</td>
 <td colspan="2">Ubuntu 18.04 LTS</td>
 <td colspan="2">Ubuntu 20.04 LTS</td>
 </tr>
@@ -19,13 +19,13 @@
 </tr>
 
 <tr>
-<td>sgxsdk</td>
+<td>SGX SDK</td>
 <td colspan="2">sgx_linux_x64_sdk_2.17.101.1.bin</td>
 <td colspan="2">sgx_linux_x64_sdk_2.17.101.1.bin</td>
 </tr>
 
 <tr>
-<td>sgxdriver</td>
+<td>SGX Driver</td>
 <td colspan="2">sgx_linux_x64_driver_1.41.bin</td>
 <td colspan="2">sgx_linux_x64_driver_1.41.bin</td>
 </tr>
@@ -37,7 +37,7 @@
 </tr>
 
 <tr>
-<td>linker ld</td>
+<td>Linker ld</td>
 <td>intel linker ld</td>
 <td>system linker ld</td>
 <td>intel linker ld</td>
