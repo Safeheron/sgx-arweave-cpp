@@ -61,6 +61,7 @@ It only supports Linux now.
 $ git clone https://github.com/Safeheron/sgx-arweave-cpp.git
 $ cd sgx-arweave-cpp
 $ mkdir build && cd build
+$ cmake ..
 $ make
 $ make install
 $ cd tee-arweave-server-0.0.1
