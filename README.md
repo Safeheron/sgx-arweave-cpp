@@ -1,8 +1,8 @@
-# Safeheron’s TEE Based RSA Key Shard Service
+# Safeheron’s TEE Based RSA Key Sharding Service
 
 ![img](doc/logo.png)
 
-This project is an HTTP server of the TEE (Intel® SGX) based RSA key shard service to eliminate the security risks of generating RSA private key shards in a non-trusted centralized environment.
+This project is an HTTP server of the TEE (Intel® SGX) based RSA key sharding service to eliminate the security risks of generating RSA private key shards in a non-trusted centralized environment.
 
 
 
