@@ -103,7 +103,7 @@ void ecall_free()
         it = g_keyContext_list.erase( it );
     }
 
-    g_dispatcher.release_task();
+    g_dispatcher.unregister_task();
 
     FUNC_END;
 }

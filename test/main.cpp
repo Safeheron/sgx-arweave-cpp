@@ -1,14 +1,3 @@
-/**
- * @file main.cpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-08-10
- * 
- * @copyright Copyright (c) 2022
- * 
- */
-
 #include <stdio.h>
 #include <cpprest/http_listener.h>
 #include <cpprest/http_client.h>
@@ -399,8 +388,8 @@ int ParseKeyShareResult( const std::string & result )
 
     // "key_shard_pubkey" node, is a JSON object
     auto jsonObj = ret_json.as_object();
-    std::string rsa_pubkey = jsonObj["key_shard_pubkey"].serialize();
-    printf("key_shard_pubkey: %s\n", rsa_pubkey.c_str());
+    std::string rsa_pubkey = jsonObj["rsa_public_key"].serialize();
+    printf("rsa_public_key: %s\n", rsa_pubkey.c_str());
 
     // "key_shard_pkg"
     auto array = ret_json.at( "key_shard_pkg" ).as_array();

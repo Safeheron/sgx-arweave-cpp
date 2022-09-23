@@ -219,7 +219,7 @@ int GenerateTask::get_reply_string(
     std::string pubkey_json_str;
     pubkey.ToJsonString( pubkey_json_str );
     JSON::Root pubkey_root = JSON::Root::parse( pubkey_json_str );
-    root["key_shard_pubkey"] = pubkey_root;
+    root["rsa_public_key"] = pubkey_root;
 
     // Add JSON list "key_shard_pkg" to JSON object root
     for ( const auto& prikey : private_key_list ) {

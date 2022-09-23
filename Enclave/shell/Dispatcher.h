@@ -17,7 +17,7 @@ class Dispatcher
 public:
     int dispatch( uint32_t task_type, const std::string & request_id, const std::string & request, std::string & reply, std::string & error_msg );
     void register_task( Task * t );
-    void release_task();
+    void unregister_task();
 
 private:
     std::vector<Task *> m_vTask;
