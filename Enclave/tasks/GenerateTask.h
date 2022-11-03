@@ -52,23 +52,26 @@ public:
 private:
     /**
      * @brief : Get the concatenation of public keys in "pubkey_list" using SHA256. The "pubkey_list" is sorted in advance.
+     * @param request_id[in] : The unique ID of each request.
      * @param pubkey_list[in]
      * @param hash_hex[out]
      * @return int : Return TEE_OK if success, otherwise return an error code.
      */
-    int get_pubkey_hash( const PUBKEY_LIST & pubkey_list, std::string & hash_hex );
+    int get_pubkey_hash( const std::string & request_id, const PUBKEY_LIST & pubkey_list, std::string & hash_hex );
 
     /**
      * @brief : Get key meta hash.
+     * @param request_id[in] : The unique ID of each request.
      * @param key_meta[in] : The collateral generated with the private key shards.
      * @param hash_hex[out]
      * @return int : Return TEE_OK if success, otherwise return an error code.
      */
-    int get_keymeta_hash( const RSAKeyMeta & key_meta, std::string & hash_hex );
+    int get_keymeta_hash( const std::string & request_id, const RSAKeyMeta & key_meta, std::string & hash_hex );
 
     /**
      * @brief : Construct a JSON string after the key shard generation is done.
      *          The key shard information is encrypted and assigned to a JSON field named "encrypt_key_info".
+     * @param request_id[in] : The unique ID of each request.
      * @param input_pubkey_hash[in] : The public key list hash.
      * @param input_pubkey_list [in] : The public key list.
      * @param pubkey [in] : The public key corresponding to the generated private key shards.
@@ -98,7 +101,7 @@ private:
      *
      * @return int : Return TEE_OK if success, otherwise return an error code.
      */
-    int get_reply_string(const std::string & input_pubkey_hash, const PUBKEY_LIST & input_pubkey_list, const RSAPublicKey & pubkey, const PRIVATE_KEYSHARD_LIST & private_key_list, const RSAKeyMeta & key_meta, std::string & out_str );
+    int get_reply_string( const std::string & request_id, const std::string & input_pubkey_hash, const PUBKEY_LIST & input_pubkey_list, const RSAPublicKey & pubkey, const PRIVATE_KEYSHARD_LIST & private_key_list, const RSAKeyMeta & key_meta, std::string & out_str );
 
     /**
      * @brief : Encrypt the key shards' information using the public key in public key list.
@@ -120,6 +123,7 @@ private:
      *                   "private_key_shard": "kasdkajshdasd"
      *               }
      *   }
+     * @param request_id[in] : The unique ID of each request.
      * @param index[in] : The index of the private key shard.
      * @param input_pubkey[in] : The public key to encrypt key shards' information.
      * @param private_key[in] : The private key shard.
@@ -127,5 +131,5 @@ private:
      * @param out_str[out] : A string that represented the encrypted key shard information.
      * @return int : Return TEE_OK if success, otherwise return an error code.
      */
-    int get_private_key_info_cipher(int index, const std::string & input_pubkey, const RSAPrivateKeyShare & private_key, const RSAKeyMeta & key_meta, std::string & out_str );
+    int get_private_key_info_cipher( const std::string & request_id, int index, const std::string & input_pubkey, const RSAPrivateKeyShare & private_key, const RSAKeyMeta & key_meta, std::string & out_str );
 };

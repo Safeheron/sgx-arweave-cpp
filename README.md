@@ -46,8 +46,8 @@ This service provides two main functions: **Private Key Shard Generation** and *
 - [OpenSSL](https://github.com/openssl/openssl.git). See [openssl-Installation](doc/openssl-Installation.md).
 - [Boost](http://www.boost.org/). See [boost-Installation](doc/boost-system-Installation.md).
 - [safeheron-crypto-suites-cpp](https://github.com/Safeheron/safeheron-crypto-suites-cpp.git): an assembly of all the basic libraries and cryptography protocols from Safeheron.
-- [sgx-safeheron-crypto-suites-cpp](https://github.com/Safeheron/sgx-safeheron-crypto-suites-cpp.git): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
-- [sgx-tss-rsa-cpp](https://github.com/Safeheron/sgx-tss-rsa-cpp): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
+- [safeheron-crypto-suites-cpp-sgx](https://github.com/Safeheron/safeheron-crypto-suites-cpp-sgx): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
+- [tss-rsa-cpp-sgx](https://github.com/Safeheron/tss-rsa-cpp-sgx): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
 
 
 

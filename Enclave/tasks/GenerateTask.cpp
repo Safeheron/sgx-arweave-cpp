@@ -47,9 +47,8 @@ int GenerateTask::execute(
 
     FUNC_BEGIN;
 
-    request_id_ = request_id;
     if (request.length() == 0) {
-        error_msg = format_msg( "Request ID: %s, request is null!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, request is null!", request_id.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_INVALID_PARAMETER;
     }
@@ -58,7 +57,7 @@ int GenerateTask::execute(
     req_root = JSON::Root::parse( request );
     if ( !req_root.is_valid() ) {
         error_msg = format_msg( "Request ID: %s, request body is not in JSON! request: %s",
-            request_id_.c_str(), request.c_str() );
+                                request_id.c_str(), request.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_INVALID_PARAMETER;
     }
@@ -66,16 +65,16 @@ int GenerateTask::execute(
     l = req_root["l"].asInt();
     key_bits = req_root["key_length"].asInt();
     input_pubkey_list = req_root["user_public_key_list"].asStringArrary();
-    INFO("Request ID: %s, k: %d l: %d, keyLength: %d, pubkey count: %d", 
-        request_id_.c_str(), k, l, key_bits, (int)input_pubkey_list.size());
+    INFO("Request ID: %s, k: %d l: %d, keyLength: %d, pubkey count: %d",
+         request_id.c_str(), k, l, key_bits, (int)input_pubkey_list.size());
     for (const auto& it : input_pubkey_list) 
-        INFO("Request ID: %s, pubkey: %s", request_id_.c_str(), it.c_str());
+        INFO("Request ID: %s, pubkey: %s", request_id.c_str(), it.c_str());
 
     // Calculate users' public key hash (SHA256) after sorting "user_public_key_list"
     std::sort( input_pubkey_list.begin(), input_pubkey_list.end() );
-    if ( (ret = get_pubkey_hash( input_pubkey_list, pubkey_hash )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with input_pubkey_list! ret : 0x%x", 
-            request_id_.c_str(), ret );
+    if ( (ret = get_pubkey_hash( request_id, input_pubkey_list, pubkey_hash )) != TEE_OK ) {
+        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with input_pubkey_list! ret : 0x%x",
+                                request_id.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         return ret;
     }
@@ -84,7 +83,7 @@ int GenerateTask::execute(
     // Return if there is, even if its status is finished!!!
     std::lock_guard<std::mutex> lock( g_list_mutex );
     if ( g_keyContext_list.count( pubkey_hash ) ) {
-        error_msg = format_msg( "Request ID: %s, a same request is in queue!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, a same request is in queue!", request_id.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_REQUEST_IS_EXIST;
     }
@@ -92,7 +91,7 @@ int GenerateTask::execute(
 
     // Construct a KeyShardContext object and add it into g_keyContext_list.
     if ( !(context = new KeyShardContext( k, l, key_bits )) ) {
-        error_msg = format_msg( "Request ID: %s, new KeyShardContext failed!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, new KeyShardContext failed!", request_id.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_MALLOC_FAILED;
     }
@@ -104,16 +103,16 @@ int GenerateTask::execute(
 
     // Create key shards by calling Safeheron API
     if ( !(ret = safeheron::tss_rsa::GenerateKey(key_bits, l, k, private_key_list, pubkey, key_meta )) ) {
-        error_msg = format_msg( "Request ID: %s, GenerateKey failed!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, GenerateKey failed!", request_id.c_str() );
         ERROR( "%s", error_msg.c_str() );
         context->key_status = eKeyStatus_Error;
         return false;
     }
 
     // Calculate the hash of key meta
-    if ( (ret = get_keymeta_hash( key_meta, key_meta_hash )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with key_mata! ret: 0x%x", 
-            request_id_.c_str(), ret );
+    if ( (ret = get_keymeta_hash( request_id, key_meta, key_meta_hash )) != TEE_OK ) {
+        error_msg = format_msg( "Request ID: %s, get_pubkey_hash() failed with key_mata! ret: 0x%x",
+                                request_id.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         context->key_status = eKeyStatus_Error;
         return ret;
@@ -121,10 +120,10 @@ int GenerateTask::execute(
     context->key_meta_hash = key_meta_hash;
 
     // Construct reply JSON string
-    if ( (ret = get_reply_string(pubkey_hash, input_pubkey_list,
+    if ( (ret = get_reply_string(request_id, pubkey_hash, input_pubkey_list,
                                  pubkey, private_key_list, key_meta, reply )) != TEE_OK ) {
-        error_msg = format_msg( "Request ID: %s, get_reply_string() failed! ret: 0x%x", 
-            request_id_.c_str(), ret );
+        error_msg = format_msg( "Request ID: %s, get_reply_string() failed! ret: 0x%x",
+                                request_id.c_str(), ret );
         ERROR( "%s", error_msg.c_str() );
         context->key_status = eKeyStatus_Error;
         return ret;
@@ -138,7 +137,8 @@ int GenerateTask::execute(
 }
 
 // Calculate the hash of the public key list
-int GenerateTask::get_pubkey_hash( 
+int GenerateTask::get_pubkey_hash(
+    const std::string & request_id,
     const PUBKEY_LIST & pubkey_list, 
     std::string & hash_hex )
 {
@@ -148,7 +148,7 @@ int GenerateTask::get_pubkey_hash(
     FUNC_BEGIN;
 
     if ( pubkey_list.size() == 0 ) {
-        ERROR( "Request ID: %s, pubkey_list is null!", request_id_.c_str() );
+        ERROR( "Request ID: %s, pubkey_list is null!", request_id.c_str() );
         return TEE_ERROR_INVALID_PARAMETER;
     }
 
@@ -159,7 +159,7 @@ int GenerateTask::get_pubkey_hash(
 
     // Hash pubkey_string string
     if ( !sha256_hash(pubkey_string, hash_hex) ) {
-        ERROR( "Request ID: %s, get_sha256_hash() failed with pubkey_list!", request_id_.c_str() );
+        ERROR( "Request ID: %s, get_sha256_hash() failed with pubkey_list!", request_id.c_str() );
         return TEE_ERROR_CALC_HASH_FAILED;
     }
 
@@ -169,7 +169,8 @@ int GenerateTask::get_pubkey_hash(
 }
 
 // Calculate the hash of a RSAKeyMeta content
-int GenerateTask::get_keymeta_hash( 
+int GenerateTask::get_keymeta_hash(
+    const std::string & request_id,
     const RSAKeyMeta & key_meta, 
     std::string & hash_hex )
 {
@@ -190,14 +191,15 @@ int GenerateTask::get_keymeta_hash(
     }
 
     if ( !sha256_hash(key_mata, hash_hex) ) {
-        ERROR( "Request ID: %s, get_sha256_hash() failed with key_meta!", request_id_.c_str() );
+        ERROR( "Request ID: %s, get_sha256_hash() failed with key_meta!", request_id.c_str() );
         return TEE_ERROR_CALC_HASH_FAILED;
     }
 
     return TEE_OK;
 }
 
-int GenerateTask::get_reply_string( 
+int GenerateTask::get_reply_string(
+    const std::string & request_id,
     const std::string & input_pubkey_hash, 
     const PUBKEY_LIST & input_pubkey_list,
     const RSAPublicKey & pubkey,
@@ -227,9 +229,9 @@ int GenerateTask::get_reply_string(
         std::string keyInfo_cipher;
 
         // Encrypt the private key shard and key meta
-        if ( (ret = get_private_key_info_cipher(index + 1, input_pubkey_list[index],
+        if ( (ret = get_private_key_info_cipher(request_id, index + 1, input_pubkey_list[index],
                                                 prikey, key_meta, keyInfo_cipher)) != TEE_OK ) {
-            ERROR( "Request ID: %s, get_private_key_info_cipher() failed with index: %d!", request_id_.c_str(), index );
+            ERROR( "Request ID: %s, get_private_key_info_cipher() failed with index: %d!", request_id.c_str(), index );
             return ret;
         }
 
@@ -251,6 +253,7 @@ int GenerateTask::get_reply_string(
 }
 
 int GenerateTask::get_private_key_info_cipher(
+    const std::string & request_id,
     int index, 
     const std::string & input_pubkey,
     const RSAPrivateKeyShare & private_key,
@@ -276,8 +279,8 @@ int GenerateTask::get_private_key_info_cipher(
     key_meta.ToJsonString( key_meta_str );
     key_meta_node = JSON::Root::parse( key_meta_str );
     if ( !key_meta_node.is_valid() ) {
-        ERROR( "Request ID: %s, JSON::Root::parse() failed with key_meta!", request_id_.c_str() );
-        ERROR( "Request ID: %s, key_meta: %s", request_id_.c_str(), key_meta_str.c_str() );
+        ERROR( "Request ID: %s, JSON::Root::parse() failed with key_meta!", request_id.c_str() );
+        ERROR( "Request ID: %s, key_meta: %s", request_id.c_str(), key_meta_str.c_str() );
         return TEE_ERROR_KEYMETA_IS_WRONG;
     }
     root["key_meta"] = key_meta_node;
@@ -295,14 +298,14 @@ int GenerateTask::get_private_key_info_cipher(
     // Construct a CurvePoint object from input public key hex string
     pub_key_65 = safeheron::encode::hex::DecodeFromHex( input_pubkey );
     if ( !ec_pubkey.DecodeFull( (uint8_t *)pub_key_65.c_str(), CurveType::P256 ) ) {
-        ERROR( "Request ID: %s, CurvePoint::DecodeFull failed with index: %d!", request_id_.c_str(), index );
-        ERROR( "Request ID: %s, input pubkey: %s", request_id_.c_str(), input_pubkey.c_str() );
+        ERROR( "Request ID: %s, CurvePoint::DecodeFull failed with index: %d!", request_id.c_str(), index );
+        ERROR( "Request ID: %s, input pubkey: %s", request_id.c_str(), input_pubkey.c_str() );
         return TEE_ERROR_PUBKEY_IS_WRONG;
     }
 
     // Encrypt plain_str by input public key
     if ( !ecies.EncryptPack( ec_pubkey, plain_str, ecies_cipher ) ) {
-        ERROR( "Request ID: %s, encrypt key_info message failed.", request_id_.c_str() );
+        ERROR( "Request ID: %s, encrypt key_info message failed.", request_id.c_str() );
         return TEE_ERROR_ECIES_ENC_FAILED;
     }
 

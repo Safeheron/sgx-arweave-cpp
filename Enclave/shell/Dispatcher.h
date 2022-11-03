@@ -8,8 +8,6 @@ class Task{
 public:
     virtual int get_task_type( ) = 0;
     virtual int execute( const std::string & request_id, const std::string & request, std::string & reply, std::string & error_msg ) = 0;
-protected:
-    std::string request_id_;
 };
 
 class Dispatcher

@@ -29,9 +29,8 @@ int QueryTask::execute(
     FUNC_BEGIN;
 
     // Check if request_id is null
-    request_id_ = request_id;
     if (request.length() == 0) {
-        error_msg = format_msg( "Request ID: %s, request is null!", request_id_.c_str() );
+        error_msg = format_msg( "Request ID: %s, request is null!", request_id.c_str() );
         ERROR( "%s", error_msg.c_str() );
         return TEE_ERROR_INVALID_PARAMETER;
     }
@@ -43,7 +42,7 @@ int QueryTask::execute(
     // Return success = false if there is not.
     if ( !g_keyContext_list.count( input_pubkey_hash ) ) {
         error_msg = format_msg( "Request ID: %s, input_pubkey_hash dose not exist! pubkey_list_hash: %s",
-            request_id_.c_str(), input_pubkey_hash.c_str() );
+                                request_id.c_str(), input_pubkey_hash.c_str() );
         ERROR( "%s", error_msg.c_str() );
         ret = TEE_ERROR_PUBLIST_KEY_HASH;
         root["success"] = false;
@@ -51,7 +50,7 @@ int QueryTask::execute(
     }
     if ( !(context = g_keyContext_list.at( input_pubkey_hash )) ) {
         error_msg = format_msg( "Request ID: %s, input_pubkey_hash exist, but the context is null! input_pubkey_hash: %s",
-            request_id_.c_str(), input_pubkey_hash.c_str() );
+                                request_id.c_str(), input_pubkey_hash.c_str() );
         ERROR( "%s", error_msg.c_str() );
         ret = TEE_ERROR_INTERNAL_ERROR;
         root["success"] = false;
