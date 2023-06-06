@@ -18,7 +18,7 @@ enclave {
                              [in, string]const char* request_id, 
                              [in, size=data_len]const char* input_data,
                              uint64_t data_len,
-                             [user_check] char **output, 
+                             [out]  char **output,
                              [out] uint64_t *output_len);
 
         /**
@@ -29,21 +29,21 @@ enclave {
         /**
          *  To return this enclave id in hex string
          */
-        public int ecall_get_enclave_id([user_check] char **output, [out] uint64_t *output_len);
+        public int ecall_get_enclave_id([out] char **output, [out] uint64_t *output_len);
 
         /**
          *  To set a status to the key shard generation task
          *  status MUST be one of eKeyStatus
          */
-        public int ecall_set_generation_status([in, string]const char* request_id, 
-                                               [in, string]const char* pubkey_list_hash, 
+        public int ecall_set_generation_status([in, string]const char* request_id,
+                                               [in, string]const char* pubkey_list_hash,
                                                int current_status);
         /**
          *  To generate the enclave quote
          */
-        public int ecall_create_report([in, string]const char* request_id, 
-                                       [in, string]const char* pubkey_list_hash, 
-                                       [in]const sgx_target_info_t* p_qe3_target, 
+        public int ecall_create_report([in, string]const char* request_id,
+                                       [in, string]const char* pubkey_list_hash,
+                                       [in]const sgx_target_info_t* p_qe3_target,
                                        [out]sgx_report_t* p_report);
     };
 
@@ -67,7 +67,7 @@ enclave {
         /*
         *  free a buffer in the untrusted memory, which is malloc in untrusted code
         */
-        void ocall_free( [user_check] uint8_t* p_out_side );
+        void ocall_free( [in] uint8_t* p_out_side );
     };
 
 };
