@@ -92,7 +92,6 @@ uint8_t* malloc_outside( size_t size )
     if (!outside_buf) {
         return nullptr;
     }
-    memset(outside_buf, 0, size);
 
     //check buff is outside or not
     if ( sgx_is_outside_enclave(outside_buf, size) != 1 ) {
@@ -100,6 +99,7 @@ uint8_t* malloc_outside( size_t size )
         outside_buf = nullptr;
         return nullptr;
     }
+    memset(outside_buf, 0, size);
 
     sgx_lfence();
 
