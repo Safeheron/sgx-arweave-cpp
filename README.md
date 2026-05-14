@@ -39,7 +39,7 @@ This service provides two main functions: **Private Key Shard Generation** and *
 - CMake 3.24+, Ninja
 - [ssgx](https://github.com/Safeheron/safeheron-sgx-library) — Safeheron SGX library (includes SafeheronCryptoSuitesSgx and SafeheronCryptoSuites)
 - [CryptoTSSRSASgx](https://github.com/Safeheron/tss-rsa-cpp)
-- Glog, CPPRESTSDK
+- [Glog](doc/glog-Installation.md), [CPPRESTSDK](doc/cpprest-Installation.md)
 
 
 
