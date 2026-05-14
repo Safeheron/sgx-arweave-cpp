@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(tee-arweave-server VERSION 1.0.0 LANGUAGES C CXX)
+project(tee-arweave-server VERSION 0.9.0 LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
