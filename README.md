@@ -36,18 +36,11 @@ This service provides two main functions: **Private Key Shard Generation** and *
 
 # Prerequisites
 
-- [SGX Components](https://01.org/intel-software-guard-extensions/downloads):
-  - SGX Driver. See [SGX-Driver-Installation](doc/SGX-Driver-Installation.md).
-  - SGX SDK (SGX SDK 2.17 or later is required). See [SGX-SDK-Installation](doc/SGX-SDK-Installation.md).
-  - SGX DCAP. See [Intel SGX DCAP Installation Procedure](https://www.intel.com/content/www/us/en/developer/articles/guide/intel-software-guard-extensions-data-center-attestation-primitives-quick-install-guide.html). 
-- [Intel SGX-SSL](https://github.com/intel/intel-sgx-ssl.git). See [SGX-SSL-Installation](doc/SGX-SSL-Installation.md).
-- [CPPRESTSDK](https://github.com/microsoft/cpprestsdk.git). See [cpprest-Installation](doc/cpprest-Installation.md).
-- [Glog](https://github.com/google/glog.git). See [glog-Installation](doc/glog-Installation.md).
-- [OpenSSL](https://github.com/openssl/openssl.git). See [openssl-Installation](doc/openssl-Installation.md).
-- [Boost](http://www.boost.org/). See [boost-Installation](doc/boost-system-Installation.md).
-- [safeheron-crypto-suites-cpp](https://github.com/Safeheron/safeheron-crypto-suites-cpp.git): an assembly of all the basic libraries and cryptography protocols from Safeheron.
-- [safeheron-crypto-suites-cpp-sgx](https://github.com/Safeheron/safeheron-crypto-suites-cpp-sgx): The SGX-supported version of **safeheron-crypto-suites-cpp** library implemented by Safeheron.
-- [tss-rsa-cpp-sgx](https://github.com/Safeheron/tss-rsa-cpp-sgx): The SGX-supported version of **tss-rsa-cpp** library implemented by Safeheron.
+- CMake 3.24+, Ninja
+- [ssgx](https://github.com/Safeheron/safeheron-sgx-library) — Safeheron SGX library (includes SafeheronCryptoSuitesSgx and SafeheronCryptoSuites)
+- [CryptoTSSRSASgx](https://github.com/Safeheron/tss-rsa-cpp)
+- Glog, CPPRESTSDK
+
 
 
 
@@ -55,18 +48,30 @@ This service provides two main functions: **Private Key Shard Generation** and *
 
 # Build & Run
 
-It only supports Linux now.
+Linux (x86-64) only.
+
+### Build
 
 ```shell
 $ git clone https://github.com/Safeheron/sgx-arweave-cpp.git
 $ cd sgx-arweave-cpp
-$ mkdir build && cd build
-$ cmake ..
-$ make
-$ make install
-$ cd tee-arweave-server-0.0.1
-$ ./tee-arweave-server enclave.signed.so
+$ cmake --preset release-config
+$ cmake --build --preset release-build
 ```
+
+Build outputs:
+- `build/App/tee-arweave-server` — host application
+- `build/Enclave/enclave.signed.so` — signed SGX enclave
+
+### Run locally (development)
+
+```shell
+$ cd build/App
+$ ./tee-arweave-server ../Enclave/enclave.signed.so
+```
+
+The server reads `./server.ini` from the working directory. Edit `App/server.ini` to adjust the listen address, paths, and log settings before running.
+
 
 
 
