@@ -1,0 +1,4 @@
+build/
+build-debug/
+output/
+output.tar.gz

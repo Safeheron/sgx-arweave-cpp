@@ -2,8 +2,8 @@
 #include "msg_handler.h"
 #include "../common/log_u.h"
 #include <cpprest/http_client.h>
-#include <safeheron/crypto-bn/bn.h>
-#include <safeheron/crypto-bn/rand.h>
+#include <crypto-bn/bn.h>
+#include <crypto-bn/rand.h>
 
 using namespace utility;
 using namespace web::http;

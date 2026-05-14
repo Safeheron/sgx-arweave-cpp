@@ -1,29 +1,18 @@
-# CMake for application
-#
-# Safeheron crypto suites library
 find_package(SafeheronCryptoSuites REQUIRED)
 
-# Set all flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SGX_COMMON_CFLAGS} -fPIC -Wno-attributes")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_C_FLAGS} -std=c++11")
+add_executable(test main.cpp)
 
-include_directories(
-		${SafeheronCryptoSuites_INCLUDE_DIR}
+target_compile_features(test PRIVATE cxx_std_11)
+
+target_include_directories(test PRIVATE
+        ${SafeheronCryptoSuites_INCLUDE_DIR}
+        ${SafeheronCryptoSuites_INCLUDE_DIR}/crypto-suites
 )
 
-add_executable(test
-        	main.cpp
+target_link_libraries(test PRIVATE
+        ${SafeheronCryptoSuites_LIBRARY}
+        -lboost_system
+        -lcrypto -lssl
+        -lcpprest
+        -lpthread
 )
-
-message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
-
-target_link_libraries(test
-			${SafeheronCryptoSuites_LIBRARY}
-			-lboost_system
-			-lcrypto -lssl
-			-lcpprest
-			-lpthread
-)
-
-message(STATUS "\n\n")

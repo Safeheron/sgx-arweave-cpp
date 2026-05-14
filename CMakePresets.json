@@ -1,0 +1,42 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "release-config",
+      "description": "Release build configuration",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_PREFIX_PATH": "/opt/safeheron/ssgx"
+      }
+    },
+    {
+      "name": "debug-config",
+      "description": "Debug build configuration",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PREFIX_PATH": "/opt/safeheron/ssgx"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "release-build",
+      "configurePreset": "release-config",
+      "jobs": 8
+    },
+    {
+      "name": "debug-build",
+      "configurePreset": "debug-config",
+      "jobs": 8
+    }
+  ]
+}

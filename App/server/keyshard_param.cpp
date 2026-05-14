@@ -1,7 +1,7 @@
 #include "keyshard_param.h"
 #include <cpprest/http_client.h>
-#include <safeheron/crypto-encode/hex.h>
-#include <safeheron/crypto-curve/curve.h>
+#include <crypto-encode/hex.h>
+#include <crypto-curve/curve.h>
 #include <crypto-hash/sha256.h>
 
 using safeheron::curve::Curve;

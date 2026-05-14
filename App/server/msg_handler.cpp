@@ -6,7 +6,7 @@
 #include "../common/log_u.h"
 #include "../common/tee_error.h"
 #include <cpprest/http_client.h>
-#include <safeheron/crypto-encode/base64.h>
+#include <crypto-encode/base64.h>
 #include <sgx_urts.h>
 #include <sgx_report.h>
 #include <sgx_dcap_ql_wrapper.h>
